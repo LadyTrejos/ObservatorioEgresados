@@ -58,6 +58,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         self.cleaned_data = self.get_cleaned_data()
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
+        user.set_password(self.cleaned_data.get('password1'))
         user.save()
         adapter.save_user(request, user, self)
         return user

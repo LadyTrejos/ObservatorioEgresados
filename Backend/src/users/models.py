@@ -56,7 +56,6 @@ class UserManager(BaseUserManager):
         """
         user = self.create_user(
             email,
-            password=password,
             id = id,
             name = name,
             last_name = last_name,
@@ -66,6 +65,7 @@ class UserManager(BaseUserManager):
         )
         user.is_staff = True
         user.is_superuser = True
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
