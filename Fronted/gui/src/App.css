@@ -1,0 +1,89 @@
+.Button{
+  background-color:#FF5126;
+  border-color: #FF5126;
+  width:33%;
+}
+
+.Button2{
+  background-color:#2F3E9E;
+  border-color: #2F3E9E;
+  width:10%;
+  left: 30%;
+  margin-top: 15%;
+}
+.container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  text-align: center;
+  transition: all 500ms ease;
+}
+
+.Div3{
+  background-color: #ffffff;
+  width: 35%;
+  left: 20%;
+  top:10%;
+  height: 80%;
+  position: absolute;
+  border-radius: 25px;
+  text-align: center;
+  min-height: 400px;
+  min-width: 400px;
+  
+}
+
+.Div2{
+  background-color: #8C98F2;
+  width: 80%;
+  left: 10%;
+  top:25%;
+  height: 50%;
+  position: absolute;
+  border-radius: 25px;
+  min-height: 300px;
+  min-width: 900px;
+  
+}
+
+.h1IS{
+  color:rgb(33, 48, 146);
+  margin-top: 5%;
+  font-size: 400%;
+  
+}
+
+.h1Q{
+  color: rgb(255,255,255);
+  position: absolute;
+  left: 60%;
+  margin-top: 10%;
+ 
+}
+
+.Icon{
+  color: rgb(94, 92, 252);
+  position: absolute;
+  left: 40%;
+  top: 25%;
+  font-size:500%;
+}
+
+.Input{
+ position: absolute;
+ top:45%;
+ left: 15%;
+ width: 70%;
+ 
+ 
+}
+
+.Input2{
+  background-color: '#E5E9FF';
+  width:100%;
+}
+
+.Input .ant-input{
+  background-color: rgb(229,233,255);
+}
