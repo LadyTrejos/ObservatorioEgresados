@@ -1,16 +1,21 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Spin } from 'antd';
+import { connect } from 'react-redux';
+import * as actions from '../store/actions/auth';
+
 import '../App.css';
 
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class LoginForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        this.props.onAuth(values.email, values.password)
       }
     });
+    this.props.history.push('/');
   };
 
   render() {
@@ -18,7 +23,14 @@ class LoginForm extends React.Component {
     const stylesObj = {
         background: '#2F3E9E'
       };
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = (
+        <p>{ this.props.error.message }</p>
+      )
+    }
     return (
+        
         <div>
             <div style={stylesObj} className="container">
             
@@ -39,36 +51,44 @@ class LoginForm extends React.Component {
                 <h1 className='h1IS'>Iniciar sesión</h1>
                 <Icon className='Icon' type="user"></Icon> 
                 
-                <Form onSubmit={this.handleSubmit} className='Input'>                    
-                    <Form.Item >
-                        {getFieldDecorator('email', {
-                            rules: [{ required: true, message: 'Por favor ingrese su correo electrónico' }],
-                        })(
-                            <Input className='Input2'
-                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}  />}
-                            placeholder="Correo electrónico"
-                            />,
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('password', {
-                            rules: [{ required: true, message: 'Por favor ingrese su contraseña' }],
-                        })(
-                            <Input
-                            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            type="password"
-                            placeholder="Contraseña"
-                            />,
-                        )}
-                    </Form.Item>
+                { errorMessage }
+                {
+                    this.props.loading ? 
                     
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className='Button'>
-                            Iniciar
-                        </Button>
-                    </Form.Item>
+                    <Spin indicator={antIcon} />
+                    
+                    :
+                    <Form onSubmit={this.handleSubmit} className='Input'>                    
+                        <Form.Item >
+                            {getFieldDecorator('email', {
+                                rules: [{ required: true, message: 'Por favor ingrese su correo electrónico' }],
+                            })(
+                                <Input className='Input2'
+                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}  />}
+                                placeholder="Correo electrónico"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: 'Por favor ingrese su contraseña' }],
+                            })(
+                                <Input
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                type="password"
+                                placeholder="Contraseña"
+                                />,
+                            )}
+                        </Form.Item>
+                        
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" className='Button'>
+                                Iniciar
+                            </Button>
+                        </Form.Item>
 
-                </Form>
+                    </Form>
+                    }
             </div>
         </div>
         
@@ -76,8 +96,19 @@ class LoginForm extends React.Component {
   }
 }
 
-
-
 const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(LoginForm);
 
-export default WrappedNormalLoginForm;
+const mapStateToProps = state => {
+    return {
+      loading: state.loading,
+      error: state.error
+    }
+  }
+  
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password) => dispatch(actions.authLogin(email, password))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm);
