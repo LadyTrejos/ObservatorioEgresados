@@ -1,0 +1,44 @@
+.Button{
+    background-color:#FF5126;
+    border-color: #FF5126;
+    position: absolute;
+    bottom: 3%;
+    left: 5%;
+    
+}
+
+
+.divMenu{
+    position: relative;
+    left: 20%;
+    border-block-end-color: brown;
+}
+
+.footer{
+    background-color: '#2F3E9E';
+}
+.h1{
+    position: relative;
+    color: white;
+    font-size: 250%;
+    
+}
+
+.h12{
+    position: relative;
+    color: white;
+    font-size: 100%;
+}
+
+.h13{
+    position: relative;
+    color: white;
+    font-size: 100%;
+    margin-top: 20%;
+}
+.icon{
+    font-Size:500%;
+    position: relative;
+}
+
+

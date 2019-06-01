@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import '../App.css';
+import './LoginForm.css'
 
 
 class LoginForm extends React.Component {
@@ -45,7 +45,8 @@ class LoginForm extends React.Component {
                             rules: [{ required: true, message: 'Por favor ingrese su correo electrónico' }],
                         })(
                             <Input className='Input2'
-                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}  />}
+                            prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
+                            size="large"
                             placeholder="Correo electrónico"
                             />,
                         )}
@@ -54,9 +55,10 @@ class LoginForm extends React.Component {
                         {getFieldDecorator('password', {
                             rules: [{ required: true, message: 'Por favor ingrese su contraseña' }],
                         })(
-                            <Input
+                            <Input.Password
                             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                             type="password"
+                            size="large"
                             placeholder="Contraseña"
                             />,
                         )}

@@ -5,6 +5,8 @@ import 'antd/dist/antd.css';
 
 
 import LoginForm from'./components/LoginForm';
+import CustomLayout from './containers/Layout'
+import { Layout } from 'antd';
   
 class App extends Component {
  
@@ -12,7 +14,7 @@ class App extends Component {
   render() {  
     return (
       <div>
-        <LoginForm />
+        <CustomLayout/>
       </div>
     );
   }
