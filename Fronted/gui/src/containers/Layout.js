@@ -1,10 +1,11 @@
 import React from 'react';
 import { Layout, Menu, Icon, Button} from 'antd';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import './Layout.css'
 import * as actions from '../store/actions/auth';
+
 
 
 const { Header, Content, Sider } = Layout;
@@ -13,8 +14,7 @@ var userName = 'ivan'
 class CustomLayout extends React.Component {
     
     render() {
-        console.log(this.props)
-            return(        
+            return(
                 <Layout style={{height:'100vh'}}>
                     <Sider
                         style={{backgroundColor: '#2F3E9E', textAlign:'center', flex:1,justifyContent:'flex-end', alignContent:'center'}}
@@ -44,7 +44,9 @@ class CustomLayout extends React.Component {
                             </Menu.Item>
                             <Menu.Item key="2">
                                 <Icon type="user-add" />
-                                <span className="nav-text">Crear administradores</span>
+                                <span className="nav-text">
+                                    <Link to='/crear-admin'>Crear administradores</Link>
+                                </span>
                             </Menu.Item>
                             
                         </Menu>
@@ -63,7 +65,7 @@ class CustomLayout extends React.Component {
                         </Header>
                         <Content style={{ margin: '24px 0px 0' }}>
                             <div style={{ padding: 24, background: '#fff', minHeight: 360, height: '100%' }}>
-                                content
+                                {this.props.children}
                             </div>
                         </Content>
                     </Layout>

@@ -2,3 +2,4 @@ Backend/myvenv
 Backend/src/users/migrations/__pycache__
 Backend/src/users/__pycache__
 Backend/src/observatorio/__pycache__
+Backend/src/users/api/__pycache__/
