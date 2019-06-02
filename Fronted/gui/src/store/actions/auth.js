@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
+import history from '../../helpers/history';
 
 export const authStart = () => {
     return {
@@ -22,7 +23,7 @@ export const authFail = error => {
 }
 
 export const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -50,7 +51,8 @@ export const authLogin = (email, password) => {
             localStorage.setItem('token', token);
             localStorage.setItem('expirationDate', expirationDate);
             dispatch(authSuccess(token));
-            dispatch(checkAuthTimeout(3600));
+            dispatch(checkAuthTimeout(3600))
+            history.push('/');
         })
         .catch(err => {
             dispatch(authFail(err))
@@ -74,6 +76,7 @@ export const authSignup = (username, email, password1, password2) => {
             localStorage.setItem('expirationDate', expirationDate);
             dispatch(authSuccess(token));
             dispatch(checkAuthTimeout(3600));
+            
         })
         .catch(err => {
             dispatch(authFail(err))

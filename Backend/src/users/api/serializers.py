@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'lastname',
+            'last_name',
             'email',
             'password',
             'country',
@@ -27,7 +27,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         fields = (
             'id',
             'name',
-            'lastname',
+            'last_name',
             'email',
             'password',
             'country',

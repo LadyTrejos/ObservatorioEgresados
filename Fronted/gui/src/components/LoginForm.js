@@ -1,9 +1,11 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 
 import '../App.css';
+import './LoginForm.css'
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -15,7 +17,6 @@ class LoginForm extends React.Component {
         this.props.onAuth(values.email, values.password)
       }
     });
-    this.props.history.push('/');
   };
 
   render() {
@@ -58,13 +59,15 @@ class LoginForm extends React.Component {
                     <Spin indicator={antIcon} />
                     
                     :
+                    
                     <Form onSubmit={this.handleSubmit} className='Input'>                    
                         <Form.Item >
                             {getFieldDecorator('email', {
                                 rules: [{ required: true, message: 'Por favor ingrese su correo electrónico' }],
                             })(
                                 <Input className='Input2'
-                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}  />}
+                                prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
+                                size="large"
                                 placeholder="Correo electrónico"
                                 />,
                             )}
@@ -73,9 +76,10 @@ class LoginForm extends React.Component {
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: 'Por favor ingrese su contraseña' }],
                             })(
-                                <Input
+                                <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 type="password"
+                                size="large"
                                 placeholder="Contraseña"
                                 />,
                             )}
@@ -88,7 +92,7 @@ class LoginForm extends React.Component {
                         </Form.Item>
 
                     </Form>
-                    }
+                }
             </div>
         </div>
         
@@ -111,4 +115,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm));

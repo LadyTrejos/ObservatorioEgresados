@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { connect } from 'react-redux';
 import BaseRouter from './routes';
 import 'antd/dist/antd.css';
+import history from './helpers/history';
 
 import * as actions from './store/actions/auth';
 
 import LoginForm from'./components/LoginForm';
+import CustomLayout from './containers/Layout'
+import { Layout } from 'antd';
   
 class App extends Component {
   componentDidMount() {
@@ -16,10 +19,8 @@ class App extends Component {
   render() {  
     return (
       <div>
-        <Router>
-          <LoginForm {...this.props}>
-            <BaseRouter/>
-          </LoginForm>
+        <Router history={history}>
+            <BaseRouter {...this.props}/>
         </Router>
       </div>
     );
