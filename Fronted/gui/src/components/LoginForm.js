@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Spin } from 'antd';
+import { Form, Icon, Input, Button, Spin, Avatar } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
@@ -50,7 +50,7 @@ class LoginForm extends React.Component {
             
             <div className='Div3' >
                 <h1 className='h1IS'>Iniciar sesión</h1>
-                <Icon className='Icon' type="user"></Icon> 
+                <Avatar type="user" size={80} icon='user' style={{color:'black', backgroundColor:'#8F9AE0'}} />
                 
                 { errorMessage }
                 {

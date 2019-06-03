@@ -7,9 +7,10 @@ import {
     Col,
     DatePicker,
     Button,
+    Modal
   } from 'antd';
 import moment from 'moment';
-import { connect } from 'react-redux';
+import history from '../helpers/history'
 
 import { withRouter, Link } from 'react-router-dom';
 
@@ -19,22 +20,23 @@ import './CreateAdmin.css';
 
   
 
-  class RegistrationForm extends React.Component {
+  class ModAdmins extends React.Component {
     state = {
       confirmDirty: false,
       autoCompleteResult: [],
     };
     
   
-    handleSubmit = e => {
+    handleSave = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          console.log('save');
+          history.push('/');
         }
       });
+      
     };
-
 
 
     handleConfirmBlur = e => {
@@ -57,6 +59,26 @@ import './CreateAdmin.css';
         (current && current > moment().add(-20, "year"))
       );
     }
+
+    handleOk = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
+  
+    handleCancel = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
+
+    showModal = () => {
+      this.setState({
+        visible: true,
+      });
+    };
   
     render() {
       const { getFieldDecorator } = this.props.form;
@@ -72,7 +94,7 @@ import './CreateAdmin.css';
 
       return (
         <Form layout="vertical" onSubmit={this.handleSubmit} >
-          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear administrador</h1>
+          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item 
@@ -147,7 +169,7 @@ import './CreateAdmin.css';
                     size='large'
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
-                    defaultValue={moment().add(-20, 'year')}
+                    initialValue={moment().add(-20, 'year')}
                   />
                   )}
               </Form.Item>
@@ -220,7 +242,7 @@ import './CreateAdmin.css';
             <Col span={5}>
               <Form.Item label="Lugar de residencia">
                   {getFieldDecorator('Country', {
-                    rules: [{ required:true, message: 'Ingresar país' }],
+                    rules: [{ required:false, message: 'Ingresar país' }],
                   })(
                     <Select size='large' placeholder='País'>
                       
@@ -232,7 +254,7 @@ import './CreateAdmin.css';
             <Col span={5}>
               <Form.Item label=".">
                   {getFieldDecorator('Region', {
-                    rules: [{ required:true, message: 'Ingresar región' }],
+                    rules: [{ required:false, message: 'Ingresar región' }],
                   })(
                     <Select size='large' placeholder='Región'>
                       
@@ -244,7 +266,7 @@ import './CreateAdmin.css';
             <Col span={5}>
               <Form.Item label=".">
                   {getFieldDecorator('City', {
-                    rules: [{ required:true, message: 'Ingresar cuidad' }],
+                    rules: [{ required:false, message: 'Ingresar cuidad' }],
                   })(
                     <Select size='large' placeholder='Ciudad'>
                       
@@ -255,19 +277,45 @@ import './CreateAdmin.css';
           </Row>
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={2}>
+            <Col span={2.5}>
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  <Link to='/modificar-admin'>Crear</Link>
+                <Button onClick={this.showModal} size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                   Desactivar cuenta
+                </Button>
+                <Modal
+                    title="Confirmación"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    footer={[
+                      <Button key="back" onClick={this.handleCancel}>
+                        Cancelar
+                      </Button>,
+                      <Button key="submit" htmlType="submit" type="primary" onClick={this.handleOk}>
+                        <Link to='/'>Desactivar</Link>
+                      </Button>,
+                    ]}
+                  >
+                    <p>¿Está seguro que desea desactivar la cuenta?</p>
+                </Modal>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row type="flex" justify="center" align="middle" gutter={20}>
+            <Col >
+              <Form.Item>
+                <Button size='large' type="primary" htmlType="submit" onClick={this.handleSave} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+                  Guardar
                 </Button>
               </Form.Item>
             </Col>
 
-            <Col span={2}>
+            <Col >
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
                     
-                <Link to='/modificar-admin'>Cancelar</Link>
+                <Link to='/'>Cancelar</Link>
                 </Button>
               </Form.Item>
             </Col>
@@ -279,8 +327,8 @@ import './CreateAdmin.css';
     }
   }
   
-  const CreateAdmin = Form.create({ name: 'register' })(RegistrationForm);
+  const ModAdmin = Form.create({ name: 'ModAdmin' })(ModAdmins);
   
   
   
-  export default withRouter(CreateAdmin);
+  export default withRouter(ModAdmin);

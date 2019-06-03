@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Icon, Button} from 'antd';
+import { Layout, Menu, Icon, Button,Avatar} from 'antd';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ class CustomLayout extends React.Component {
                     
                         
                         <h1 className='h1'>Menú</h1>
-                        <Icon type="user" className='icon'/>
+                        <Avatar type="user" size={80} icon='user' />
                         <h1 className='h12'>{this.props.user}</h1>
                         
 
@@ -40,12 +40,14 @@ class CustomLayout extends React.Component {
                             <Menu.Divider />
                             <Menu.Item key="1">
                                 <Icon type="eye" />
-                                <span className="nav-text">Ver administradores</span>
+                                <span className="nav-text">
+                                    <Link to='/ver-admins'>Ver administradores</Link>
+                                </span>
                             </Menu.Item>
                             <Menu.Item key="2">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
-                                    <Link to='/crear-admin'>Crear administradores</Link>
+                                    <Link to='/crear-admin'>Crear administrador</Link>
                                 </span>
                             </Menu.Item>
                             
@@ -64,7 +66,7 @@ class CustomLayout extends React.Component {
                             <h1>Observatorio de egresados</h1>
                         </Header>
                         <Content style={{ margin: '24px 0px 0' }}>
-                            <div style={{ padding: 24, background: '#fff', minHeight: 360, height: '100%' }}>
+                            <div style={{ padding: 24, background: '#fff', minHeight: 360}}>
                                 {this.props.children}
                             </div>
                         </Content>
