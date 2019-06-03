@@ -11,9 +11,8 @@ const { Header, Content, Sider } = Layout;
 var userName = 'ivan'
 
 class CustomLayout extends React.Component {
-    
+
     render() {
-        console.log(this.props)
             return(        
                 <Layout style={{height:'100vh'}}>
                     <Sider
@@ -31,7 +30,7 @@ class CustomLayout extends React.Component {
                         
                         <h1 className='h1'>Menú</h1>
                         <Icon type="user" className='icon'/>
-                        <h1 className='h12'>{this.props.user}</h1>
+                        <h1 className='h12'>{userName}</h1>
                         
 
                         
