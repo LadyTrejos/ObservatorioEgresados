@@ -4,7 +4,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
+from django.forms import ModelForm, PasswordInput
+
 import datetime
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -64,6 +67,8 @@ class UserManager(BaseUserManager):
             city = city
         )
         user.is_staff = True
+        user.is_graduated = False
+        user.is_admin = False
         user.is_superuser = True
         user.set_password(password)
         user.save(using=self._db)
@@ -111,10 +116,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-
 class Interes(models.Model):
-    _id = djongomodels.ObjectIdField(primary_key=True)
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=120, unique=True)
     
     def __str__(self):
         return self.name
@@ -158,3 +161,24 @@ class Evento(models.Model):
 
     def __str__(self):
         return self.name 
+
+# FORMS
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        widgets = {
+            'password': PasswordInput(),
+        }
+        fields = (
+            'id',
+            'name',
+            'last_name',
+            'email',
+            'password',
+            'country',
+            'region',
+            'city',
+            'is_graduated',
+            'is_admin'
+        )

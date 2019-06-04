@@ -22,8 +22,7 @@ import './CreateAdmin.css';
 
   class ModAdmins extends React.Component {
     state = {
-      confirmDirty: false,
-      autoCompleteResult: [],
+      
     };
     
   
@@ -176,7 +175,7 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-          <Row  type="flex" justify="center" align="middle">
+         {/* <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Género">
                 {getFieldDecorator('genre', {
@@ -190,7 +189,7 @@ import './CreateAdmin.css';
                  )}
               </Form.Item>
             </Col>
-          </Row>
+                </Row>*/}
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>

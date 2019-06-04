@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Descriptions, Form, Divider,Row, Col,Button, Modal } from "antd";
+import { List, Avatar, Icon, Skeleton, Form, Divider,Row, Col,Button, Modal } from "antd";
+
 
 
 import { withRouter, Link } from 'react-router-dom';
+import axios from "axios";
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
 const nameList =['jorge', 'ivan', 'lady', 'johanna', 'daniel', 'carmen', 'lina', 'nico', 'yami', 'fanny']
 
@@ -14,7 +16,7 @@ for (let i = 0; i < 23; i++) {
     id: `${i}`,
     name: `Iván ${i}`,
     genero:'masculino',
-    correo: 'ivan@gmail.com',
+    correo: `ivan${i}@gmail.com`,
 });
 }
 
@@ -53,49 +55,66 @@ class Adminlist extends React.Component {
         });
       };
 
+      handleEdit = (adminID) => {
+        axios.get(`http://127.0.0.1:8000/api/users/${adminID}/`)
+        .then(res => {
+          console.log(`soy AdminList${adminID}`)
+          console.log(res.data)
+        })
+      }
+
+
     render(){
         console.log(colorList[Math.floor(Math.random() * 10)])
         return(
                 <List
-                    itemLayout="vertical"
-                    size="large"
+                    itemLayout="horizontal"
+                    size="middle"
                     pagination={{
                     onChange: page => {
                         console.log(page);
                     },
-                    pageSize: 3
+                    pageSize: 5
                     }}
-                    dataSource={listData}
+                    dataSource={this.props.data}
                     
                     
                     renderItem={item => (
-                        <Row gutter={10}>
-                            <Col span={2}>
-                                <Avatar  style={{backgroundColor: colorList[Math.floor(Math.random() * 10)], verticalAlign: 'middle' }} size='large'>
-                                    { nameList[Math.floor(Math.random() * 10)][0]}
-                                </Avatar>
-                                
-                            </Col>
-                            <Col span={5}>
-                                <Descriptions
-                                    title={item.name}
-                                    column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                        <List.Item 
+                            actions={[
+                                <Button 
+                                  size='large' 
+                                  style={{backgroundColor:'#FF5126', borderColor:'#FF5126', borderRadius:10}}
+                                  onClick={() => this.handleEdit(item.id)}
+                                  href='/modificar-admin'
                                 >
-                                    
-                                    <Descriptions.Item icon='idcard' label="Id" span={5}>{item.id}</Descriptions.Item>
-                                    <Descriptions.Item label="correo" span={5}>{item.correo}</Descriptions.Item>
-                                    <Descriptions.Item label="genero" span={5}>{item.genero}</Descriptions.Item>
-                                    
-                                </Descriptions>
-                            </Col>
-                            
-                            <Button>
-                                <Link to='/modificar-admin'>Editar</Link>
-                            </Button>
-                            
-                            <Button onClick={this.showModal} size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                                  Editar
+                                </Button>, 
+                                <Button onClick={this.showModal} size='large' type="primary" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0', borderRadius:10}}>
                                 Desactivar cuenta
-                            </Button>
+                                </Button>
+                            ]}>
+                            <Skeleton avatar title={true} loading={item.loading} active>
+                            <List.Item.Meta
+                                avatar={
+                                    <Avatar  style={{backgroundColor: colorList[Math.floor(Math.random() * 10)], verticalAlign: 'middle' }} size='large'>
+                                        { item.name[0].toUpperCase()}
+                                    </Avatar>
+                                }
+                                title={item.name + ' ' + item.last_name}
+                                description={
+                                    <div>
+                                    <IconText type="idcard" text={`Documento: ${item.id}`}/>
+                                    <br/>
+                                    <IconText type="mail" text={`Correo: ${item.email}`}/>
+                                    <br/>
+                                    </div>
+                                }
+                            />
+                            
+                                
+                            
+                            </Skeleton>
                             <Modal
                                 title="Confirmación"
                                 visible={this.state.visible}
@@ -113,9 +132,8 @@ class Adminlist extends React.Component {
                                 <p>¿Está seguro que desea desactivar la cuenta?</p>
                             </Modal>
 
-                            <Divider/>
-
-                    </Row>
+                        </List.Item>
+                        
                     )}
                 />
         );
