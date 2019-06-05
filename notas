@@ -1,0 +1,11 @@
+para entorno virtual
+
+myvenv\Scripts\activate
+
+luego ir a src y poner "py manage.py runserver"
+
+Se cambió en el mockup de crear admin y editar admin porque no llevaban fecha de nacimiento y género
+
+- debo cambir el estado de los inputs en ModAdmin para luego guardar
+
+- seguir con CreateAdmin en para organizar la URL

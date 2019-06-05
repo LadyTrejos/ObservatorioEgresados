@@ -18,14 +18,20 @@ class CustomLayout extends React.Component {
     }
 
     componentDidMount(){
-        axios.get('http://127.0.0.1:8000/api/current-user')
-        .then(res =>{
-            {/*this.setState({
-                user: res.data
-            })*/}
+        {/*axios({
+            method: "GET",
+            url: 'http://127.0.0.1:8000/rest-auth/user',
+            config: {
+              headers: { Authorization: "Bearer "+ localStorage.getItem('token') }
+            }
+          })
+        .then(res => {
+            console.log("current-user:")
             console.log(res)
-        })
+        }) */}
     }
+
+    
 
     render() {
             return(
@@ -35,10 +41,8 @@ class CustomLayout extends React.Component {
                         breakpoint="lg"
                         collapsedWidth="0"
                         onBreakpoint={broken => {
-                            console.log(broken);
                         }}
                         onCollapse={(collapsed, type) => {
-                            console.log(collapsed, type);
                         }}
                         >
                     

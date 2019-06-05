@@ -1,14 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Skeleton, Form, Divider,Row, Col,Button, Modal } from "antd";
+import { List, Avatar, Icon, Skeleton, Form, Button, Modal } from "antd";
 
 
 
 import { withRouter, Link } from 'react-router-dom';
-import axios from "axios";
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
-const nameList =['jorge', 'ivan', 'lady', 'johanna', 'daniel', 'carmen', 'lina', 'nico', 'yami', 'fanny']
 
 const listData = [];
 for (let i = 0; i < 23; i++) {
@@ -55,17 +52,7 @@ class Adminlist extends React.Component {
         });
       };
 
-      handleEdit = (adminID) => {
-        axios.get(`http://127.0.0.1:8000/api/users/${adminID}/`)
-        .then(res => {
-          console.log(`soy AdminList${adminID}`)
-          console.log(res.data)
-        })
-      }
-
-
     render(){
-        console.log(colorList[Math.floor(Math.random() * 10)])
         return(
                 <List
                     itemLayout="horizontal"
@@ -85,8 +72,7 @@ class Adminlist extends React.Component {
                                 <Button 
                                   size='large' 
                                   style={{backgroundColor:'#FF5126', borderColor:'#FF5126', borderRadius:10}}
-                                  onClick={() => this.handleEdit(item.id)}
-                                  href='/modificar-admin'
+                                  href={`editar-admin/${item.id}`}
                                 >
                                   Editar
                                 </Button>, 

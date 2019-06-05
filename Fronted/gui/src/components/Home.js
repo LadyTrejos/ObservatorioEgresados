@@ -3,7 +3,6 @@ import CreateAdmin from './CreateAdmin';
 import { Route } from 'react-router-dom';
 import CustomLayout from '../containers/Layout';
 import ModAdmin from './ModAdmin';
-import AdminList from './AdminList';
 import AdminListView from '../containers/AdminListView';
 
 class Home extends React.Component {
@@ -11,7 +10,7 @@ class Home extends React.Component {
         return(
             <div>
                 <CustomLayout>
-                    <Route exact path="/modificar-admin" component={ModAdmin} />
+                    <Route exact path="/editar-admin/:id" component={ModAdmin} />
                     <Route exact path="/crear-admin" component={CreateAdmin} />
                     <Route exact path="/ver-admins" component={AdminListView} />
                 </CustomLayout>
