@@ -27,21 +27,21 @@ class CustomLayout extends React.Component {
                             console.log(collapsed, type);
                         }}
                         >
-                    
-                        
+
+
                         <h1 className='h1'>Menú</h1>
                         <Avatar type="user" size={80} icon='user' />
                         <h1 className='h12'>{this.props.user}</h1>
-                        
 
-                        
+
+
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'center'}}>
                             <Menu.Item className='h13 '>Mi perfil</Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="1">
                                 <Icon type="eye" />
                                 <span className="nav-text">
-                                    <Link to='/ver-admins'>Ver administradores</Link>
+                                    <Link to='/createEvento'>Ver administradores</Link>
                                 </span>
                             </Menu.Item>
                             <Menu.Item key="2">
@@ -50,16 +50,16 @@ class CustomLayout extends React.Component {
                                     <Link to='/crear-admin'>Crear administrador</Link>
                                 </span>
                             </Menu.Item>
-                            
+
                         </Menu>
-                        
-                        <Button 
-                            type="primary" 
-                            onClick={this.props.logout} 
+
+                        <Button
+                            type="primary"
+                            onClick={this.props.logout}
                             style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                             Cerrar sesión
                         </Button>
-                            
+
                     </Sider>
                     <Layout>
                         <Header style={{height: '10%', backgroundColor:'#fff', textAlign: 'right', fontSize:'150%'}}>
@@ -71,12 +71,12 @@ class CustomLayout extends React.Component {
                             </div>
                         </Content>
                     </Layout>
-                    
+
             </Layout>
     )
 
     }
-  
+
 }
 
 const mapStateToProps = state => {
