@@ -7,7 +7,6 @@ import './Layout.css'
 import * as actions from '../store/actions/auth';
 
 
-
 const { Header, Content, Sider } = Layout;
 
 class SuperuserLayout extends React.Component {
@@ -27,6 +26,10 @@ class SuperuserLayout extends React.Component {
         })
     }
 
+    state = {
+        user:[],
+    }    
+
     render() {
         // isLoading indica si aún no tiene un usuario en el estado
         let isLoading = this.state.user ? false : true;
@@ -43,7 +46,6 @@ class SuperuserLayout extends React.Component {
                         breakpoint="lg"
                         collapsedWidth="0"
                         onBreakpoint={broken => {
-                        
                         }}
                         onCollapse={(collapsed, type) => {
                         }}

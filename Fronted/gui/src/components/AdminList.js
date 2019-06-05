@@ -70,8 +70,7 @@ class Adminlist extends React.Component {
                                 <Button 
                                   size='large' 
                                   style={{backgroundColor:'#FF5126', borderColor:'#FF5126', borderRadius:10}}
-                                  onClick={() => this.handleEdit(item.id)}
-                                  href='/modificar-admin'
+                                  href={`editar-admin/${item.id}`}
                                 >
                                   Editar
                                 </Button>, 

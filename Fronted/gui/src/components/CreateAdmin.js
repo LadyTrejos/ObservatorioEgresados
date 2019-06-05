@@ -5,7 +5,6 @@ import {
     Select,
     Row,
     Col,
-    DatePicker,
     Button,
   } from 'antd';
 import moment from 'moment';
@@ -13,6 +12,8 @@ import moment from 'moment';
 import { withRouter, Link } from 'react-router-dom';
 
 import './CreateAdmin.css';
+import axios from 'axios';
+import NumericInput from './NumericInput'
   
   const { Option } = Select;
 
@@ -20,15 +21,18 @@ import './CreateAdmin.css';
 
   class RegistrationForm extends React.Component {
     state = {
-      name:'',
-      lastname:'',
-      typeDNI:'',
-      DNI:'',
-      birthday:'',
-      phone:'',
-      country:'',
-      region:'',
+      
+      id_phone:'',
+      name:'', 
+      last_name:'',
+      id_type: '',
+      id:'',
+      email: '',
+      address: '',
+      country: '',
+      region: '',
       city:'',
+      phone:'',
     };
     
   
@@ -41,20 +45,16 @@ import './CreateAdmin.css';
       });
     };
 
+    handleCreate = () => {
+      axios.post('http://127.0.0.1:8000/users', {
+        
+      })
+    }
 
-
-    handleConfirmBlur = e => {
-      const value = e.target.value;
-      this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    onChange = value => {
+      this.setState({ phone: value });
     };
 
-    onChange = e => {
-      const { value } = e.target;
-      const reg = /^(0|[1-9][0-9]*)([0-9]*)?$/;
-      if ((!Number.isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-        this.props.onChange(value);
-      }
-    };
 
     disabledDate = (current) => {
       let min = "1942-01-01";
@@ -62,12 +62,9 @@ import './CreateAdmin.css';
         (current && current < moment(min, "YYYY-MM-DD")) ||
         (current && current > moment().add(-20, "year"))
       );
+    }
 
-      
-    }
-    onChange2(dateString) {
-      console.log('Formatted Selected Time: ', dateString);
-    }
+    
 
     
   
@@ -77,7 +74,7 @@ import './CreateAdmin.css';
       const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '57',
       })(
-        <Select style={{ width: 70 }}>
+        <Select size='large' onChange={(value) => {this.setState({id_phone: value})}}>
           <Option value="57">+57</Option>
           <Option value="56">+56</Option>
         </Select>,
@@ -114,8 +111,8 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='Apellido(s)'
                       size='large'
-                      onChange={e => {this.setState({lastname: e.target.value})}}
-                      onPressEnter={console.log("lastname: "+this.state.lastname)}
+                      onChange={e => {this.setState({last_name: e.target.value})}}
+                      onPressEnter={console.log("lastname: "+this.state.last_name)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -128,7 +125,12 @@ import './CreateAdmin.css';
                 {getFieldDecorator('TypeDNI', {
                   initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 })(
-                  <Select size='large'>
+                  <Select 
+                    size='large'
+                    onChange={(value) => {this.setState({id_type: value})}}
+                    onPressEnter={console.log("id_type: "+this.state.id_type)}
+                    >
+
                     <Option value="TI">Tarjeta de identidad</Option>
                     <Option value="CC">Cédula</Option>
                     <Option value="PA">Pasaporte</Option>
@@ -147,8 +149,8 @@ import './CreateAdmin.css';
                 })(
                   <Input
                     size='large' 
-                    onChange={e => {this.setState({DNI: e.target.value})}}
-                    onPressEnter={console.log("DNI: "+this.state.DNI)} 
+                    onChange={e => {this.setState({id: e.target.value})}}
+                    onPressEnter={console.log("id: "+this.state.id)} 
                     placeholder='Documento de identidad'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}} />)}
               </Form.Item>
@@ -157,14 +159,14 @@ import './CreateAdmin.css';
 
             <br/>
 
-          <Row  type="flex" justify="center" align="middle">
+          {/*<Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Fecha de nacimiento">
                 {getFieldDecorator('Birthday')(
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
-                    onChange={this.onChange2}
+                    onChange={e => {this.setState({birthday: e.format('YYYY-MM-DD')})}}
                     onPressEnter={console.log("birthday: "+this.state.birthday)} 
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
@@ -173,7 +175,7 @@ import './CreateAdmin.css';
                   )}
               </Form.Item>
             </Col>
-          </Row>
+                </Row>*/}
 
           {/*<Row  type="flex" justify="center" align="middle">
             <Col span={7}>
@@ -197,6 +199,10 @@ import './CreateAdmin.css';
                 {getFieldDecorator('email', {
                   rules: [
                     {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
+                    {
                       required: true,
                       message: 'Ingresar correo electrónico',
                     },
@@ -205,7 +211,7 @@ import './CreateAdmin.css';
                       placeholder='ejemplo@dominio.com'
                       size='large'
                       onChange={e => {this.setState({email: e.target.value})}}
-                    onPressEnter={console.log("email: "+this.state.email)} 
+                      onPressEnter={console.log("email: "+this.state.email)} 
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -218,6 +224,9 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='Cr 27 Cll 4 # 45-56'
                       size='large'
+                      onChange={e => {this.setState({address: e.target.value})}}
+                      onPressEnter={console.log("address: "+this.state.address)} 
+
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
                 />)}
               </Form.Item>
@@ -228,11 +237,15 @@ import './CreateAdmin.css';
             <Col span={7}>
               <Form.Item label="Número Celular">
                 {getFieldDecorator('phone', {
-                  rules: [{ required: false, message: 'Ingresar número telefónico' }],
+                  
+                  rules: [{ required: true, message: 'Ingresar número telefónico' }]
+                
                 })(
-                  <Input 
+                  <NumericInput 
                     size='large'
-                    addonBefore={prefixSelector} 
+                    addonBefore={prefixSelector}
+                    onChange={this.onChange}
+                    onPressEnter={console.log('phone: '+this.state.phone)}
                     placeholder='Ej: 1234567890'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
@@ -245,8 +258,12 @@ import './CreateAdmin.css';
                   {getFieldDecorator('Country', {
                     rules: [{ required:false, message: 'Ingresar país' }],
                   })(
-                    <Select size='large' placeholder='País'>
-                      
+                    <Select size='large'
+                     placeholder='País' 
+                     onChange={(value) => {this.setState({country: value})}}
+                     onPressEnter={console.log("Country: "+this.state.country)}  >
+                        <Option value="CO">Colombia</Option>
+                                             
                     </Select>
                   )}
                 </Form.Item>
@@ -257,7 +274,12 @@ import './CreateAdmin.css';
                   {getFieldDecorator('Region', {
                     rules: [{ required:false, message: 'Ingresar región' }],
                   })(
-                    <Select size='large' placeholder='Región'>
+                    <Select size='large' 
+                    placeholder='Región'  
+                    onChange={(value) => {this.setState({region: value})}}
+                    onPressEnter={console.log("Region: "+this.state.region)} >
+                      <Option value="RI">Risaralda</Option>
+                        
                       
                     </Select>
                   )}
@@ -269,8 +291,12 @@ import './CreateAdmin.css';
                   {getFieldDecorator('City', {
                     rules: [{ required:false, message: 'Ingresar cuidad' }],
                   })(
-                    <Select size='large' placeholder='Ciudad'>
-                      
+                    <Select size='large' 
+                            placeholder='Ciudad'  
+                            onChange={(value) => {this.setState({city: value})}}
+                            onPressEnter={console.log("Ciudad: "+this.state.city)} >
+                      <Option value="PE">Pereira</Option>
+                        
                     </Select>
                   )}
                 </Form.Item>
@@ -278,15 +304,18 @@ import './CreateAdmin.css';
           </Row>
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={2}>
+            <Col>
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+                <Button size='large' 
+                        type="primary" 
+                        htmlType="submit"
+                        style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   <Link to='/modificar-admin'>Crear</Link>
                 </Button>
               </Form.Item>
             </Col>
 
-            <Col span={2}>
+            <Col>
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
                     

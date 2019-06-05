@@ -5,7 +5,6 @@ import {
     Select,
     Row,
     Col,
-    DatePicker,
     Button,
     Modal
   } from 'antd';
@@ -15,6 +14,8 @@ import history from '../helpers/history'
 import { withRouter, Link } from 'react-router-dom';
 
 import './CreateAdmin.css';
+
+import axios from 'axios';
   
   const { Option } = Select;
 
@@ -22,8 +23,41 @@ import './CreateAdmin.css';
 
   class ModAdmins extends React.Component {
     state = {
-      
+      name:'', 
+      last_name:'',
+      id_type: '',
+      id:'',
+      email: '',
+      address: '',
+      country: '',
+      region: '',
+      city:''
     };
+
+    componentDidMount(){
+      const adminID = this.props.match.params.id;
+      axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+      .then(res =>{
+        this.setState({
+          name: res.data.name,
+          last_name: res.data.last_name,
+          id_type: res.data.id_type,
+          id: res.data.id,
+          email: res.data.email,
+          country: res.data.country,
+          region: res.data.region,
+          city: res.data.city,
+          
+        })      
+      })
+      axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
+      .then(res =>{
+        this.setState({
+          phone: res.data.phone,
+          address: res.data.address          
+        })      
+      })
+  }
     
   
     handleSave = e => {
@@ -90,7 +124,6 @@ import './CreateAdmin.css';
           <Option value="56">+56</Option>
         </Select>,
       );
-
       return (
         <Form layout="vertical" onSubmit={this.handleSubmit} >
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
@@ -100,7 +133,7 @@ import './CreateAdmin.css';
                 label='Nombre(s)'
               >
                 {getFieldDecorator('name', {
-                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }],
+                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }], initialValue: this.state.name
                 })(<Input 
                       placeholder='Nombre(s)'
                       size='large'
@@ -116,7 +149,7 @@ import './CreateAdmin.css';
                 label='Apellido(s)'
               >
                 {getFieldDecorator('lastname', {
-                  rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true }],
+                  rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true }], initialValue: this.state.last_name
                 })(<Input 
                       placeholder='Apellido(s)'
                       size='large'
@@ -129,14 +162,14 @@ import './CreateAdmin.css';
           <Row gutter={0} type="flex" justify="center" align="middle">
             <Col span={3.5}>
               <Form.Item label="Tipo de documento">
-                {getFieldDecorator('TypeDNI', {
-                  initialValue: 'Cédula', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                {getFieldDecorator('id_type', {
+                  rules: [{ required:true, message: 'Ingresar el documento de identidad' }], initialValue: this.state.id_type
                 })(
                   <Select size='large'>
                     <Option value="TI">Tarjeta de identidad</Option>
-                    <Option value="Cédula">Cédula</Option>
-                    <Option value="Pasaporte">Pasaporte</Option>
-                    <Option value="CédulaExtranjería">Cédula de extranjería</Option>
+                    <Option value="CC">Cédula</Option>
+                    <Option value="PA">Pasaporte</Option>
+                    <Option value="CE">Cédula de extranjería</Option>
                   </Select>
                  )}
               </Form.Item>
@@ -146,8 +179,8 @@ import './CreateAdmin.css';
             
             <Col span={4.5}> 
               <Form.Item label="Documento de identidad">
-                {getFieldDecorator('DNI', {
-                  rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                {getFieldDecorator('id', {
+                  rules: [{ required:true, message: 'Ingresar el documento de identidad' }], initialValue: this.state.id
                 })(
                   <Input
                     size='large'  
@@ -158,7 +191,7 @@ import './CreateAdmin.css';
           </Row>
 
             <br/>
-
+          {/*
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Fecha de nacimiento">
@@ -175,7 +208,7 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-         {/* <Row  type="flex" justify="center" align="middle">
+          <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Género">
                 {getFieldDecorator('genre', {
@@ -195,12 +228,11 @@ import './CreateAdmin.css';
             <Col span={7}>
               <Form.Item label="Correo electrónico">
                 {getFieldDecorator('email', {
-                  rules: [
-                    {
+                  rules: [{
                       required: true,
                       message: 'Ingresar correo electrónico',
-                    },
-                  ],
+                    }],
+                  initialValue: this.state.email
                 })(<Input 
                       placeholder='ejemplo@dominio.com'
                       size='large'
@@ -213,6 +245,7 @@ import './CreateAdmin.css';
             <Col span={7}>
               <Form.Item label="Dirección">
                 {getFieldDecorator('address', {
+                  initialValue: this.state.address
                 })(<Input 
                       placeholder='Cr 27 Cll 4 # 45-56'
                       size='large'
@@ -227,6 +260,7 @@ import './CreateAdmin.css';
               <Form.Item label="Número Celular">
                 {getFieldDecorator('phone', {
                   rules: [{ required: false, message: 'Ingresar número telefónico' }],
+                  initialValue: this.state.phone
                 })(
                   <Input 
                     size='large'
@@ -240,8 +274,9 @@ import './CreateAdmin.css';
           <Row type="flex" justify="center" align="middle">
             <Col span={5}>
               <Form.Item label="Lugar de residencia">
-                  {getFieldDecorator('Country', {
+                  {getFieldDecorator('country', {
                     rules: [{ required:false, message: 'Ingresar país' }],
+                    initialValue: this.state.country
                   })(
                     <Select size='large' placeholder='País'>
                       
@@ -252,8 +287,9 @@ import './CreateAdmin.css';
             
             <Col span={5}>
               <Form.Item label=".">
-                  {getFieldDecorator('Region', {
+                  {getFieldDecorator('region', {
                     rules: [{ required:false, message: 'Ingresar región' }],
+                    initialValue: this.state.region
                   })(
                     <Select size='large' placeholder='Región'>
                       
@@ -264,8 +300,9 @@ import './CreateAdmin.css';
 
             <Col span={5}>
               <Form.Item label=".">
-                  {getFieldDecorator('City', {
+                  {getFieldDecorator('city', {
                     rules: [{ required:false, message: 'Ingresar cuidad' }],
+                    initialValue: this.state.city
                   })(
                     <Select size='large' placeholder='Ciudad'>
                       
@@ -278,7 +315,7 @@ import './CreateAdmin.css';
           <Row type="flex" justify="center" align="middle">
             <Col span={2.5}>
               <Form.Item>
-                <Button onClick={this.showModal} size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                <Button onClick={this.showModal} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
                    Desactivar cuenta
                 </Button>
                 <Modal
@@ -287,10 +324,10 @@ import './CreateAdmin.css';
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-                      <Button key="back" onClick={this.handleCancel}>
+                      <Button key="back" onClick={() => this.handleCancel}>
                         Cancelar
                       </Button>,
-                      <Button key="submit" htmlType="submit" type="primary" onClick={this.handleOk}>
+                      <Button key="submit" htmlType="submit" type="primary" onClick={() => this.handleOk}>
                         <Link to='/'>Desactivar</Link>
                       </Button>,
                     ]}
@@ -304,7 +341,7 @@ import './CreateAdmin.css';
           <Row type="flex" justify="center" align="middle" gutter={20}>
             <Col >
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" onClick={this.handleSave} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+                <Button size='large' type="primary" htmlType="submit" onClick={() => this.handleSave} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Guardar
                 </Button>
               </Form.Item>
@@ -312,7 +349,7 @@ import './CreateAdmin.css';
 
             <Col >
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
+                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={() => this.props.logout} >
                     
                 <Link to='/'>Cancelar</Link>
                 </Button>

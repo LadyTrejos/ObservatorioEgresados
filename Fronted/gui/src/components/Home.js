@@ -32,7 +32,7 @@ class Home extends React.Component {
         if(this.state.user.is_superuser){
             return (
             <SuperuserLayout>
-                <Route exact path="/modificar-admin" component={ModAdmin} />
+                <Route exact path="/editar-admin/:id/" component={ModAdmin} />
                 <Route exact path="/crear-admin" component={CreateAdmin} />
                 <Route exact path="/ver-admins" component={AdminListView} />
             </SuperuserLayout>)
