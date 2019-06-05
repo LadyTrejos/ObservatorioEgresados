@@ -14,10 +14,10 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 
 import './CreateAdmin.css';
-  
+
   const { Option } = Select;
 
-  
+
 
   class RegistrationForm extends React.Component {
     state = {
@@ -31,8 +31,8 @@ import './CreateAdmin.css';
       region:'',
       city:'',
     };
-    
-  
+
+
     handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
@@ -64,17 +64,17 @@ import './CreateAdmin.css';
         (current && current > moment().add(-20, "year"))
       );
 
-      
+
     }
     onChange2(dateString) {
       console.log('Formatted Selected Time: ', dateString);
     }
 
-    
-  
+
+
     render() {
       const { getFieldDecorator } = this.props.form;
-  
+
       const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '57',
       })(
@@ -89,12 +89,12 @@ import './CreateAdmin.css';
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear administrador</h1>
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item 
+              <Form.Item
                 label='Nombre(s)'
               >
                 {getFieldDecorator('name', {
                   rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }],
-                })(<Input 
+                })(<Input
                       placeholder='Nombre(s)'
                       size='large'
                       onChange={e => {this.setState({name: e.target.value})}}
@@ -105,14 +105,14 @@ import './CreateAdmin.css';
             </Col>
           </Row>
           <Row  type="flex" justify="center" align="middle">
-            
+
             <Col span={7}>
-              <Form.Item 
+              <Form.Item
                 label='Apellido(s)'
               >
                 {getFieldDecorator('lastname', {
                   rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true }],
-                })(<Input 
+                })(<Input
                       placeholder='Apellido(s)'
                       size='large'
                       onChange={e => {this.setState({lastname: e.target.value})}}
@@ -140,16 +140,16 @@ import './CreateAdmin.css';
 
             </Col>
 
-            
-            <Col span={4.5}> 
+
+            <Col span={4.5}>
               <Form.Item label="Documento de identidad">
                 {getFieldDecorator('DNI', {
                   rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 })(
                   <Input
-                    size='large' 
+                    size='large'
                     onChange={e => {this.setState({DNI: e.target.value})}}
-                    onPressEnter={console.log("DNI: "+this.state.DNI)} 
+                    onPressEnter={console.log("DNI: "+this.state.DNI)}
                     placeholder='Documento de identidad'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}} />)}
               </Form.Item>
@@ -166,7 +166,7 @@ import './CreateAdmin.css';
                     placeholder='Seleccione fecha'
                     size='large'
                     onChange={this.onChange2}
-                    onPressEnter={console.log("birthday: "+this.state.birthday)} 
+                    onPressEnter={console.log("birthday: "+this.state.birthday)}
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
                     initialValue={moment().add(-20, 'year')}
@@ -202,11 +202,11 @@ import './CreateAdmin.css';
                       message: 'Ingresar correo electrónico',
                     },
                   ],
-                })(<Input 
+                })(<Input
                       placeholder='ejemplo@dominio.com'
                       size='large'
                       onChange={e => {this.setState({email: e.target.value})}}
-                    onPressEnter={console.log("email: "+this.state.email)} 
+                    onPressEnter={console.log("email: "+this.state.email)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -216,7 +216,7 @@ import './CreateAdmin.css';
             <Col span={7}>
               <Form.Item label="Dirección">
                 {getFieldDecorator('address', {
-                })(<Input 
+                })(<Input
                       placeholder='Cr 27 Cll 4 # 45-56'
                       size='large'
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
@@ -231,9 +231,9 @@ import './CreateAdmin.css';
                 {getFieldDecorator('phone', {
                   rules: [{ required: false, message: 'Ingresar número telefónico' }],
                 })(
-                  <Input 
+                  <Input
                     size='large'
-                    addonBefore={prefixSelector} 
+                    addonBefore={prefixSelector}
                     placeholder='Ej: 1234567890'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
@@ -247,19 +247,19 @@ import './CreateAdmin.css';
                     rules: [{ required:false, message: 'Ingresar país' }],
                   })(
                     <Select size='large' placeholder='País'>
-                      
+
                     </Select>
                   )}
                 </Form.Item>
             </Col>
-            
+
             <Col span={5}>
               <Form.Item label=".">
                   {getFieldDecorator('Region', {
                     rules: [{ required:false, message: 'Ingresar región' }],
                   })(
                     <Select size='large' placeholder='Región'>
-                      
+
                     </Select>
                   )}
                 </Form.Item>
@@ -271,7 +271,7 @@ import './CreateAdmin.css';
                     rules: [{ required:false, message: 'Ingresar cuidad' }],
                   })(
                     <Select size='large' placeholder='Ciudad'>
-                      
+
                     </Select>
                   )}
                 </Form.Item>
@@ -290,21 +290,21 @@ import './CreateAdmin.css';
             <Col span={2}>
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
-                    
+
                 <Link to='/modificar-admin'>Cancelar</Link>
                 </Button>
               </Form.Item>
             </Col>
           </Row>
 
-          
+
         </Form>
       );
     }
   }
-  
+
   const CreateAdmin = Form.create({ name: 'register' })(RegistrationForm);
-  
-  
-  
+
+
+
   export default withRouter(CreateAdmin);
