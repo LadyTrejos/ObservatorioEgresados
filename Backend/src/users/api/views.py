@@ -30,3 +30,9 @@ class InteresViewSet(viewsets.ModelViewSet):
 class AdminListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_admin = True)
     serializer_class = UserSerializer
+
+class CurrentUserView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)

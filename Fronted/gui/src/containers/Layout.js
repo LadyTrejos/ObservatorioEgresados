@@ -9,7 +9,6 @@ import * as actions from '../store/actions/auth';
 
 
 const { Header, Content, Sider } = Layout;
-var userName = 'ivan'
 
 class CustomLayout extends React.Component {
 
