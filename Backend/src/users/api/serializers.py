@@ -4,10 +4,12 @@ from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(style={'input_type': 'password'})
     class Meta:
         model = User
         fields = (
             'id',
+            'id_type',
             'name',
             'last_name',
             'email',
@@ -22,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomRegisterSerializer(RegisterSerializer):
     
     id = serializers.CharField(required=True)
+    id_type = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     country = serializers.CharField(required=True)
@@ -34,8 +37,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         model = User
         fields = (
             'email',
-            'password',
             'id',
+            'id_type',
             'name',
             'last_name',
             'country',
@@ -48,6 +51,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         return {
             'id': self.validated_data.get('id', ''),
+            'id_type': self.validated_data.get('id_type', ''),
             'password1': self.validated_data.get('password1', ''),
             'password2': self.validated_data.get('password2', ''),
             'name': self.validated_data.get('name', ''),
@@ -65,6 +69,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
         user.id = self.cleaned_data.get('id')
+        user.id_type = self.cleaned_data.get('id_type')
         user.name = self.cleaned_data.get('name')
         user.last_name = self.cleaned_data.get('last_name')
         user.country = self.cleaned_data.get('country')
@@ -72,7 +77,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.city = self.cleaned_data.get('city')
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
-        user.set_password(self.cleaned_data.get('password1'))
+        user.set_password(self.cleaned_data.get('password'))
         user.save()
         adapter.save_user(request, user, self)
         return user
