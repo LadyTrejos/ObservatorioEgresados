@@ -1,8 +1,8 @@
 import React from 'react';
-import { Layout, Menu, Icon, Button,Avatar} from 'antd';
+import { Layout, Menu, Icon, Button, Avatar, Spin} from 'antd';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-
+import axios from 'axios';
 import './Layout.css'
 import * as actions from '../store/actions/auth';
 
@@ -10,46 +10,82 @@ import * as actions from '../store/actions/auth';
 
 const { Header, Content, Sider } = Layout;
 
-class CustomLayout extends React.Component {
+class AdminLayout extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+      }
+
+    componentDidMount() {
+        const userID = localStorage.getItem('user');
+        axios.get(`http://127.0.0.1:8000/api/users/${userID}`)
+        .then(res => {
+            this.setState({
+                user: res.data
+            })
+        })
+    }
 
     render() {
+        // isLoading indica si aún no tiene un usuario en el estado
+        let isLoading = this.state.user ? false : true;
             return(
+                <div>
+                {
+                    isLoading ? 
+                        <Spin tip="Cargando..."/> 
+                    : 
+                    (
                 <Layout style={{height:'100vh'}}>
                     <Sider
-                        style={{backgroundColor: '#2F3E9E', textAlign:'center', flex:1,justifyContent:'flex-end', alignContent:'center'}}
+                        style={{backgroundColor: '#2F3E9E', textAlign:'center', flex:1,justifyContent:'flex-end', alignContent:'left'}}
                         breakpoint="lg"
                         collapsedWidth="0"
                         onBreakpoint={broken => {
-                            console.log(broken);
+                        
                         }}
                         onCollapse={(collapsed, type) => {
-                            console.log(collapsed, type);
                         }}
                         >
                     
                         
                         <h1 className='h1'>Menú</h1>
                         <Avatar type="user" size={80} icon='user' />
-                        <h1 className='h12'>{this.props.user}</h1>
+                        <h1 className='h12'>{this.state.user.name.toUpperCase() }</h1>
                         
 
                         
-                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'center'}}>
-                            <Menu.Item className='h13 '>Mi perfil</Menu.Item>
-                            <Menu.Divider />
+                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'left'}}>
                             <Menu.Item key="1">
-                                <Icon type="eye" />
-                                <span className="nav-text">
-                                    <Link to='/ver-admins'>Ver administradores</Link>
-                                </span>
-                            </Menu.Item>
-                            <Menu.Item key="2">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
-                                    <Link to='/crear-admin'>Crear administrador</Link>
+                                    Mi perfil
                                 </span>
+                                <Link to='/crear-admin'></Link>
                             </Menu.Item>
-                            
+                            <Menu.Divider />
+                            <Menu.Item key="2">
+                                <Icon type="calendar" />
+                                <span className="nav-text">
+                                    Eventos
+                                </span>
+                                <Link to='/ver-admins'></Link>
+                            </Menu.Item>
+                            <Menu.Item key="3">
+                                <Icon type="team" />
+                                <span className="nav-text">
+                                    Egresados
+                                </span>
+                                <Link to='/crear-admin'></Link>
+                            </Menu.Item>
+                            <Menu.Item key="4">
+                                <Icon type="bell" />
+                                <span className="nav-text">
+                                    Solicitudes de registro
+                                </span>
+                                <Link to='/crear-admin'></Link>
+                            </Menu.Item>
                         </Menu>
                         
                         <Button 
@@ -71,8 +107,10 @@ class CustomLayout extends React.Component {
                         </Content>
                     </Layout>
                     
-            </Layout>
-    )
+            </Layout>)
+            } 
+            </div>
+        )
 
     }
   
@@ -90,4 +128,4 @@ const mapDispatchToProps = dispatch => {
       logout: () => dispatch(actions.logout())
     }
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomLayout));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminLayout));

@@ -9,7 +9,6 @@ import {
     Button,
   } from 'antd';
 import moment from 'moment';
-import { connect } from 'react-redux';
 
 import { withRouter, Link } from 'react-router-dom';
 

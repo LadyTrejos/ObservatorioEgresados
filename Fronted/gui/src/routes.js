@@ -3,8 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import { PrivateRoute } from './components/PrivateRoute';
 
 import LoginForm from './components/LoginForm';
-import CustomLayout from './containers/Layout';
-import CreateAdmin from './components/CreateAdmin';
 import Home from './components/Home';
 
 const BaseRouter = () => (

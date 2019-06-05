@@ -41,4 +41,10 @@
     position: relative;
 }
 
+.ant-menu.ant-menu-dark .ant-menu-item-selected{
+    background-color: #5B6ABF 
+}
 
+.nav-text {
+    color: #fff;
+}

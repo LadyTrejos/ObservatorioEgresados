@@ -2,24 +2,14 @@ from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
+from rest_framework.authtoken.models import Token
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={'input_type': 'password'})
     class Meta:
         model = User
-        fields = (
-            'id',
-            'id_type',
-            'name',
-            'last_name',
-            'email',
-            'password',
-            'country',
-            'region',
-            'city',
-            'is_graduated',
-            'is_admin'
-        )
+        fields = "__all__"
 
 class CustomRegisterSerializer(RegisterSerializer):
     
@@ -85,39 +75,26 @@ class CustomRegisterSerializer(RegisterSerializer):
 class EgresadoSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Egresado 
-        fields = (
-            'user',
-            'date_of_birth',
-            'genre',
-            'interests',
-            'friends'
-        )
+        fields = "__all__"
 
 class AdminSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Admin 
-        fields = (
-            'user',
-            'address',
-            'phone'
-        )
+        fields = "__all__"
 
 class EventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento
-        fields = (
-            'name',
-            'description',
-            'place',
-            'date',
-            'hour',
-            'organizer',
-            'created_at',
-            'admin',
-            'interests'
-        )
+        fields = "__all__"
 
 class InteresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interes
         fields = "__all__"
+
+
+class TokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Token
+        fields = ('key', 'user')

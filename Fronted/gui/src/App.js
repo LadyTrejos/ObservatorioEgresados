@@ -6,10 +6,6 @@ import 'antd/dist/antd.css';
 import history from './helpers/history';
 
 import * as actions from './store/actions/auth';
-
-import LoginForm from'./components/LoginForm';
-import CustomLayout from './containers/Layout'
-import { Layout } from 'antd';
   
 class App extends Component {
   componentDidMount() {
