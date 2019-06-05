@@ -1,6 +1,8 @@
 from users.models import User, Egresado, Admin, Evento, Interes
 from .serializers import UserSerializer, EgresadoSerializer, AdminSerializer, EventoSerializer, InteresSerializer
 from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -24,3 +26,7 @@ class EventoViewSet(viewsets.ModelViewSet):
 class InteresViewSet(viewsets.ModelViewSet):
     serializer_class = InteresSerializer
     queryset = Interes.objects.all()
+
+class AdminListView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.filter(is_admin = True)
+    serializer_class = UserSerializer

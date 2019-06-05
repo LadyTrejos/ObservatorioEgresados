@@ -9,9 +9,9 @@ import * as actions from '../store/actions/auth';
 
 
 const { Header, Content, Sider } = Layout;
-var userName = 'ivan'
+var userName = 'administrador'
 
-class CustomLayout extends React.Component {
+class CustomLayoutAdmin extends React.Component {
 
     render() {
             return(
@@ -31,7 +31,7 @@ class CustomLayout extends React.Component {
                         
                         <h1 className='h1'>Menú</h1>
                         <Avatar type="user" size={80} icon='user' />
-                        <h1 className='h12'>{this.props.user}</h1>
+                        <h1 className='h12'>{userName}</h1>
                         
 
                         
@@ -41,13 +41,13 @@ class CustomLayout extends React.Component {
                             <Menu.Item key="1">
                                 <Icon type="eye" />
                                 <span className="nav-text">
-                                    <Link to='/ver-admins'>Ver administradores</Link>
+                                    <Link to='/ver-admins'>Ver eventos</Link>
                                 </span>
                             </Menu.Item>
                             <Menu.Item key="2">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
-                                    <Link to='/crear-admin'>Crear administrador</Link>
+                                    <Link to='/crear-admin'>Crear evento</Link>
                                 </span>
                             </Menu.Item>
                             
@@ -91,4 +91,4 @@ const mapDispatchToProps = dispatch => {
       logout: () => dispatch(actions.logout())
     }
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomLayout));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomLayoutAdmin));

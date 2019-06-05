@@ -7,9 +7,10 @@ import {
     Col,
     DatePicker,
     Button,
+    Modal
   } from 'antd';
 import moment from 'moment';
-import { connect } from 'react-redux';
+import history from '../helpers/history'
 
 import { withRouter, Link } from 'react-router-dom';
 
@@ -19,29 +20,22 @@ import './CreateAdmin.css';
 
   
 
-  class RegistrationForm extends React.Component {
+  class ModAdmins extends React.Component {
     state = {
-      name:'',
-      lastname:'',
-      typeDNI:'',
-      DNI:'',
-      birthday:'',
-      phone:'',
-      country:'',
-      region:'',
-      city:'',
+      
     };
     
   
-    handleSubmit = e => {
+    handleSave = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          console.log('save');
+          history.push('/');
         }
       });
+      
     };
-
 
 
     handleConfirmBlur = e => {
@@ -63,14 +57,27 @@ import './CreateAdmin.css';
         (current && current < moment(min, "YYYY-MM-DD")) ||
         (current && current > moment().add(-20, "year"))
       );
-
-      
-    }
-    onChange2(dateString) {
-      console.log('Formatted Selected Time: ', dateString);
     }
 
-    
+    handleOk = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
+  
+    handleCancel = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
+
+    showModal = () => {
+      this.setState({
+        visible: true,
+      });
+    };
   
     render() {
       const { getFieldDecorator } = this.props.form;
@@ -86,7 +93,7 @@ import './CreateAdmin.css';
 
       return (
         <Form layout="vertical" onSubmit={this.handleSubmit} >
-          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear administrador</h1>
+          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item 
@@ -97,8 +104,6 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='Nombre(s)'
                       size='large'
-                      onChange={e => {this.setState({name: e.target.value})}}
-                      onPressEnter={console.log("name: "+this.state.name)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -115,8 +120,6 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='Apellido(s)'
                       size='large'
-                      onChange={e => {this.setState({lastname: e.target.value})}}
-                      onPressEnter={console.log("lastname: "+this.state.lastname)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -127,13 +130,13 @@ import './CreateAdmin.css';
             <Col span={3.5}>
               <Form.Item label="Tipo de documento">
                 {getFieldDecorator('TypeDNI', {
-                  initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                  initialValue: 'Cédula', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 })(
                   <Select size='large'>
                     <Option value="TI">Tarjeta de identidad</Option>
-                    <Option value="CC">Cédula</Option>
-                    <Option value="PA">Pasaporte</Option>
-                    <Option value="CE">Cédula de extranjería</Option>
+                    <Option value="Cédula">Cédula</Option>
+                    <Option value="Pasaporte">Pasaporte</Option>
+                    <Option value="CédulaExtranjería">Cédula de extranjería</Option>
                   </Select>
                  )}
               </Form.Item>
@@ -147,9 +150,7 @@ import './CreateAdmin.css';
                   rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 })(
                   <Input
-                    size='large' 
-                    onChange={e => {this.setState({DNI: e.target.value})}}
-                    onPressEnter={console.log("DNI: "+this.state.DNI)} 
+                    size='large'  
                     placeholder='Documento de identidad'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}} />)}
               </Form.Item>
@@ -165,8 +166,6 @@ import './CreateAdmin.css';
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
-                    onChange={this.onChange2}
-                    onPressEnter={console.log("birthday: "+this.state.birthday)} 
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
                     initialValue={moment().add(-20, 'year')}
@@ -176,7 +175,7 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-          {/*<Row  type="flex" justify="center" align="middle">
+         {/* <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Género">
                 {getFieldDecorator('genre', {
@@ -190,7 +189,7 @@ import './CreateAdmin.css';
                  )}
               </Form.Item>
             </Col>
-          </Row>*/}
+                </Row>*/}
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
@@ -205,8 +204,6 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='ejemplo@dominio.com'
                       size='large'
-                      onChange={e => {this.setState({email: e.target.value})}}
-                    onPressEnter={console.log("email: "+this.state.email)} 
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -279,19 +276,45 @@ import './CreateAdmin.css';
           </Row>
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={2}>
+            <Col span={2.5}>
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  <Link to='/modificar-admin'>Crear</Link>
+                <Button onClick={this.showModal} size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                   Desactivar cuenta
+                </Button>
+                <Modal
+                    title="Confirmación"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    footer={[
+                      <Button key="back" onClick={this.handleCancel}>
+                        Cancelar
+                      </Button>,
+                      <Button key="submit" htmlType="submit" type="primary" onClick={this.handleOk}>
+                        <Link to='/'>Desactivar</Link>
+                      </Button>,
+                    ]}
+                  >
+                    <p>¿Está seguro que desea desactivar la cuenta?</p>
+                </Modal>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row type="flex" justify="center" align="middle" gutter={20}>
+            <Col >
+              <Form.Item>
+                <Button size='large' type="primary" htmlType="submit" onClick={this.handleSave} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+                  Guardar
                 </Button>
               </Form.Item>
             </Col>
 
-            <Col span={2}>
+            <Col >
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
                     
-                <Link to='/modificar-admin'>Cancelar</Link>
+                <Link to='/'>Cancelar</Link>
                 </Button>
               </Form.Item>
             </Col>
@@ -303,8 +326,8 @@ import './CreateAdmin.css';
     }
   }
   
-  const CreateAdmin = Form.create({ name: 'register' })(RegistrationForm);
+  const ModAdmin = Form.create({ name: 'ModAdmin' })(ModAdmins);
   
   
   
-  export default withRouter(CreateAdmin);
+  export default withRouter(ModAdmin);
