@@ -25,7 +25,8 @@ import './CreateAdmin.css';
       lastname:'',
       typeDNI:'',
       DNI:'',
-      birthday:'',
+      email:'',
+      address:'', 
       phone:'',
       country:'',
       region:'',
@@ -44,11 +45,6 @@ import './CreateAdmin.css';
 
 
 
-    handleConfirmBlur = e => {
-      const value = e.target.value;
-      this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-    };
-
     onChange = e => {
       const { value } = e.target;
       const reg = /^(0|[1-9][0-9]*)([0-9]*)?$/;
@@ -66,8 +62,9 @@ import './CreateAdmin.css';
 
       
     }
-    onChange2(dateString) {
-      console.log('Formatted Selected Time: ', dateString);
+    onChange2(value) {
+      console.log('Formatted Selected Time: ', value.format('YYYY-MM-DD'));
+      this.setState({birthday: value.format('YYYY-MM-DD')})
     }
 
     
@@ -158,14 +155,14 @@ import './CreateAdmin.css';
 
             <br/>
 
-          <Row  type="flex" justify="center" align="middle">
+          {/*<Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Fecha de nacimiento">
                 {getFieldDecorator('Birthday')(
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
-                    onChange={this.onChange2}
+                    onChange={e => {this.setState({birthday: e.format('YYYY-MM-DD')})}}
                     onPressEnter={console.log("birthday: "+this.state.birthday)} 
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
@@ -174,7 +171,7 @@ import './CreateAdmin.css';
                   )}
               </Form.Item>
             </Col>
-          </Row>
+                </Row>*/}
 
           {/*<Row  type="flex" justify="center" align="middle">
             <Col span={7}>
@@ -206,7 +203,7 @@ import './CreateAdmin.css';
                       placeholder='ejemplo@dominio.com'
                       size='large'
                       onChange={e => {this.setState({email: e.target.value})}}
-                    onPressEnter={console.log("email: "+this.state.email)} 
+                      onPressEnter={console.log("email: "+this.state.email)} 
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -219,6 +216,9 @@ import './CreateAdmin.css';
                 })(<Input 
                       placeholder='Cr 27 Cll 4 # 45-56'
                       size='large'
+                      onChange={e => {this.setState({address: e.target.value})}}
+                      onPressEnter={console.log("address: "+this.state.address)} 
+
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
                 />)}
               </Form.Item>
@@ -233,6 +233,8 @@ import './CreateAdmin.css';
                 })(
                   <Input 
                     size='large'
+                    onChange={e => {this.setState({phone: e.target.value+{prefixSelector}})}}
+                    onPressEnter={console.log("phone: "+this.state.phone)} 
                     addonBefore={prefixSelector} 
                     placeholder='Ej: 1234567890'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}

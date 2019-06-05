@@ -100,8 +100,9 @@ import './CreateAdmin.css';
                 label='Nombre(s)'
               >
                 {getFieldDecorator('name', {
-                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }],
+                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }], initialValue:'problema solucionado'
                 })(<Input 
+                      
                       placeholder='Nombre(s)'
                       size='large'
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
@@ -158,7 +159,7 @@ import './CreateAdmin.css';
           </Row>
 
             <br/>
-
+          {/*
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Fecha de nacimiento">
@@ -175,7 +176,7 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-         {/* <Row  type="flex" justify="center" align="middle">
+          <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Género">
                 {getFieldDecorator('genre', {

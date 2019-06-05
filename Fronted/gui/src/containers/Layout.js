@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import './Layout.css'
 import * as actions from '../store/actions/auth';
+import axios from 'axios'
 
 
 
@@ -12,6 +13,20 @@ const { Header, Content, Sider } = Layout;
 var userName = 'ivan'
 
 class CustomLayout extends React.Component {
+
+    state = {
+        user:[],
+    }
+
+    componentDidMount(){
+        axios.get('http://127.0.0.1:8000/api/current-user')
+        .then(res =>{
+            {/*this.setState({
+                user: res.data
+            })*/}
+            console.log(res)
+        })
+    }
 
     render() {
             return(
