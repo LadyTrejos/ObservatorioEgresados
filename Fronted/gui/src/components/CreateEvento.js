@@ -7,6 +7,8 @@ import {
     Col,
     DatePicker,
     Button,
+    Cascader,
+    TimePicker,
   } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -19,7 +21,63 @@ import './CreateAdmin.css';
 
 
   const { TextArea } = Input;
+  const options = [
+    {
+      value: "colombia",
+      label: "Colombia",
+      children: [
+        {
+          value: "risaralda",
+          label: "Risaralda",
+          children: [
+            {
+              value: "Pereira",
+              label: "pereira"
+            },
+            {
+              value: "Santarosa",
+              label: "Santa Rosa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      value: "Estados unidos",
+      label: "Estados Unidos",
+      children: [
+        {
+          value: "Florida",
+          label: "FLorida",
+          children: [
+            {
+              value: "Miami ",
+              label: "Miami"
+            }
+          ]
+        }
+      ]
+    }
+  ];
 
+  function onChange(value) {
+    console.log(value);
+  }
+
+  class Demo extends React.Component {
+    state = {
+      value: null,
+    };
+
+    onChange = time => {
+      console.log(time);
+      this.setState({ value: time });
+    };
+
+    render() {
+      return <TimePicker value={this.state.value} onChange={this.onChange} />;
+    }
+  }
 
   class createEvento extends React.Component {
     state = {
@@ -63,7 +121,7 @@ import './CreateAdmin.css';
       let min = "1942-01-01";
       return (
         (current && current < moment(min, "YYYY-MM-DD")) ||
-        (current && current > moment().add(-20, "year"))
+        (current && current < moment().add( "year"))
       );
 
 
@@ -113,45 +171,48 @@ import './CreateAdmin.css';
               <Form.Item
                 label='Descripcion'
               >
-                {getFieldDecorator('lastname', {
-                  rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true }],
+                {getFieldDecorator('description', {
+                  rules: [{ required: true, message: 'ingrese descripcion de evento', whitespace: true }],
                 })(<TextArea rows={4}
-                      placeholder='Apellido(s)'
+                      placeholder='Descripcion de evento'
                       size='large'
-                      onChange={e => {this.setState({lastname: e.target.value})}}
-                      onPressEnter={console.log("lastname: "+this.state.lastname)}
+                      onChange={e => {this.setState({description: e.target.value})} }
+
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
             </Col>
           </Row>
+
+
           <br/>
-          <Row gutter={0} type="flex" justify="center" align="middle">
-            <Col span={3.5}>
-              <Form.Item label="Tipo de documento">
-                {getFieldDecorator('TypeDNI', {
-                  initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
-                })(
-                  <Select size='large'>
-                    <Option value="TI">Tarjeta de identidad</Option>
-                    <Option value="CC">Cédula</Option>
-                    <Option value="PA">Pasaporte</Option>
-                    <Option value="CE">Cédula de extranjería</Option>
-                  </Select>
-                 )}
+          <Row  type="flex" justify="center" align="middle">
+            <Col span={7}>
+              <Form.Item label="Fecha de evento">
+                {getFieldDecorator('date')(
+                  <DatePicker
+                    placeholder='Seleccione fecha'
+                    size='large'
+                    onChange={this.onChange2}
+                    onPressEnter={console.log("birthday: "+this.state.birthday)}
+                    format="DD-MM-YYYY"
+                    disabledDate={this.disabledDate}
+
+                  />
+                  )}
               </Form.Item>
 
             </Col>
 
 
             <Col span={4.5}>
-              <Form.Item label="Documento de identidad">
-                {getFieldDecorator('DNI', {
-                  rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+              <Form.Item label="Hora de evento">
+                {getFieldDecorator('hour  ', {
+                  rules: [{ required:true, message: 'Hora' }],
                 })(
-                  <Input
+                  <Demo
                     size='large'
-                    onChange={e => {this.setState({DNI: e.target.value})}}
+                    onChange={e => {this.setState({hour: e.target.value})}}
                     onPressEnter={console.log("DNI: "+this.state.DNI)}
                     placeholder='Documento de identidad'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}} />)}
@@ -163,16 +224,16 @@ import './CreateAdmin.css';
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Fecha de nacimiento">
-                {getFieldDecorator('Birthday')(
-                  <DatePicker
-                    placeholder='Seleccione fecha'
+              <Form.Item label="Lugar del Evento">
+                {getFieldDecorator('place')(
+                  <Cascader options={options} onChange={e => {this.setState({place: e.target.value})}}
+
+                    placeholder='Seleccione Lugar'
                     size='large'
                     onChange={this.onChange2}
-                    onPressEnter={console.log("birthday: "+this.state.birthday)}
-                    format="DD-MM-YYYY"
-                    disabledDate={this.disabledDate}
-                    initialValue={moment().add(-20, 'year')}
+
+
+
                   />
                   )}
               </Form.Item>
@@ -245,12 +306,12 @@ import './CreateAdmin.css';
 
           <Row type="flex" justify="center" align="middle">
             <Col span={5}>
-              <Form.Item label="Lugar de residencia">
+              <Form.Item label="Lugar del  Evento">
                   {getFieldDecorator('Country', {
                     rules: [{ required:false, message: 'Ingresar país' }],
                   })(
                     <Select size='large' placeholder='País'>
-
+                    <Option value="Colombia">Colombia</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -262,7 +323,8 @@ import './CreateAdmin.css';
                     rules: [{ required:false, message: 'Ingresar región' }],
                   })(
                     <Select size='large' placeholder='Región'>
-
+                    <Option value="Risaralda">Risaralda</Option>
+                    <Option value="Madrid">Colombia</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -274,7 +336,7 @@ import './CreateAdmin.css';
                     rules: [{ required:false, message: 'Ingresar cuidad' }],
                   })(
                     <Select size='large' placeholder='Ciudad'>
-
+                    <Option value="Pereira">Pereira</Option>
                     </Select>
                   )}
                 </Form.Item>
