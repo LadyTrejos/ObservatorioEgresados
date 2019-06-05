@@ -74,8 +74,16 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+IDTYPE_CHOICES = (
+    ('TI', 'Tarjeta de identidad'),
+    ('CC', 'Cédula'),
+    ('PA', 'Pasaporte'),
+    ('CE', 'Cédula de extranjería')
+)
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(max_length=20, primary_key=True)
+    id_type = models.CharField(max_length=2, choices=IDTYPE_CHOICES, default='CC')
     name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)

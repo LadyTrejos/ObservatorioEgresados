@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from .models import User, Egresado, Admin, Evento, Interes
@@ -9,8 +9,8 @@ from .models import User, Egresado, Admin, Evento, Interes
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirmación de contraseña', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
     is_graduated = forms.BooleanField()
     is_admin = forms.BooleanField()
 
@@ -18,6 +18,7 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = (
             'id',
+            'id_type',
             'name',
             'last_name',
             'email',
@@ -54,6 +55,7 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = fields = (
             'id',
+            'id_type',
             'name',
             'last_name',
             'email',
@@ -72,16 +74,18 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserAdmin(BaseUserAdmin):
+class MyUserAdmin(UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    model = User
+    class Meta():
+        model = User
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('id',
             'name',
+            'id_type',
             'last_name',
             'email',
             'password',
@@ -93,7 +97,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin','is_graduated')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Información personal', {'fields': ('name','last_name','country', 'region','city')}),
+        ('Información personal', {'fields': (('id', 'id_type'), 'name','last_name','country', 'region','city')}),
         ('Tipo de usuario', {'fields': ('is_admin','is_graduated')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -101,7 +105,8 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('id',
+            'fields': (('id',
+            'id_type'),
             'name',
             'last_name',
             'email',
@@ -118,8 +123,10 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-admin.site.register(User, UserAdmin)
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Egresado)
 admin.site.register(Admin)
 admin.site.register(Evento)
 admin.site.register(Interes)
+admin.site.unregister(Group)
+

@@ -10,7 +10,6 @@ import axios from 'axios'
 
 
 const { Header, Content, Sider } = Layout;
-var userName = 'ivan'
 
 class CustomLayout extends React.Component {
 
