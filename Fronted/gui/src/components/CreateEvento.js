@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {
     Form,
     Input,
@@ -9,7 +10,13 @@ import {
     Button,
     Cascader,
     TimePicker,
+    Checkbox,
+    Icon,
+    Upload,
+    message,
+
   } from 'antd';
+
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -21,6 +28,7 @@ import './CreateAdmin.css';
 
 
   const { TextArea } = Input;
+  /* Lugar*/
   const options = [
     {
       value: "colombia",
@@ -60,10 +68,125 @@ import './CreateAdmin.css';
     }
   ];
 
+  /* intereses */
+  const CheckboxGroup = Checkbox.Group;
+  const plainOptions = ['Medicina', 'Veterinaria', 'Matematicas','Programacion','Deporte','Academia','Social',];
+  const defaultCheckedList = ['Social','Academia'];
+  class App extends React.Component {
+  state = {
+    checkedList: defaultCheckedList,
+    indeterminate: true,
+    checkAll: false,
+  };
+
+  onChange = checkedList => {
+    this.setState({
+      checkedList,
+      indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
+      checkAll: checkedList.length === plainOptions.length,
+
+
+    });
+  };
+
+  onCheckAllChange = e => {
+    this.setState({
+      checkedList: e.target.checked ? plainOptions : [],
+      indeterminate: false,
+      checkAll: e.target.checked,
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+          <Checkbox
+            indeterminate={this.state.indeterminate}
+            onChange={this.onCheckAllChange}
+            checked={this.state.checkAll}
+          >
+            Check all
+          </Checkbox>
+        </div>
+        <br />
+        <CheckboxGroup
+          options={plainOptions}
+          value={this.state.checkedList}
+          onChange={this.onChange}
+        />
+      </div>
+    );
+  }
+}
+/* fin de intereses*/
+ /* imagenes*/
+ function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+function beforeUpload(file) {
+  const isJPG = file.type === 'image/jpeg';
+  if (!isJPG) {
+    message.error('You can only upload JPG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJPG && isLt2M;
+}
+class Avatar extends React.Component {
+  state = {
+    loading: false,
+  };
+
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          imageUrl,
+          loading: false,
+        }),
+      );
+    }
+  };
+
+  render() {
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    const imageUrl = this.state.imageUrl;
+    return (
+      <Upload
+        name="avatar"
+        listType="picture-card"
+        className="avatar-uploader"
+        showUploadList={false}
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        beforeUpload={beforeUpload}
+        onChange={this.handleChange}
+      >
+        {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+      </Upload>
+    );
+  }
+}
+/* fin de imagenes */
+
   function onChange(value) {
     console.log(value);
   }
-
+/* reloj*/
   class Demo extends React.Component {
     state = {
       value: null,
@@ -90,6 +213,7 @@ import './CreateAdmin.css';
       created_at:'',
       admin:'',
       interests:'',
+      multimedia:'',
     };
 
 
@@ -130,7 +254,18 @@ import './CreateAdmin.css';
       console.log('Formatted Selected Time: ', dateString);
     }
 
+    disabledDate2 = (current) => {
+      let min = "1942-01-01";
+      return (
+        (current && current == moment(current))
 
+      );
+
+
+    }
+    onChange2(dateString) {
+      console.log('Formatted Selected Time: ', dateString);
+    }
 
     render() {
       const { getFieldDecorator } = this.props.form;
@@ -145,9 +280,27 @@ import './CreateAdmin.css';
         </Select>,
       );
 
+
       return (
         <Form layout="vertical" onSubmit={this.handleSubmit} >
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear Evento</h1>
+
+
+          <Row type="flex" justify="center" align="middle">
+            <Col span={5}>
+              <Form.Item label="Imagenes multimedia">
+                  {getFieldDecorator('multimedia', )
+                  (<Avatar />
+
+                  )}
+                </Form.Item>
+            </Col>
+          </Row>
+
+
+
+
+
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item
@@ -165,6 +318,8 @@ import './CreateAdmin.css';
               </Form.Item>
             </Col>
           </Row>
+
+
           <Row  type="flex" justify="center" align="middle">
 
             <Col span={7}>
@@ -189,7 +344,9 @@ import './CreateAdmin.css';
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Fecha de evento">
-                {getFieldDecorator('date')(
+                {getFieldDecorator('date', {
+                  rules: [{ required:true, message: 'fecha' }],
+                }) (
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
@@ -225,7 +382,9 @@ import './CreateAdmin.css';
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item label="Lugar del Evento">
-                {getFieldDecorator('place')(
+                {getFieldDecorator('place', {
+                  rules: [{ required:true, message: 'donde se realizara?' }],
+                })(
                   <Cascader options={options} onChange={e => {this.setState({place: e.target.value})}}
 
                     placeholder='Seleccione Lugar'
@@ -258,18 +417,18 @@ import './CreateAdmin.css';
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Correo electrónico">
-                {getFieldDecorator('email', {
+              <Form.Item label="Organizador">
+                {getFieldDecorator('organizer', {
                   rules: [
                     {
                       required: true,
-                      message: 'Ingresar correo electrónico',
+                      message: 'Quien organiza el evento?',
                     },
                   ],
                 })(<Input
-                      placeholder='ejemplo@dominio.com'
+                      placeholder='Nombre o institucion '
                       size='large'
-                      onChange={e => {this.setState({email: e.target.value})}}
+                      onChange={e => {this.setState({organizer: e.target.value})}}
                     onPressEnter={console.log("email: "+this.state.email)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
@@ -278,11 +437,35 @@ import './CreateAdmin.css';
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Dirección">
-                {getFieldDecorator('address', {
+              <Form.Item label="creado el dia">
+                {getFieldDecorator('date', {
+                  rules: [{ required:true, message: 'fecha' }],
+                }) (
+                  <DatePicker
+                    placeholder='Seleccione fecha'
+                    size='large'
+                    onChange1={this.onChange1}
+                    onPressEnter={console.log("birthday: "+this.state.birthday)}
+                    format="DD-MM-YYYY"
+                    disabledDate2={this.disabledDate2}
+
+                  />
+                  )}
+              </Form.Item>
+
+            </Col>
+          </Row>
+
+
+
+          <Row  type="flex" justify="center" align="middle">
+            <Col span={7}>
+              <Form.Item label="Creado por">
+                {getFieldDecorator('admin', {
                 })(<Input
-                      placeholder='Cr 27 Cll 4 # 45-56'
+                      placeholder='administrador'
                       size='large'
+                      onChange={e => {this.setState({admin: e.target.value})}}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
                 />)}
               </Form.Item>
@@ -291,12 +474,13 @@ import './CreateAdmin.css';
 
           <Row type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Número Celular">
-                {getFieldDecorator('phone', {
-                  rules: [{ required: false, message: 'Ingresar número telefónico' }],
+              <Form.Item label="Intereses">
+                {getFieldDecorator('interests', {
+                  rules: [{ required: false, message: 'marque almenos un interes' }],
                 })(
-                  <Input
+                  <App
                     size='large'
+                    onChange={e => {this.setState({interests: e.target.value})}}
                     addonBefore={prefixSelector}
                     placeholder='Ej: 1234567890'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
@@ -304,59 +488,33 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-          <Row type="flex" justify="center" align="middle">
-            <Col span={5}>
-              <Form.Item label="Lugar del  Evento">
-                  {getFieldDecorator('Country', {
-                    rules: [{ required:false, message: 'Ingresar país' }],
-                  })(
-                    <Select size='large' placeholder='País'>
-                    <Option value="Colombia">Colombia</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-            </Col>
 
-            <Col span={5}>
-              <Form.Item label=".">
-                  {getFieldDecorator('Region', {
-                    rules: [{ required:false, message: 'Ingresar región' }],
-                  })(
-                    <Select size='large' placeholder='Región'>
-                    <Option value="Risaralda">Risaralda</Option>
-                    <Option value="Madrid">Colombia</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-            </Col>
 
-            <Col span={5}>
-              <Form.Item label=".">
-                  {getFieldDecorator('City', {
-                    rules: [{ required:false, message: 'Ingresar cuidad' }],
-                  })(
-                    <Select size='large' placeholder='Ciudad'>
-                    <Option value="Pereira">Pereira</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-            </Col>
-          </Row>
+
+
+
+
+
 
           <Row type="flex" justify="center" align="middle">
             <Col span={2}>
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  <Link to='/modificar-admin'>Crear</Link>
+                  <Link to='/createEvento'>Crear</Link>
                 </Button>
               </Form.Item>
             </Col>
+
+
+
+
+
 
             <Col span={2}>
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
 
-                <Link to='/modificar-admin'>Cancelar</Link>
+                <Link to='/createEvento'>Cancelar</Link>
                 </Button>
               </Form.Item>
             </Col>

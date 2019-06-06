@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class CustomRegisterSerializer(RegisterSerializer):
-    
+
     id = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
@@ -30,7 +30,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     is_graduated = serializers.BooleanField()
     is_admin = serializers.BooleanField()
 
-    class Meta: 
+    class Meta:
         model = User
         fields = (
             'email',
@@ -44,7 +44,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             'is_graduated',
             'is_admin'
         )
-    
+
     def get_cleaned_data(self):
         return {
             'id': self.validated_data.get('id', ''),
@@ -78,8 +78,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
 
 class EgresadoSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = Egresado 
+    class Meta:
+        model = Egresado
         fields = (
             'user',
             'date_of_birth',
@@ -89,8 +89,8 @@ class EgresadoSerializer(serializers.ModelSerializer):
         )
 
 class AdminSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = Admin 
+    class Meta:
+        model = Admin
         fields = (
             'user',
             'address',
@@ -109,7 +109,8 @@ class EventoSerializer(serializers.ModelSerializer):
             'organizer',
             'created_at',
             'admin',
-            'interests'
+            'interests',
+            'multimedia',
         )
 
 class InteresSerializer(serializers.ModelSerializer):
