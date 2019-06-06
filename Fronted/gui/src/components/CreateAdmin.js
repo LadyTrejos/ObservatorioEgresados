@@ -8,11 +8,13 @@ import {
     Button,
   } from 'antd';
 import moment from 'moment';
+import axios from 'axios';
 
 import { withRouter, Link } from 'react-router-dom';
 
 import './CreateAdmin.css';
-import axios from 'axios';
+import history from '../helpers/history'
+
 import NumericInput from './NumericInput'
   
   const { Option } = Select;
@@ -34,6 +36,8 @@ import NumericInput from './NumericInput'
       city:'',
       phone:'',
     };
+
+    
     
   
     handleSubmit = e => {
@@ -41,8 +45,10 @@ import NumericInput from './NumericInput'
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values);
+          history.push('/ver-admins')
         }
       });
+      
     };
 
     handleCreate = () => {
@@ -54,6 +60,8 @@ import NumericInput from './NumericInput'
     onChange = value => {
       this.setState({ phone: value });
     };
+
+   
 
 
     disabledDate = (current) => {
@@ -70,6 +78,7 @@ import NumericInput from './NumericInput'
   
     render() {
       const { getFieldDecorator } = this.props.form;
+      console.log(this.state)
   
       const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '57',
@@ -89,12 +98,13 @@ import NumericInput from './NumericInput'
                 label='Nombre(s)'
               >
                 {getFieldDecorator('name', {
-                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true }],
+                  rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true },
+                      {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([\u0020]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi,
+                      message: 'Nombre no válido'}],
                 })(<Input 
                       placeholder='Nombre(s)'
                       size='large'
-                      onChange={e => {this.setState({name: e.target.value})}}
-                      onPressEnter={console.log("name: "+this.state.name)}
+                      onChange={e=>{this.setState({name: e.target.value})}}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -112,7 +122,6 @@ import NumericInput from './NumericInput'
                       placeholder='Apellido(s)'
                       size='large'
                       onChange={e => {this.setState({last_name: e.target.value})}}
-                      onPressEnter={console.log("lastname: "+this.state.last_name)}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -122,13 +131,12 @@ import NumericInput from './NumericInput'
           <Row gutter={0} type="flex" justify="center" align="middle">
             <Col span={3.5}>
               <Form.Item label="Tipo de documento">
-                {getFieldDecorator('TypeDNI', {
+                {getFieldDecorator('id_type', {
                   initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 })(
                   <Select 
                     size='large'
                     onChange={(value) => {this.setState({id_type: value})}}
-                    onPressEnter={console.log("id_type: "+this.state.id_type)}
                     >
 
                     <Option value="TI">Tarjeta de identidad</Option>
@@ -149,8 +157,7 @@ import NumericInput from './NumericInput'
                 })(
                   <Input
                     size='large' 
-                    onChange={e => {this.setState({id: e.target.value})}}
-                    onPressEnter={console.log("id: "+this.state.id)} 
+                    onChange={e => {this.setState({id: e.target.value})}} 
                     placeholder='Documento de identidad'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}} />)}
               </Form.Item>
@@ -166,8 +173,7 @@ import NumericInput from './NumericInput'
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
-                    onChange={e => {this.setState({birthday: e.format('YYYY-MM-DD')})}}
-                    onPressEnter={console.log("birthday: "+this.state.birthday)} 
+                    onChange={e => {this.setState({birthday: e.format('YYYY-MM-DD')})}} 
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
                     initialValue={moment().add(-20, 'year')}
@@ -200,7 +206,7 @@ import NumericInput from './NumericInput'
                   rules: [
                     {
                       type: 'email',
-                      message: 'The input is not valid E-mail!',
+                      message: 'Correo no válido',
                     },
                     {
                       required: true,
@@ -211,7 +217,6 @@ import NumericInput from './NumericInput'
                       placeholder='ejemplo@dominio.com'
                       size='large'
                       onChange={e => {this.setState({email: e.target.value})}}
-                      onPressEnter={console.log("email: "+this.state.email)} 
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -225,8 +230,6 @@ import NumericInput from './NumericInput'
                       placeholder='Cr 27 Cll 4 # 45-56'
                       size='large'
                       onChange={e => {this.setState({address: e.target.value})}}
-                      onPressEnter={console.log("address: "+this.state.address)} 
-
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
                 />)}
               </Form.Item>
@@ -235,7 +238,7 @@ import NumericInput from './NumericInput'
 
           <Row type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Número Celular">
+              <Form.Item label="Número de celular">
                 {getFieldDecorator('phone', {
                   
                   rules: [{ required: true, message: 'Ingresar número telefónico' }]
@@ -245,8 +248,6 @@ import NumericInput from './NumericInput'
                     size='large'
                     addonBefore={prefixSelector}
                     onChange={this.onChange}
-                    onPressEnter={console.log('phone: '+this.state.phone)}
-                    placeholder='Ej: 1234567890'
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -260,8 +261,7 @@ import NumericInput from './NumericInput'
                   })(
                     <Select size='large'
                      placeholder='País' 
-                     onChange={(value) => {this.setState({country: value})}}
-                     onPressEnter={console.log("Country: "+this.state.country)}  >
+                     onChange={(value) => {this.setState({country: value})}}  >
                         <Option value="CO">Colombia</Option>
                                              
                     </Select>
@@ -277,7 +277,7 @@ import NumericInput from './NumericInput'
                     <Select size='large' 
                     placeholder='Región'  
                     onChange={(value) => {this.setState({region: value})}}
-                    onPressEnter={console.log("Region: "+this.state.region)} >
+                     >
                       <Option value="RI">Risaralda</Option>
                         
                       
@@ -293,8 +293,7 @@ import NumericInput from './NumericInput'
                   })(
                     <Select size='large' 
                             placeholder='Ciudad'  
-                            onChange={(value) => {this.setState({city: value})}}
-                            onPressEnter={console.log("Ciudad: "+this.state.city)} >
+                            onChange={(value) => {this.setState({city: value})}} >
                       <Option value="PE">Pereira</Option>
                         
                     </Select>
@@ -308,9 +307,9 @@ import NumericInput from './NumericInput'
               <Form.Item>
                 <Button size='large' 
                         type="primary" 
-                        htmlType="submit"
+                        onClick = {this.handleSubmit}
                         style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  <Link to='/modificar-admin'>Crear</Link>
+                        Crear
                 </Button>
               </Form.Item>
             </Col>
