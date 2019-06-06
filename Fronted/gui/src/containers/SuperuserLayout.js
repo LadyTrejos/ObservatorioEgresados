@@ -26,10 +26,6 @@ class SuperuserLayout extends React.Component {
         })
     }
 
-    state = {
-        user:[],
-    }    
-
     render() {
         // isLoading indica si aún no tiene un usuario en el estado
         let isLoading = this.state.user ? false : true;
