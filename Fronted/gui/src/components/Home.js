@@ -8,6 +8,7 @@ import CreateAdmin from './CreateAdmin';
 import AdminListView from '../containers/AdminListView';
 import AdminLayout from '../containers/AdminLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
+import ViewEvent from './ViewEvent';
 
 
 class Home extends React.Component {
@@ -39,7 +40,7 @@ class Home extends React.Component {
         } else if (this.state.user.is_admin){
             return (
             <AdminLayout>
-                <Route exact path="/modificar-admin" component={ModAdmin} />
+                <Route exact path="/ver-eventos" component={ViewEvent} />
             </AdminLayout>)
         }
     }

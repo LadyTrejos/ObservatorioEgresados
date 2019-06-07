@@ -1,7 +1,7 @@
 .Button{
   background-color:#FF5126;
   border-color: #FF5126;
-  width:33%;
+
 }
 
 .Button2{
@@ -74,9 +74,7 @@
  position: absolute;
  top:45%;
  left: 15%;
- width: 70%;
- 
- 
+ width: 70%; 
 }
 
 .Input2{
@@ -84,7 +82,7 @@
   width:100%;
 }
 
-.Input .ant-input{
+.Input .antd-input{
   background-color: rgb(229,233,255);
   border-radius: 15;
   border-color:  rgb(229,233,255);

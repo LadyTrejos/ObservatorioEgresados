@@ -7,6 +7,8 @@ import * as actions from '../store/actions/auth';
 import '../App.css';
 import './LoginForm.css'
 
+
+
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class LoginForm extends React.Component {
@@ -33,6 +35,8 @@ class LoginForm extends React.Component {
     return (
         
         <div>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%'}}><strong>Observatorio de egresados</strong></div>
+
             <div style={stylesObj} className="container">
             
             </div>
@@ -63,7 +67,7 @@ class LoginForm extends React.Component {
                     <Form onSubmit={this.handleSubmit} className='Input'>                    
                         <Form.Item >
                             {getFieldDecorator('email', {
-                                rules: [{ required: true, message: 'Por favor ingrese su correo electrónico' }],
+                                rules: [{ required: true, message: 'Ingrese su correo electrónico' }],
                             })(
                                 <Input className='Input2'
                                 prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
@@ -74,7 +78,7 @@ class LoginForm extends React.Component {
                         </Form.Item>
                         <Form.Item>
                             {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Por favor ingrese su contraseña' }],
+                                rules: [{ required: true, message: 'Ingrese su contraseña' }],
                             })(
                                 <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -84,12 +88,10 @@ class LoginForm extends React.Component {
                                 />,
                             )}
                         </Form.Item>
-                        
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" className='Button'>
-                                Iniciar
-                            </Button>
-                        </Form.Item>
+                        <br/>
+                        <Button type="primary" htmlType="submit" size='large' >
+                            Iniciar
+                        </Button>
 
                     </Form>
                 }

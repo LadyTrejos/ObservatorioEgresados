@@ -26,10 +26,6 @@ class SuperuserLayout extends React.Component {
         })
     }
 
-    state = {
-        user:[],
-    }    
-
     render() {
         // isLoading indica si aún no tiene un usuario en el estado
         let isLoading = this.state.user ? false : true;
@@ -86,8 +82,8 @@ class SuperuserLayout extends React.Component {
                             
                     </Sider>
                     <Layout>
-                        <Header style={{height: '10%', backgroundColor:'#fff', textAlign: 'right', fontSize:'150%'}}>
-                            <h1>Observatorio de egresados</h1>
+                        <Header style={{height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
+                            <h1>Observatorio de egresados</h1>   
                         </Header>
                         <Content style={{ margin: '24px 0px 0' }}>
                             <div style={{ padding: 24, background: '#fff', minHeight: 360}}>

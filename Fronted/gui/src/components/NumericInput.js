@@ -1,6 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Input, Tooltip } from "antd";
+import { Input } from "antd";
+
 
 
 class NumericInput extends React.Component {
@@ -24,24 +25,13 @@ class NumericInput extends React.Component {
 
   render() {
     const { value } = this.props;
-    const title = value ? ('') : (
-      "Ingresar número"
-    );
     return (
-      <Tooltip
-        trigger={["focus"]}
-        title={title}
-        placement="topLeft"
-        overlayClassName="numeric-input"
-      >
         <Input
           {...this.props}
           onChange={this.onChange}
           onBlur={this.onBlur}
-          placeholder="Ej: 123456789"
           maxLength={25}
         />
-      </Tooltip>
     );
   }
 }

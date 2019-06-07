@@ -70,7 +70,7 @@ class AdminLayout extends React.Component {
                                 <span className="nav-text">
                                     Eventos
                                 </span>
-                                <Link to='/ver-admins'></Link>
+                                <Link to='/ver-eventos'></Link>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <Icon type="team" />
@@ -97,10 +97,10 @@ class AdminLayout extends React.Component {
                             
                     </Sider>
                     <Layout>
-                        <Header style={{height: '10%', backgroundColor:'#fff', textAlign: 'right', fontSize:'150%'}}>
+                        <Header style={{height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
                             <h1>Observatorio de egresados</h1>
                         </Header>
-                        <Content style={{ margin: '24px 0px 0' }}>
+                        <Content style={{ margin: '24px 0px 0'}}>
                             <div style={{ padding: 24, background: '#fff', minHeight: 360}}>
                                 {this.props.children}
                             </div>
