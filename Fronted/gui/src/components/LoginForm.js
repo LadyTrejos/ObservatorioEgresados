@@ -44,8 +44,8 @@ class LoginForm extends React.Component {
             <div className='Div2'>
                 <h1 className='h1Q'>¿Aún no tienes una cuenta?</h1>
                 <Form.Item style={{left:'40%'}}>
-                    <Button type="primary" htmlType="submit" className='Button2'>
-                        Registrarse
+                    <Button htmlType="submit" className='Button2'>
+                        <strong>Regístrate</strong> 
                     </Button>
                             
                 </Form.Item>

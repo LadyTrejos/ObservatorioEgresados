@@ -16,15 +16,13 @@ class NumericInput extends React.Component {
 
   // '.' at the end or only '-' in the input box.
   onBlur = () => {
-    const {onBlur } = this.props;
-    
+    const { onBlur } = this.props;
     if (onBlur) {
       onBlur();
     }
   };
 
   render() {
-    const { value } = this.props;
     return (
         <Input
           {...this.props}

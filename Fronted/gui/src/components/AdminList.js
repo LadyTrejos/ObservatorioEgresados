@@ -100,7 +100,7 @@ class Adminlist extends React.Component {
                             
                             </Skeleton>
                             <Modal
-                                title="Confirmación"
+                                title="¿Está seguro(a) que desea eliminar el evento?"
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
