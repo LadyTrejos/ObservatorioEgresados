@@ -13,6 +13,7 @@ import {
     Icon,
     Upload,
     message,
+      Modal,
 
   } from 'antd';
 
@@ -120,80 +121,63 @@ import './CreateAdmin.css';
 }
 /* fin de intereses*/
  /* imagenes*/
- function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
-class Avatar extends React.Component {
-  state = {
-    loading: false,
-    previewVisible: false,
-    previewImage: '',
-  };
+ function getBase64(file) {
+   return new Promise((resolve, reject) => {
+     const reader = new FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = () => resolve(reader.result);
+     reader.onerror = error => reject(error);
+   });
+ }
 
-  handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
-    }
-  };
+ class PicturesWall extends React.Component {
+   state = {
+     previewVisible: false,
+     previewImage: '',
+     fileList: [  ],
+   };
 
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
+   handleCancel = () => this.setState({ previewVisible: false });
 
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-    });
-  };
+   handlePreview = async file => {
+     if (!file.url && !file.preview) {
+       file.preview = await getBase64(file.originFileObj);
+     }
 
-  render() {
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    const imageUrl = this.state.imageUrl;
-    return (
-      <Upload
-        name="avatar"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        beforeUpload={beforeUpload}
-        onPreview={this.handlePreview}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? <img src={this.state.previewImage} alt="avatar" /> : uploadButton}
-      </Upload>
-    );
-  }
-}
+     this.setState({
+       previewImage: file.url || file.preview,
+       previewVisible: true,
+     });
+   };
+
+   handleChange = ({ fileList }) => this.setState({ fileList });
+
+   render() {
+     const { previewVisible, previewImage, fileList } = this.state;
+     const uploadButton = (
+       <div>
+         <Icon type="plus" />
+         <div className="ant-upload-text">Upload</div>
+       </div>
+     );
+     return (
+       <div className="clearfix">
+         <Upload
+           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+           listType="picture-card"
+           fileList={fileList}
+           onPreview={this.handlePreview}
+           onChange={this.handleChange}
+         >
+           {fileList.length >= 1   ? null : uploadButton}
+         </Upload>
+         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+           <img alt="example" style={{ width: '100%' }} src={previewImage} />
+         </Modal>
+       </div>
+     );
+   }
+ }
 /* fin de imagenes */
 
   function onChange(value) {
@@ -287,7 +271,7 @@ class Avatar extends React.Component {
             <Col span={5}>
               <Form.Item label="Imagen de portada del evento">
                   {getFieldDecorator('multimedia', )
-                  (<Avatar />
+                  (<PicturesWall />
 
                   )}
                 </Form.Item>
@@ -364,10 +348,10 @@ class Avatar extends React.Component {
                   setFieldsValue:this.state.hour,
                   initialValue: moment('00:00:00', 'HH:mm:ss')
                 })(
-                    <TimePicker 
-                        size='large' 
+                    <TimePicker
+                        size='large'
                         placeholder="Hora del evento"
-                        onChange={onChange} 
+                        onChange={onChange}
                         onChange={(time, timeString) => this.setState({ hour: timeString })} />
                   )}
               </Form.Item>
