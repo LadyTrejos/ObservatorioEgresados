@@ -6,10 +6,25 @@ from rest_framework.authtoken.models import Token
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_superuser = serializers.BooleanField(read_only=True)
     password = serializers.CharField(style={'input_type': 'password'})
     class Meta:
         model = User
-        fields = "__all__"
+        fields = (
+             "id",
+            "password",
+            "id_type",
+            "name",
+            "last_name",
+            "email",
+            "country",
+            "region",
+            "city",
+            "is_graduated",
+            "is_admin",
+            "is_active",
+            "is_superuser"
+        )
 
 class CustomRegisterSerializer(RegisterSerializer):
     
@@ -78,6 +93,7 @@ class EgresadoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class AdminSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta: 
         model = Admin 
         fields = "__all__"

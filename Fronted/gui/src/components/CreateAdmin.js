@@ -10,13 +10,11 @@ import {
 import moment from 'moment';
 import axios from 'axios';
 import { withRouter, } from 'react-router-dom';
-import country from 'country-state-city';
 
 import './CreateAdmin.css';
 import NumericInput from './NumericInput';
 import CountrySelector from './CountrySelector';
 import history from '../helpers/history';
-import FormItem from 'antd/lib/form/FormItem';
   
 const { Option } = Select;
 
@@ -25,46 +23,66 @@ class RegistrationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name:'', 
-      last_name:'',
-      id_type: '',
-      id:'',
-      email: '',
-      address: '',
-      country: '',
-      region: '',
-      city:'',
-      phone:'',
-      id_phone:'',
+      userInfo:{
+        email: '',
+        password1: '',
+        password2: '',
+        name:'', 
+        last_name:'',
+        id:'',
+        id_type: 'CC',
+        country: '',
+        region: '',
+        city:'',
+        is_graduated: false,
+        is_admin: true
+      },
+      adminInfo: {
+        address: '',
+        phone:'',
+        id_phone:'',
+      },
       phonecodeItems: []
     };
     this.countryRef = React.createRef();
   }
+
+  makeRandomPassword = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
   
-  handleSubmit = e => {
+  handleCreate = e => {
     e.preventDefault();
     const selector = this.countryRef.current;
-    this.setState({
+    const password = this.makeRandomPassword();
+    console.log(password)
+    this.setState({ userInfo: { ...this.state.userInfo, 
       country: selector.state.country,
       region: selector.state.region,
-      city: selector.state.city
-    }, () => console.log(this.state))
+      city: selector.state.city,
+      password1: password,
+      password2: password},
+      adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
+    },
+      () => {
+        const userData = JSON.stringify(this.state.userInfo)
+        const adminData = JSON.stringify(this.state.adminInfo)
+        axios.post('http://localhost:8000/rest-auth/registration/', 
+                    userData, 
+                    { headers: {"Content-type": "application/json"}})
+        .then(() => {
+            history.push('/ver-admins')
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
+      }
+    )
     
 
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        history.push('/ver-admins')
-      }
-    });
+    
     
   };
-
-  handleCreate = () => {
-    axios.post('http://127.0.0.1:8000/users', {
-      
-    })
-  }
 
   disabledDate = (current) => {
     let min = "1942-01-01";
@@ -88,7 +106,10 @@ class RegistrationForm extends React.Component {
       initialValue: "Indicativo",
       rules: [{required:true, message: 'Ingresar indicativo'}]
     })(
-      <Select size='large' onChange={(value) => {this.setState({id_phone: value})}}>
+      <Select 
+        size='large' 
+        onChange={(value) => this.setState({ adminInfo: { ...this.state.adminInfo, id_phone: value } })}
+      >
         {this.state.phonecodeItems}
       </Select>,
     );
@@ -109,7 +130,7 @@ class RegistrationForm extends React.Component {
               })(<Input 
                     placeholder='Nombre(s)'
                     size='large'
-                    onChange={e => {this.setState({name: e.target.value})}}
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
                 )}
             </Form.Item>
@@ -127,7 +148,7 @@ class RegistrationForm extends React.Component {
               })(<Input 
                     placeholder='Apellido(s)'
                     size='large'
-                    onChange={e => {this.setState({last_name: e.target.value})}}
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
                 )}
             </Form.Item>
@@ -143,8 +164,8 @@ class RegistrationForm extends React.Component {
               })(
                 <Select 
                   size='large'
-                  onChange={(value) => {this.setState({id_type: value})}}
-                  >
+                  onChange={ value => this.setState({ userInfo: { ...this.state.userInfo, id_type: value } })}
+                >
                   <Option value="TI">Tarjeta de identidad</Option>
                   <Option value="CC">Cédula</Option>
                   <Option value="PA">Pasaporte</Option>
@@ -161,7 +182,7 @@ class RegistrationForm extends React.Component {
               })(
                 <Input
                   size='large' 
-                  onChange={e => {this.setState({id: e.target.value})}}
+                  onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
                   placeholder='Documento de identidad'
                   style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF', borderRadius:10}} />
                 )}
@@ -187,7 +208,7 @@ class RegistrationForm extends React.Component {
               })(<Input 
                     placeholder='ejemplo@dominio.com'
                     size='large'
-                    onChange={e => {this.setState({email: e.target.value})}}
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
                 )}
             </Form.Item>
@@ -201,7 +222,7 @@ class RegistrationForm extends React.Component {
               })(<Input 
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
-                    onChange={e => {this.setState({address: e.target.value})}}
+                    onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
               />)}
             </Form.Item>
@@ -217,7 +238,7 @@ class RegistrationForm extends React.Component {
                 <NumericInput 
                   size='large'
                   addonBefore={prefixSelector}
-                  onChange={value => this.setState({ phone: value })}
+                  onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
                   style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
             </Form.Item>
@@ -226,9 +247,9 @@ class RegistrationForm extends React.Component {
 
         <Row type="flex" justify="center" align="middle">
           <Col span={5}>
-            <FormItem>
+            <Form.Item>
               <CountrySelector ref={this.countryRef}/>
-						</FormItem>
+						</Form.Item>
           </Col>
         </Row>
 
@@ -237,7 +258,7 @@ class RegistrationForm extends React.Component {
             <Form.Item>
               <Button size='large' 
                       type="primary" 
-                      onClick={this.handleSubmit}
+                      onClick={this.handleCreate}
                       style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                 Crear
               </Button>
