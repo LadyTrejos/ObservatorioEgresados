@@ -9,6 +9,7 @@ import AdminListView from '../containers/AdminListView';
 import AdminLayout from '../containers/AdminLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import ViewEvent from './ViewEvent';
+import CreateEvent from './CreateEvent';
 
 
 class Home extends React.Component {
@@ -40,7 +41,7 @@ class Home extends React.Component {
         } else if (this.state.user.is_admin){
             return (
             <AdminLayout>
-                <Route exact path="/ver-eventos" component={ViewEvent} />
+                <Route exact path="/crear-evento" component={CreateEvent} />
             </AdminLayout>)
         }
     }
