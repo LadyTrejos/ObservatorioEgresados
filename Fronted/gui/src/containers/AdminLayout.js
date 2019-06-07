@@ -70,7 +70,7 @@ class AdminLayout extends React.Component {
                                 <span className="nav-text">
                                     Eventos
                                 </span>
-                                <Link to='/ver-eventos'></Link>
+                                <Link to='/crear-evento'></Link>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <Icon type="team" />
