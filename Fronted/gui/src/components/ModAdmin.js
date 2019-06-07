@@ -14,7 +14,6 @@ import axios from 'axios';
 
 import history from '../helpers/history'
 import './CreateAdmin.css';
-import CountrySelector from './CountrySelector';
 
 const { Option } = Select;
 
@@ -45,31 +44,28 @@ class ModAdmins extends React.Component {
     this.countryRef = React.createRef();
   }
   
-  componentDidMount(){
+  componentWillMount(){
     const adminID = this.props.match.params.id;
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
-    .then(res => {
-      this.setState({ userInfo: {
-        name: res.data.name,
-        last_name: res.data.last_name,
-        id_type: res.data.id_type,
-        id: res.data.id,
-        email: res.data.email,
-        country: res.data.country,
-        region: res.data.region,
-        city: res.data.city
-      }}      
-    )}
-    )
     axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
     .then(res => {
-      this.setState({ adminInfo: {
-        address: res.data.address,
-        id_phone: res.data.id_phone,
-        phone: res.data.phone
-      }}      
-    )}
-    )
+      this.setState({ 
+        userInfo: {
+          name: res.data.user.name,
+          last_name: res.data.user.last_name,
+          id_type: res.data.user.id_type,
+          id: res.data.user.id,
+          email: res.data.user.email,
+          country: res.data.user.country,
+          region: res.data.user.region,
+          city: res.data.user.city
+        }, 
+        adminInfo : {
+          address: res.data.address,
+          id_phone: res.data.id_phone,
+          phone: res.data.phone
+        }
+      })
+    })
 }
   
 
@@ -140,7 +136,6 @@ class ModAdmins extends React.Component {
         {this.state.phonecodeItems}
       </Select>,
     );
-
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>

@@ -70,6 +70,9 @@ class RegistrationForm extends React.Component {
         axios.post('http://localhost:8000/rest-auth/registration/', 
                     userData, 
                     { headers: {"Content-type": "application/json"}})
+        axios.post('http://localhost:8000/api/admins/', 
+                    adminData, 
+                    { headers: {"Content-type": "application/json"}})
         .then(() => {
             history.push('/ver-admins')
         })
