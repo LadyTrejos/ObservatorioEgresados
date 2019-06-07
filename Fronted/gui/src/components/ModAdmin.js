@@ -12,8 +12,9 @@ import moment from 'moment';
 import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import history from '../helpers/history'
+import history from '../helpers/history';
 import './CreateAdmin.css';
+import NumericInput from './NumericInput';
 
 const { Option } = Select;
 
@@ -32,7 +33,8 @@ class ModAdmins extends React.Component {
         region: '',
         city:'',
         is_graduated: false,
-        is_admin: true
+        is_admin: true,
+        is_active: true
       },
       adminInfo: {
         address: '',
@@ -52,19 +54,22 @@ class ModAdmins extends React.Component {
         userInfo: {
           name: res.data.name,
           last_name: res.data.last_name,
+          password: res.data.password,
           id_type: res.data.id_type,
           id: res.data.id,
           email: res.data.email,
           country: res.data.country,
           region: res.data.region,
-          city: res.data.city
+          city: res.data.city,
+          is_active: res.data.is_active
         }
       })
     })
     axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
     .then(res => {
-      this.setState({ 
+      this.setState({
         adminInfo : {
+          user: res.data.user,
           address: res.data.address,
           id_phone: res.data.id_phone,
           phone: res.data.phone
@@ -74,45 +79,38 @@ class ModAdmins extends React.Component {
         
 }
   
-
   handleSave = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('save');
-        history.push('/');
+        const userData = JSON.stringify(this.state.userInfo)
+        const adminData = JSON.stringify(this.state.adminInfo)
+        const adminID = this.props.match.params.id;
+        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
+                    userData, 
+                    { headers: {"Content-Type": "application/json"}})
+        .then(() => {
+            axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
+                    adminData, 
+                    { headers: {"Content-Type": "application/json"}})
+            history.push('/ver-admins')
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
       }
     });
     
   };
 
-
-  handleConfirmBlur = e => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };
-
-  onChange = e => {
-    const { value } = e.target;
-    const reg = /^(0|[1-9][0-9]*)([0-9]*)?$/;
-    if ((!Number.isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-      this.props.onChange(value);
-    }
-  };
-
-  disabledDate = (current) => {
-    let min = "1942-01-01";
-    return (
-      (current && current < moment(min, "YYYY-MM-DD")) ||
-      (current && current > moment().add(-20, "year"))
-    );
-  }
-
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
+  handleDeactivate = e => {
+    e.persist()
+    this.setState({ userInfo: {
+      ...this.state.userInfo, is_active: !this.state.userInfo.is_active
+    }}, () => {
+      this.handleSave(e);
+    })
+    
   };
 
   handleCancel = e => {
@@ -133,7 +131,6 @@ class ModAdmins extends React.Component {
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: this.state.adminInfo.id_phone,
-      rules: [{required:true, message: 'Ingresar indicativo'}]
     })(
       <Select 
         size='large' 
@@ -158,7 +155,9 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Nombre(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
+                  />)}
 
             </Form.Item>
           </Col>
@@ -177,8 +176,9 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Apellido(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
-
+                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
+                  />)}
             </Form.Item>
           </Col>
         </Row>
@@ -190,7 +190,7 @@ class ModAdmins extends React.Component {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
                 initialValue: this.state.userInfo.id_type
               })(
-                <Select size='large'>
+                <Select size='large' onChange={ value => this.setState({ userInfo: { ...this.state.userInfo, id_type: value } })}>
                   <Option value="TI">Tarjeta de identidad</Option>
                   <Option value="CC">Cédula</Option>
                   <Option value="PA">Pasaporte</Option>
@@ -210,6 +210,7 @@ class ModAdmins extends React.Component {
                 <Input
                   size='large'  
                   placeholder='Documento de identidad'
+                  onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
                   style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF', borderRadius:10}} />)}
             </Form.Item>
           </Col>
@@ -228,6 +229,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='ejemplo@dominio.com'
                     size='large'
+                    onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
@@ -241,6 +243,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
+                    onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
                     style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
               />)}
             </Form.Item>
@@ -254,9 +257,10 @@ class ModAdmins extends React.Component {
                 rules: [{ required: false, message: 'Ingresar número telefónico' }],
                 initialValue: this.state.adminInfo.phone
               })(
-                <Input 
+                <NumericInput 
                   size='large'
-                  addonBefore={prefixSelector} 
+                  addonBefore={prefixSelector}
+                  onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
                   style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
             </Form.Item>
@@ -267,23 +271,22 @@ class ModAdmins extends React.Component {
           <Col span={2.5}>
             <Form.Item>
               <Button onClick={this.showModal} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
-                  Desactivar cuenta
+                  {this.state.userInfo.is_active ? "Desactivar cuenta" : "Activar cuenta"}
               </Button>
               <Modal
                   title="Confirmación"
                   visible={this.state.visible}
-                  onOk={this.handleOk}
-                  onCancel={this.handleCancel}
                   footer={[
-                    <Button key="back" onClick={() => this.handleCancel}>
+                    <Button key="back" onClick={(e) => this.handleCancel(e)}>
                       Cancelar
                     </Button>,
-                    <Button key="submit" htmlType="submit" type="primary" onClick={() => this.handleOk}>
-                      <Link to='/'>Desactivar</Link>
+                    <Button key="deactivate" type="danger" onClick={(e) => this.handleDeactivate(e)}>
+                      {this.state.userInfo.is_active ? "Desactivar" : "Activar"}
                     </Button>,
                   ]}
                 >
-                  <p>¿Está seguro que desea desactivar la cuenta?</p>
+                  <p>{this.state.userInfo.is_active ? "¿Está seguro que desea desactivar esta cuenta?"
+                    : "¿Está seguro que desea activar esta cuenta?"}</p>
               </Modal>
             </Form.Item>
           </Col>
@@ -292,7 +295,7 @@ class ModAdmins extends React.Component {
         <Row type="flex" justify="center" align="middle" gutter={20}>
           <Col >
             <Form.Item>
-              <Button size='large' type="primary" htmlType="submit" onClick={() => this.handleSave} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+              <Button size='large' type="primary" onClick={(e) => this.handleSave(e)} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                 Guardar
               </Button>
             </Form.Item>
@@ -300,9 +303,14 @@ class ModAdmins extends React.Component {
 
           <Col >
             <Form.Item>
-              <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={() => this.props.logout} >
-                  
-              <Link to='/'>Cancelar</Link>
+              <Button 
+                  size='large' 
+                  type="primary" 
+                  htmlType="submit" 
+                  href='/ver-admins'
+                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+                  onClick={() => this.props.logout} >
+              Cancelar
               </Button>
             </Form.Item>
           </Col>
