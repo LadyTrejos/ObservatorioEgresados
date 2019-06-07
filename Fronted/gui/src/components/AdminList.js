@@ -74,11 +74,11 @@ class Adminlist extends React.Component {
                                 >
                                   Editar
                                 </Button>, 
-                                <Button onClick={this.showModal} size='large' type="primary" style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0', borderRadius:10}}>
-                                Desactivar cuenta
+                                <Button onClick={this.showModal} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                                  {item.is_active ? "Desactivar cuenta" : "Activar cuenta"}
                                 </Button>
                             ]}>
-                            <Skeleton avatar title={true} loading={item.loading} active>
+                            
                             <List.Item.Meta
                                 avatar={
                                     <Avatar  style={{backgroundColor: colorList[Math.floor(Math.random() * 10)], verticalAlign: 'middle' }} size='large'>
@@ -96,21 +96,18 @@ class Adminlist extends React.Component {
                                 }
                             />
                             
-                                
-                            
-                            </Skeleton>
                             <Modal
                                 title="Confirmación"
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={[
-                                <Button key="back" onClick={this.handleCancel}>
+                                  <Button key="back" onClick={(e) => this.handleCancel(e)}>
                                     Cancelar
-                                </Button>,
-                                <Button key="submit" htmlType="submit" type="primary" onClick={this.handleOk}>
-                                    <Link to='/'>Desactivar</Link>
-                                </Button>,
+                                  </Button>,
+                                  <Button key="deactivate" type="danger" onClick={(e) => this.handleDeactivate(e)}>
+                                    {item.is_active ? "Desactivar" : "Activar"}
+                                  </Button>,
                                 ]}
                             >
                                 <p>¿Está seguro que desea desactivar la cuenta?</p>

@@ -93,7 +93,6 @@ class EgresadoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class AdminSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
     class Meta: 
         model = Admin 
         fields = "__all__"

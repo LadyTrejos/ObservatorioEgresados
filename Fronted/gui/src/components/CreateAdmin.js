@@ -70,10 +70,10 @@ class RegistrationForm extends React.Component {
         axios.post('http://localhost:8000/rest-auth/registration/', 
                     userData, 
                     { headers: {"Content-type": "application/json"}})
-        axios.post('http://localhost:8000/api/admins/', 
+        .then(() => {
+            axios.post('http://localhost:8000/api/admins/', 
                     adminData, 
                     { headers: {"Content-type": "application/json"}})
-        .then(() => {
             history.push('/ver-admins')
         })
         .catch(err => {
@@ -103,6 +103,7 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     const { getFieldDecorator } = this.props.form;
    
     const prefixSelector = getFieldDecorator('prefix', {
