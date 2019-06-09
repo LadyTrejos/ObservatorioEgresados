@@ -9,6 +9,8 @@ import thunk from 'redux-thunk';
 
 import reducer from './store/reducers/auth';
 
+
+
 const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(reducer, composeEnhances(
@@ -20,6 +22,7 @@ const app = (
         <App />
     </Provider>
 )
+
 
 ReactDOM.render(app, document.getElementById('root'));
 serviceWorker.register();

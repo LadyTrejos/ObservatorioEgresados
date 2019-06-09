@@ -155,7 +155,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Nombre(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
                   />)}
 
@@ -176,7 +176,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Apellido(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
                   />)}
             </Form.Item>
@@ -211,7 +211,7 @@ class ModAdmins extends React.Component {
                   size='large'  
                   placeholder='Documento de identidad'
                   onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF', borderRadius:10}} />)}
+                  style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}} />)}
             </Form.Item>
           </Col>
         </Row>
@@ -230,7 +230,7 @@ class ModAdmins extends React.Component {
                     placeholder='ejemplo@dominio.com'
                     size='large'
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
         </Row>
@@ -244,7 +244,7 @@ class ModAdmins extends React.Component {
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
                     onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
               />)}
             </Form.Item>
           </Col>
@@ -262,7 +262,7 @@ class ModAdmins extends React.Component {
                   addonBefore={prefixSelector}
                   onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                  style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
         </Row>

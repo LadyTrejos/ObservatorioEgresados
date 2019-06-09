@@ -96,12 +96,12 @@ class AdminLayout extends React.Component {
                         </Button>
                             
                     </Sider>
-                    <Layout>
+                    <Layout style={{backgroundColor:'#E5E9FF'}}>
                         <Header style={{height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
-                            <h1>Observatorio de egresados</h1>
+                            <h1 >Observatorio de egresados</h1>
                         </Header>
-                        <Content style={{ margin: '24px 0px 0'}}>
-                            <div style={{ padding: 24, background: '#fff', minHeight: 360}}>
+                        <Content style={{ margin: '24px 0px 0', backgroundColor:'#E5E9FF'}}>
+                            <div style={{ padding: 24, background: '#E5E9FF', minHeight: 360}}>
                                 {this.props.children}
                             </div>
                         </Content>

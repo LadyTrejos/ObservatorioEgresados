@@ -47,14 +47,14 @@ class ViewEvent extends React.Component {
             photo:'https://cdn.pixabay.com/photo/2015/04/04/21/41/concert-707155_960_720.jpg'
             },
             {
-                title:'holi',
-                description:'soy la descripción',
-                tags:'tag',
-                date:'date',
-                time:'time',
-                place:'place',
-                photo:'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                }
+            title:'holi',
+            description:'soy la descripción',
+            tags:'tag',
+            date:'2019-07-06',
+            time:'12:52',
+            place:'UTP',
+            photo:'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            }
             ],
 
             
@@ -67,7 +67,7 @@ class ViewEvent extends React.Component {
             (event) => {
                 return(
                 <Card
-            alignContent='center'
+            
             style={{width:'30vw', minWidth:400, borderColor:'gray', borderRadius:20}}
             cover={
             <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"5%" }}>
@@ -135,13 +135,20 @@ class ViewEvent extends React.Component {
         )
 
         return(
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:'#E5E9FF' }}>       
-        <Row > {eventItems}      
-            
-            
-        </Row>
-        
-    </div>  )
+          <div>
+            <h2>Eventos</h2>
+            <Row>
+              <Button>Buscar</Button>
+              <Button>Crear eventos</Button>
+            </Row>
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:'#E5E9FF' }}>       
+                
+                <Row > {eventItems}      
+                    
+                </Row>
+                
+            </div>
+          </div>  )
     }
       }
 

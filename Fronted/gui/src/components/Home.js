@@ -9,6 +9,7 @@ import AdminListView from '../containers/AdminListView';
 import AdminLayout from '../containers/AdminLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import ViewEvent from './ViewEvent';
+import Email from './Email';
 
 
 class Home extends React.Component {
@@ -47,7 +48,7 @@ class Home extends React.Component {
     render() {
         let isLoading = this.state.user ? false : true;
         return(
-            <div>
+            <div >
             {
                 isLoading ? 
                     <Spin tip="Cargando..."/> 

@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Skeleton, Form, Button, Modal } from "antd";
-import { withRouter, Link } from 'react-router-dom';
+import { List, Avatar, Icon, Form, Button, Modal } from "antd";
+import { withRouter} from 'react-router-dom';
 import axios from "axios";
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
@@ -65,7 +65,7 @@ class Adminlist extends React.Component {
                     
                     
                     renderItem={item => (
-                        <List.Item 
+                        <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
                                 <Button 
                                   size='large' 
@@ -78,6 +78,7 @@ class Adminlist extends React.Component {
                                   {item.is_active ? "Desactivar cuenta" : "Activar cuenta"}
                                 </Button>
                             ]}>
+                            
                             
                             <List.Item.Meta
                                 avatar={
@@ -112,8 +113,8 @@ class Adminlist extends React.Component {
                             >
                                 <p>¿Está seguro que desea desactivar la cuenta?</p>
                             </Modal>
-
                         </List.Item>
+
                         
                     )}
                 />
