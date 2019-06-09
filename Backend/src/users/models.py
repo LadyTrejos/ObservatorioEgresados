@@ -150,7 +150,7 @@ class Egresado(models.Model):
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     address = models.CharField(max_length=100, blank=True)
-    id_phone = models.IntegerField(blank=True)
+    id_phone = models.IntegerField(blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True)
     
     def __str__(self):

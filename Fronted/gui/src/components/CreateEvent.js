@@ -192,19 +192,11 @@ import './CreateAdmin.css';
         
     }
 
-    handleCreate = () => {
-        console.log(this.state.eventInfo)
-        let interests = []
-        let data = ''
-        this.state.eventInfo.interests.map((interest) => (
-            data = interest.split('>'),
-            interests.push(data[0])
-        ))
+    postEvent = (interests) => {
         this.setState({
             eventInfo: { ...this.state.eventInfo, interests: interests}
         }, () => {
             const eventData = JSON.stringify(this.state.eventInfo)
-            console.log(eventData)
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
@@ -213,7 +205,27 @@ import './CreateAdmin.css';
                 console.log(err.message)
               })
         })
-        
+    }
+
+    handleCreate = () => {
+        let interests = []
+        let data = ''
+        this.state.eventInfo.interests.forEach((interest) => {
+            if(data.includes('>')) {
+                data = interest.split('>')
+                interests.push(data[0])
+            } else {
+                console.log(`{"name": "${interest}"}`)
+                axios.post('http://127.0.0.1:8000/api/intereses/',
+                            `{"name": "${interest}"}`,
+                            { headers: {"Content-type": "application/json"}}
+                            )
+                .then(res => {
+                    interests.push(res.data.id)
+                    this.postEvent(interests)
+                })
+            }
+        })
     }
 
     render() {
@@ -366,7 +378,9 @@ import './CreateAdmin.css';
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
                         ],
                     })(
-                        <Select mode="tags"
+                        <Select 
+                        size='large'
+                        mode="tags"
                         placeholder="Seleccione intereses relacionados con el evento"
                         tokenSeparators={[","]}
                         onChange={(e) => this.handleInterestChange(e)}
@@ -379,8 +393,8 @@ import './CreateAdmin.css';
           </Row>
 
 
-          <Row type="flex" justify="center" align="middle">
-            <Col span={2}>
+          <Row type="flex" justify="center" align="middle" gutter={20}>
+            <Col>
               <Form.Item>
                 <Button 
                     size='large' 
@@ -392,9 +406,7 @@ import './CreateAdmin.css';
               </Form.Item>
             </Col>
 
-
-
-            <Col span={2}>
+            <Col >
               <Form.Item>
                 <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
 
