@@ -408,7 +408,11 @@ import './CreateAdmin.css';
 
             <Col >
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
+                <Button 
+                    size='large' 
+                    type="primary" 
+                    href='/eventos'
+                    style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} >
 
                 <Link to='/ver-eventos'>Cancelar</Link>
                 </Button>
