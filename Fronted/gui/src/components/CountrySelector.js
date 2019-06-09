@@ -74,22 +74,23 @@ class CountrySelector extends React.Component {
     render() {
         
         let countryItems = this.countryData.countries.map((count) =>
-            <Option key={count.id}> {count.name} </Option>
+            <Option key={count.id} value={count.id}> {count.name} </Option>
         );
 
         let stateItems = this.countryData.states ? 
             (this.countryData.states.map((state) =>
-            <Option key={state.id}> {state.name} </Option>))
+            <Option key={state.id} value={state.id}> {state.name} </Option>))
             : null;
 
         let cityItems = this.countryData.cities ? 
             (this.countryData.cities.map((city) =>
-            <Option key={city.id}> {city.name} </Option>))
+            <Option key={city.id} value={city.id}> {city.name} </Option>))
             : null;
 
         return(
             <div>
                 <Select
+                    showSearch
                     size='large'
                     placeholder='País'
                     onChange={this.handleCountryChange}
@@ -97,6 +98,7 @@ class CountrySelector extends React.Component {
                     {countryItems}
                 </Select>
                 <Select
+                    showSearch
                     size='large'
                     placeholder='Región'
                     onChange={this.handleStateChange}
@@ -104,6 +106,7 @@ class CountrySelector extends React.Component {
                     {stateItems}
                 </Select>
                 <Select
+                    showSearch
                     size='large'
                     placeholder='Ciudad'
                     onChange={this.handleCitiesChange}

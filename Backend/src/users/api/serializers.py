@@ -105,7 +105,7 @@ class EventoSerializer(serializers.ModelSerializer):
 class InteresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interes
-        fields = "__all__"
+        fields = ('id', 'name')
 
 
 class TokenSerializer(serializers.ModelSerializer):

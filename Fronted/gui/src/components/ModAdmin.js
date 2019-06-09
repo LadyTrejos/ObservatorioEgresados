@@ -8,8 +8,7 @@ import {
     Button,
     Modal
   } from 'antd';
-import moment from 'moment';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import history from '../helpers/history';
@@ -86,6 +85,8 @@ class ModAdmins extends React.Component {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = this.props.match.params.id;
+        console.log(adminData)
+        console.log(userData)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
