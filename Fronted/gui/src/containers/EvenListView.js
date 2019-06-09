@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import { Row, Button } from 'antd';
 import ViewEvent from '../components/ViewEvent'
 
   class AdminListView extends React.Component {
@@ -20,7 +20,17 @@ import ViewEvent from '../components/ViewEvent'
    render(){
        return(
            <div>
-               <ViewEvent data={this.state.events}/>
+               <h2>Eventos</h2>
+                <Row>
+                <Button>Buscar</Button>
+                <Button
+                    style={{backgroundColor:'#22BA45'}}
+                    href='/crear-evento'
+                >
+                    Crear eventos
+                </Button>
+                </Row>
+                <ViewEvent data={this.state.events}/>
            </div>
        )
    }
