@@ -8,8 +8,7 @@ import {
     Button,
     Modal
   } from 'antd';
-import moment from 'moment';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import history from '../helpers/history';

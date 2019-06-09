@@ -157,7 +157,6 @@ class Admin(models.Model):
         return self.user.get_full_name()
 
 class Evento(models.Model):
-    _id = djongomodels.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=120)
     description = models.TextField()
     place = models.CharField(max_length=150)

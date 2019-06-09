@@ -7,20 +7,16 @@ import {
     Col,
     DatePicker,
     Button,
-    Cascader,
     TimePicker,
     Checkbox,
     Icon,
     Upload,
-    message,
-      Modal,
+    Modal,
 
   } from 'antd';
-
 import moment from 'moment';
-import { connect } from 'react-redux';
-
 import { withRouter, Link } from 'react-router-dom';
+import axios from 'axios';
 
 import './CreateAdmin.css';
 
@@ -28,46 +24,7 @@ import './CreateAdmin.css';
 
 
   const { TextArea } = Input;
-  /* Lugar*/
-  const options = [
-    {
-      value: "colombia",
-      label: "Colombia",
-      children: [
-        {
-          value: "risaralda",
-          label: "Risaralda",
-          children: [
-            {
-              value: "Pereira",
-              label: "pereira"
-            },
-            {
-              value: "Santarosa",
-              label: "Santa Rosa"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      value: "Estados unidos",
-      label: "Estados Unidos",
-      children: [
-        {
-          value: "Florida",
-          label: "FLorida",
-          children: [
-            {
-              value: "Miami ",
-              label: "Miami"
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
+  
   /* intereses */
   const CheckboxGroup = Checkbox.Group;
   const plainOptions = ['Deporte', 'Cultura', 'Familiar','Ocio','Academia','Social',];
@@ -84,8 +41,6 @@ import './CreateAdmin.css';
       checkedList,
       indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
       checkAll: checkedList.length === plainOptions.length,
-
-
     });
   };
 
@@ -106,7 +61,7 @@ import './CreateAdmin.css';
             onChange={this.onCheckAllChange}
             checked={this.state.checkAll}
           >
-            Check all
+            Seleccionar todos
           </Checkbox>
         </div>
         <br />
@@ -157,7 +112,7 @@ import './CreateAdmin.css';
      const uploadButton = (
        <div>
          <Icon type="plus" />
-         <div className="ant-upload-text">Upload</div>
+         <div className="ant-upload-text">Subir</div>
        </div>
      );
      return (
@@ -172,7 +127,7 @@ import './CreateAdmin.css';
            {fileList.length >= 1   ? null : uploadButton}
          </Upload>
          <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-           <img alt="example" style={{ width: '100%' }} src={previewImage} />
+           <img alt="Portada del evento" style={{ width: '100%' }} src={previewImage} />
          </Modal>
        </div>
      );
@@ -180,40 +135,39 @@ import './CreateAdmin.css';
  }
 /* fin de imagenes */
 
-  function onChange(value) {
-    console.log(value);
-  }
+
+
+
+
+
+
+
+
+
 
   class createEvento extends React.Component {
     state = {
-      name:'',
-      description:'',
-      place:'',
-      date:'',
-      hour:'',
-      organizer:'',
-      created_at: moment().format('DD-MM-YYYY'),
-      admin: localStorage.getItem('user'),
-      interests:'',
-      multimedia:'',
+        eventInfo: {
+            name:'',
+            description:'',
+            place:'',
+            date:'',
+            hour:'',
+            organizer:'',
+            created_at: moment().format('DD-MM-YYYY'),
+            admin: localStorage.getItem('user'),
+            interests: []
+        },
+        interests: []
     };
 
-
-    handleSubmit = e => {
-      e.preventDefault();
-      this.props.form.validateFieldsAndScroll((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-        }
-      });
-    };
-
-
-
-    handleConfirmBlur = e => {
-      const value = e.target.value;
-      this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-    };
+    componentDidMount(){
+        axios.get('http://127.0.0.1:8000/api/intereses/')
+        .then( res => {
+            this.setState({ interests: res.data})
+        })
+        .catch( err => console.log(err.message))
+    }
 
     onChange = e => {
       const { value } = e.target;
@@ -229,41 +183,52 @@ import './CreateAdmin.css';
         (current && current < moment(min, "YYYY-MM-DD")) ||
         (current && current < moment().add( "year"))
       );
-
-
-    }
-    onChange2(dateString) {
-      console.log('Formatted Selected Time: ', dateString);
     }
 
-    disabledDate2 = (current) => {
-      let min = "1942-01-01";
-      return (
-        (current && current == moment(current))
+    handleInterestChange = (value) => {
+        this.setState({
+            eventInfo: { ...this.state.eventInfo, interests: value}
+        })
+        
+    }
 
-      );
-
-
+    handleCreate = () => {
+        console.log(this.state.eventInfo)
+        let interests = []
+        let data = ''
+        this.state.eventInfo.interests.map((interest) => (
+            data = interest.split('>'),
+            interests.push(data[0])
+        ))
+        this.setState({
+            eventInfo: { ...this.state.eventInfo, interests: interests}
+        }, () => {
+            const eventData = JSON.stringify(this.state.eventInfo)
+            console.log(eventData)
+            axios.post('http://127.0.0.1:8000/api/eventos/', 
+                        eventData, 
+                        { headers: {"Content-type": "application/json"}})
+            .then((res) => console.log(res))
+            .catch(err => {
+                console.log(err.message)
+              })
+        })
+        
     }
 
     render() {
 
-        console.log(this.state)
       const { getFieldDecorator } = this.props.form;
 
-      const prefixSelector = getFieldDecorator('prefix', {
-        initialValue: '57',
-      })(
-        <Select style={{ width: 70 }}>
-          <Option value="57">+57</Option>
-          <Option value="56">+56</Option>
-          <Option value="59">+59</Option>
-        </Select>,
+      const interestItems = [] 
+      
+      this.state.interests.map( (item) => 
+          interestItems.push(<Option key={item.id} value={`${item.id}>${item.name}`}>{item.name}</Option>)
       );
 
 
       return (
-        <Form layout="vertical" onSubmit={this.handleSubmit} >
+        <Form layout="vertical" >
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
 
 
@@ -278,10 +243,6 @@ import './CreateAdmin.css';
             </Col>
           </Row>
 
-
-
-
-
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
               <Form.Item
@@ -292,7 +253,7 @@ import './CreateAdmin.css';
                 })(<Input
                       placeholder='Nombre del evento'
                       size='large'
-                      onChange={e => {this.setState({name: e.target.value})}}
+                      onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, name: e.target.value}})}}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
               </Form.Item>
@@ -311,7 +272,7 @@ import './CreateAdmin.css';
                 })(<TextArea rows={4}
                       placeholder='Descripción de evento'
                       size='large'
-                      onChange={e => {this.setState({description: e.target.value})} }
+                      onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, description: e.target.value}})} }
 
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
 
@@ -330,7 +291,7 @@ import './CreateAdmin.css';
                   <DatePicker
                     placeholder='Seleccione fecha'
                     size='large'
-                    onChange={(date, dateString) => this.setState({ date: dateString })}
+                    onChange={(date, dateString) => this.setState({ eventInfo: {...this.state.eventInfo, date: dateString }})}
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
 
@@ -351,8 +312,9 @@ import './CreateAdmin.css';
                     <TimePicker
                         size='large'
                         placeholder="Hora del evento"
-                        onChange={onChange}
-                        onChange={(time, timeString) => this.setState({ hour: timeString })} />
+                        onChange={(_, timeString) => 
+                            this.setState({ eventInfo: {...this.state.eventInfo, hour: timeString} })} 
+                    />
                   )}
               </Form.Item>
             </Col>
@@ -366,35 +328,16 @@ import './CreateAdmin.css';
                 {getFieldDecorator('place', {
                   rules: [{ required:true, message: '¿Dónde se realizará?' }],
                 })(
-                  <Cascader options={options} onChange={e => {this.setState({place: e.target.value})}}
-
-                    placeholder='Seleccione lugar'
+                    <Input
+                    placeholder='Lugar del evento'
                     size='large'
-                    onChange={this.onChange2}
-
-
-
-                  />
+                    onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, place: e.target.value }})}}
+                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
                   )}
               </Form.Item>
             </Col>
           </Row>
 
-          {/*<Row  type="flex" justify="center" align="middle">
-            <Col span={7}>
-              <Form.Item label="Género">
-                {getFieldDecorator('genre', {
-                  initialValue: 'Prefiero no contestar',
-                })(
-                  <Select size='large'>
-                    <Option value="Hombre">Hombre</Option>
-                    <Option value="Mujer">Mujer</Option>
-                    <Option value="NoContestar">Prefiero no contestar</Option>
-                  </Select>
-                 )}
-              </Form.Item>
-            </Col>
-          </Row>*/}
 
           <Row  type="flex" justify="center" align="middle">
             <Col span={7}>
@@ -409,7 +352,7 @@ import './CreateAdmin.css';
                 })(<Input
                       placeholder='Nombre, asociación o institución '
                       size='large'
-                      onChange={e => {this.setState({organizer: e.target.value})}}
+                      onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, organizer: e.target.value}})}}
                       style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
@@ -417,17 +360,21 @@ import './CreateAdmin.css';
 
           <Row type="flex" justify="center" align="middle">
             <Col span={7}>
-              <Form.Item label="Intereses">
-                {getFieldDecorator('interests', {
-                  rules: [{ required: false, message: 'Seleccione al menos un interés' }],
-                })(
-                  <App
-                    size='large'
-                    onChange={e => {this.setState({interests: e.target.value})}}
-                    addonBefore={prefixSelector}
-                    placeholder='Ej: 1234567890'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
-              </Form.Item>
+                <Form.Item label="Intereses">
+                    {getFieldDecorator('interests', {
+                        rules: [
+                        { required: true, message: 'Seleccione al menos un interés', type: 'array' },
+                        ],
+                    })(
+                        <Select mode="tags"
+                        placeholder="Seleccione intereses relacionados con el evento"
+                        tokenSeparators={[","]}
+                        onChange={(e) => this.handleInterestChange(e)}
+                        >
+                            {interestItems}
+                        </Select>,
+                    )}
+                </Form.Item>
             </Col>
           </Row>
 
@@ -435,8 +382,12 @@ import './CreateAdmin.css';
           <Row type="flex" justify="center" align="middle">
             <Col span={2}>
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  <Link to='/ver-eventos'>Crear</Link>
+                <Button 
+                    size='large' 
+                    type="primary" 
+                    onClick={this.handleCreate}
+                    style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
+                  Crear
                 </Button>
               </Form.Item>
             </Col>
@@ -459,7 +410,7 @@ import './CreateAdmin.css';
     }
   }
 
-  const CreateEvent = Form.create({ name: 'register' })(createEvento);
+  const CreateEvent = Form.create({ name: 'createEvent' })(createEvento);
 
 
 

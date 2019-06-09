@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Skeleton, Form, Button, Modal } from "antd";
-import { withRouter, Link } from 'react-router-dom';
+import { List, Avatar, Icon, Form, Button, Modal } from "antd";
+import { withRouter } from 'react-router-dom';
 import axios from "axios";
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
