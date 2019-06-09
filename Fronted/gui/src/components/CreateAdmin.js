@@ -50,6 +50,8 @@ class RegistrationForm extends React.Component {
   makeRandomPassword = () => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
+
+  
   
   handleCreate = e => {
     e.preventDefault();
@@ -84,9 +86,6 @@ class RegistrationForm extends React.Component {
       }
     )
     
-
-    
-    
   };
 
   disabledDate = (current) => {
@@ -104,8 +103,25 @@ class RegistrationForm extends React.Component {
     })
   }
 
+  getPattern = (rule, value, callback) => {
+    let reg = null;
+    // Expresión regular dependiendo del tipo de documento seleccionado
+    if ( this.state.userInfo.id_type === 'PA'){
+      reg = /^[A-Z]{2}[0-9]{6}$/;
+    } else {
+      reg = /^[0-9]{6,10}$/
+    }
+    // Verificar si se cumple la expresión regular
+    if(value && !reg.test(value)){
+      callback('El documento ingresado no es válido')
+    } else {
+      callback();
+    }
+    
+  };
+
   render() {
-    console.log(this.state)
+
     const { getFieldDecorator } = this.props.form;
    
     const prefixSelector = getFieldDecorator('prefix', {
@@ -184,13 +200,18 @@ class RegistrationForm extends React.Component {
           <Col span={4.5}> 
             <Form.Item label="Documento de identidad">
               {getFieldDecorator('id', {
-                rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                rules: [{ required:true, message: 'Ingresar el documento de identidad' }, 
+              {validator: this.getPattern, message: 'El documento ingresado no es válido' }
+              ]
               })(
+
                 <Input
                   size='large' 
-                  onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
                   placeholder='Documento de identidad'
-                  style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}} />
+                  style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}}
+                  onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }>
+                </Input>
+
                 )}
             </Form.Item>
           </Col>
