@@ -29,4 +29,18 @@ class InteresViewSet(viewsets.ModelViewSet):
 
 class AdminListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_admin = True)
+<<<<<<< Updated upstream
     serializer_class = UserSerializer
+=======
+    serializer_class = UserSerializer
+
+class EventoListView(viewsets.ReadOnlyModelViewSet):
+    queryset = Evento.objects.all()
+    serializer_class = UserSerializer
+
+class CurrentUserView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+>>>>>>> Stashed changes
