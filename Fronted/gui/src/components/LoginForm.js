@@ -6,7 +6,7 @@ import * as actions from '../store/actions/auth';
 
 import '../App.css';
 import './LoginForm.css'
-
+import logo from '../static/img/logo.png'
 
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -35,7 +35,10 @@ class LoginForm extends React.Component {
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%'}}><strong>Observatorio de egresados</strong></div>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%'}}>
+              <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
+              <strong>Observatorio de egresados</strong>
+            </div>
 
             <div style={stylesObj} className="container">
             

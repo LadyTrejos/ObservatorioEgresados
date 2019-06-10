@@ -1,8 +1,8 @@
-
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
 import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
+import history from '../helpers/history';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -31,7 +31,7 @@ class ViewEvent extends React.Component {
               },],
             
         }
-        this.countryRef = React.createRef();
+        this.showConfirm = this.showConfirm.bind(this)
     }
 
       showModal = () => {
@@ -54,15 +54,18 @@ class ViewEvent extends React.Component {
         });
       };
 
-      showConfirm = (item) => {
-        console.log(item)
+      
+      showConfirm(item) {
+        
         confirm({
           title: '¿Está seguro(a) que desea eliminar este evento?',
           content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
-          onOk() {
-            return new Promise((resolve, reject) => {
-              setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-            }).catch(() => console.log('Oops errors!'));
+          onOk: () => {
+            console.log(this.state)
+            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
+            .then(() => 
+              this.props.loadData()
+            )
           },
           onCancel() {},
         });
@@ -85,7 +88,7 @@ class ViewEvent extends React.Component {
               renderItem={item => (
                 <div>
                   <Card
-                    style={{width:'30vw', minWidth:400, borderColor:'gray', borderRadius:20}}
+                    style={{width:'30vw', minWidth:300, borderColor:'gray', borderRadius:20}}
                     cover={
                       <div 
                         style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"5%" }}>
@@ -125,7 +128,7 @@ class ViewEvent extends React.Component {
                             </Button>
                         </Col>
                         <Col>
-                            <Button onClick={()=>this.showConfirm(item)} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                            <Button onClick={() => {this.showConfirm(item)}} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
                               Eliminar
                             </Button>
                         </Col>

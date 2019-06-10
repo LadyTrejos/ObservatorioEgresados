@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Layout.css'
 import * as actions from '../store/actions/auth';
-
+import logo from '../static/img/logo.png'
 
 const { Header, Content, Sider } = Layout;
 
@@ -82,8 +82,18 @@ class SuperuserLayout extends React.Component {
                             
                     </Sider>
                     <Layout style={{backgroundColor:'#E5E9FF'}}>
-                        <Header style={{height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
-                            <h1 >Observatorio de egresados</h1>   
+                    <Header 
+                            style={{height: '10%', 
+                                    backgroundColor:'#8796F0', 
+                                    fontSize:'150%', 
+                                    display:'flex', 
+                                    flexDirection:'row', 
+                                    alignContent:'flex-center', 
+                                    justifyContent:'flex-end'}}
+                        >
+                            <img src={logo} alt="Logo de la página" style={{width: 50, height: 50}}/>
+                            <h1 style={{color:'#fff'}}><strong>Observatorio de egresados</strong></h1>
+                            
                         </Header>
                         <Content style={{ margin: '24px 0px 0', backgroundColor:'#E5E9FF' }}>
                             <div style={{ padding: 24, background: '#E5E9FF', minHeight: 360}}>

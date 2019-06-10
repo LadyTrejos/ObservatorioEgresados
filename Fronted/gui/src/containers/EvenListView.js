@@ -9,12 +9,16 @@ import ViewEvent from '../components/ViewEvent'
    }
 
    componentDidMount(){
-       axios.get('http://127.0.0.1:8000/api/eventos')
-       .then(res =>{
-           this.setState({
-               events: res.data
-           })
-       })
+       this.loadData()
+   }
+
+   loadData = () => {
+    axios.get('http://127.0.0.1:8000/api/eventos')
+    .then(res =>{
+        this.setState({
+            events: res.data
+        })
+    })
    }
 
    render(){
@@ -30,7 +34,7 @@ import ViewEvent from '../components/ViewEvent'
                     Crear eventos
                 </Button>
                 </Row>
-                <ViewEvent data={this.state.events}/>
+                <ViewEvent data={this.state.events} loadData={this.loadData}/>
            </div>
        )
    }

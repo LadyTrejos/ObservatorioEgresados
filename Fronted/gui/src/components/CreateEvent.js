@@ -12,7 +12,7 @@ import {
     Icon,
     Upload,
     Modal,
-
+    message
   } from 'antd';
 import moment from 'moment';
 import { withRouter, Link } from 'react-router-dom';
@@ -192,28 +192,44 @@ import './CreateAdmin.css';
         
     }
 
-    handleCreate = () => {
-        console.log(this.state.eventInfo)
-        let interests = []
-        let data = ''
-        this.state.eventInfo.interests.map((interest) => (
-            data = interest.split('>'),
-            interests.push(data[0])
-        ))
+    postEvent = (interests) => {
         this.setState({
             eventInfo: { ...this.state.eventInfo, interests: interests}
         }, () => {
             const eventData = JSON.stringify(this.state.eventInfo)
-            console.log(eventData)
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
-            .then((res) => console.log(res))
+            .then((res) => message.success('El evento ha sido creado con éxito.', 10))
             .catch(err => {
                 console.log(err.message)
               })
         })
+    }
+
+    handleCreate = () => {
         
+        let interests = [], promises = [];
+        let data = ''
+        this.state.eventInfo.interests.forEach((interest, i) => {
+            if(interest.includes('>')) {
+                data = interest.split('>')
+                interests.push(data[0])
+            } else {
+                promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
+                            `{"name": "${interest}"}`,
+                            { headers: {"Content-type": "application/json"}}
+                            )
+                )
+            }
+        })
+        axios.all(promises)
+        .then(results => {
+          results.forEach(item => interests.push(item.data.id))
+          console.log(interests)
+          this.postEvent(interests)
+        }
+        )
     }
 
     render() {
@@ -367,7 +383,9 @@ import './CreateAdmin.css';
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
                         ],
                     })(
-                        <Select mode="tags"
+                        <Select 
+                        size='large'
+                        mode="tags"
                         placeholder="Seleccione intereses relacionados con el evento"
                         tokenSeparators={[","]}
                         onChange={(e) => this.handleInterestChange(e)}
@@ -386,6 +404,7 @@ import './CreateAdmin.css';
                 <Button 
                     size='large' 
                     type="primary"
+                    href='/eventos'
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Crear
@@ -393,13 +412,15 @@ import './CreateAdmin.css';
               </Form.Item>
             </Col>
 
-
-
             <Col >
               <Form.Item>
-                <Button size='large' type="primary" htmlType="submit" style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} onClick={this.props.logout} >
+                <Button 
+                    size='large' 
+                    type="primary" 
+                    href='/eventos'
+                    style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} >
 
-                <Link to='/eventos'>Cancelar</Link>
+                Cancelar
                 </Button>
               </Form.Item>
             </Col>

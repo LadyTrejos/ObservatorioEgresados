@@ -191,7 +191,7 @@ class ModAdmins extends React.Component {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
                 initialValue: this.state.userInfo.id_type
               })(
-                <Select size='large' onChange={ value => this.setState({ userInfo: { ...this.state.userInfo, id_type: value } })}>
+                <Select size='large' disabled>
                   <Option value="TI">Tarjeta de identidad</Option>
                   <Option value="CC">Cédula</Option>
                   <Option value="PA">Pasaporte</Option>
@@ -211,6 +211,7 @@ class ModAdmins extends React.Component {
                 <Input
                   size='large'  
                   placeholder='Documento de identidad'
+                  readOnly
                   onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
                   style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}} />)}
             </Form.Item>
@@ -230,6 +231,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='ejemplo@dominio.com'
                     size='large'
+                    readOnly
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
