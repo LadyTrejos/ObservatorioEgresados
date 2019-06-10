@@ -11,7 +11,6 @@ import moment from 'moment';
 import axios from 'axios';
 import { withRouter, } from 'react-router-dom';
 
-import './CreateAdmin.css';
 import NumericInput from './NumericInput';
 import CountrySelector from './CountrySelector';
 import history from '../helpers/history';
@@ -58,33 +57,36 @@ class RegistrationForm extends React.Component {
     const selector = this.countryRef.current;
     const password = this.makeRandomPassword();
     console.log(password)
-    this.setState({ userInfo: { ...this.state.userInfo, 
-      country: selector.state.country,
-      region: selector.state.region,
-      city: selector.state.city,
-      password1: password,
-      password2: password},
-      adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
-    },
-      () => {
-        const userData = JSON.stringify(this.state.userInfo)
-        const adminData = JSON.stringify(this.state.adminInfo)
-        console.log(userData)
-        console.log(adminData)
-        axios.post('http://localhost:8000/rest-auth/registration/', 
-                    userData, 
-                    { headers: {"Content-type": "application/json"}})
-        .then(() => {
-            axios.post('http://localhost:8000/api/admins/', 
-                    adminData, 
-                    { headers: {"Content-type": "application/json"}})
-            history.push('/ver-admins')
-        })
-        .catch(err => {
-          console.log(err.message)
-        })
+
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setState({ userInfo: { ...this.state.userInfo, 
+          country: selector.state.country,
+          region: selector.state.region,
+          city: selector.state.city,
+          password1: password,
+          password2: password},
+          adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
+        },
+          () => {
+            const userData = JSON.stringify(this.state.userInfo)
+            const adminData = JSON.stringify(this.state.adminInfo)
+            axios.post('http://localhost:8000/rest-auth/registration/', 
+                        userData, 
+                        { headers: {"Content-type": "application/json"}})
+            .then(() => {
+                axios.post('http://localhost:8000/api/admins/', 
+                        adminData, 
+                        { headers: {"Content-type": "application/json"}})
+                history.push('/ver-admins')
+            })
+            .catch(err => {
+              console.log(err.message)
+            })
+          }
+        )
       }
-    )
+    });
     
   };
 
@@ -141,7 +143,7 @@ class RegistrationForm extends React.Component {
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>
           Crear administrador
         </h1>
-        <Row  type="flex" justify="center" >
+        <Row type="flex" justify="center" >
           <Col span={7}>
             
             <Form.Item label='Nombre(s)'>

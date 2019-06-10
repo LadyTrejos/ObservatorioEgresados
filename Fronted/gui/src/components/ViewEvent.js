@@ -2,7 +2,6 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
 import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
-import history from '../helpers/history';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -29,9 +28,21 @@ class ViewEvent extends React.Component {
               place:'place',
               photo:'https://cdn.pixabay.com/photo/2015/04/04/21/41/concert-707155_960_720.jpg'
               },],
+            interests: {}
             
         }
         this.showConfirm = this.showConfirm.bind(this)
+    }
+
+    componentDidMount(){
+      axios.get('http://127.0.0.1:8000/api/intereses/')
+      .then(res => {
+        let interests = {}
+        res.data.map( item => 
+          interests[item.id] = item.name
+        )
+        this.setState({ interests: interests })
+      })
     }
 
       showModal = () => {
@@ -106,13 +117,16 @@ class ViewEvent extends React.Component {
                     />
                     <br/>
                     <Meta
-                      style={{color:'#2F3E9E'}}
+                      style={{color:'#2F3E9E', overflowWrap: 'break-word'}}
                       description={item.description}
                     />
                     <br/>
                     <br/>
                     
-                    <Tag>{item.interests[0]}</Tag>
+                    { item.interests.map( item => (
+                      <Tag key={item}>{this.state.interests[item]}</Tag>
+                      ))
+                    }
                     <Divider/>
                     <IconText type="calendar" text={item.date}/>
                     <br/>
