@@ -256,7 +256,6 @@ class ModAdmins extends React.Component {
           <Col span={7}>
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {
-                rules: [{ required: false, message: 'Ingresar número telefónico' }],
                 initialValue: this.state.adminInfo.phone
               })(
                 <NumericInput 

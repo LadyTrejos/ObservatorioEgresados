@@ -262,7 +262,6 @@ class RegistrationForm extends React.Component {
           <Col span={7}>
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {
-                rules: [{ required: true, message: 'Ingresar número telefónico' }]
               })(
                 <NumericInput 
                   size='large'

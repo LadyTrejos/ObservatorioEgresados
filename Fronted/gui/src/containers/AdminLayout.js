@@ -100,6 +100,7 @@ class AdminLayout extends React.Component {
                     <Layout style={{backgroundColor:'#E5E9FF'}}>
                         <Header 
                             style={{height: '10%', 
+                                    minHeight: 60,
                                     backgroundColor:'#8796F0', 
                                     fontSize:'150%', 
                                     display:'flex', 
