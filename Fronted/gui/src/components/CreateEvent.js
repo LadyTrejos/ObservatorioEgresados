@@ -8,22 +8,19 @@ import {
     DatePicker,
     Button,
     TimePicker,
-    Checkbox,
     Icon,
     Upload,
     Modal,
     message
   } from 'antd';
 import moment from 'moment';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-import './CreateAdmin.css';
-
-  const { Option } = Select;
+const { Option } = Select;
 
 
-  const { TextArea } = Input;
+const { TextArea } = Input;
   
   
  /* imagenes*/
@@ -107,7 +104,6 @@ import './CreateAdmin.css';
             date:'',
             hour:'',
             organizer:'',
-            created_at: moment().format('DD-MM-YYYY'),
             admin: localStorage.getItem('user'),
             interests: [],
             url:''
@@ -166,30 +162,32 @@ import './CreateAdmin.css';
         })
     }
 
-    handleCreate = () => {
-      
-        let interests = [], promises = [];
-        let data = ''
-        this.state.eventInfo.interests.forEach((interest, i) => {
-            if(interest.includes('>')) {
-                data = interest.split('>')
-                interests.push(data[0])
-            } else {
-                promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
-                            `{"name": "${interest}"}`,
-                            { headers: {"Content-type": "application/json"}}
-                            )
-                )
+    handleCreate = (e) => {
+      e.preventDefault();
+      this.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          let interests = [], promises = [];
+          let data = ''
+          this.state.eventInfo.interests.forEach((interest, i) => {
+              if(interest.includes('>')) {
+                  data = interest.split('>')
+                  interests.push(data[0])
+              } else {
+                  promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
+                              `{"name": "${interest}"}`,
+                              { headers: {"Content-type": "application/json"}}
+                              )
+                  )
+              }
+          })
+          axios.all(promises)
+          .then(results => {
+            results.forEach(item => interests.push(item.data.id))
+            this.postEvent(interests)
+          }
+          )
         }
-        })
-        axios.all(promises)
-        .then(results => {
-          results.forEach(item => interests.push(item.data.id))
-          console.log(interests)
-          this.postEvent(interests)
-        }
-      )
-      console.log(this.state)
+      });
     }
 
     render() {
@@ -213,9 +211,7 @@ import './CreateAdmin.css';
           <Row type="flex" justify="center" align="middle">
             <Col span={5}>
               <Form.Item label="Imagen de portada del evento">
-                  {getFieldDecorator('multimedia', )
-                  (<PicturesWall ref={this.imageRef}/>
-
+                  {getFieldDecorator('multimedia', )(<PicturesWall ref={this.imageRef}/>
                   )}
                 </Form.Item>
             </Col>
@@ -229,12 +225,12 @@ import './CreateAdmin.css';
                 {getFieldDecorator('name', {
                   rules: [{ required: true, message: 'Ingrese el nombre del evento', whitespace: true }],
                 })(<Input
-                      
                       placeholder='Nombre del evento'
                       size='large'
                       onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, name: e.target.value}})}}
-                      style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
-
+                      style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
+                    />
+                  )}
               </Form.Item>
             </Col>
           </Row>
@@ -261,8 +257,8 @@ import './CreateAdmin.css';
 
 
           <br/>
-          <Row  type="flex" justify="center" align="middle">
-            <Col span={5}>
+          <Row  type="flex" justify="center" align="middle" gutter={20}>
+            <Col>
               <Form.Item label="Fecha del evento">
                 {getFieldDecorator('date', {
                   rules: [{ required:true, message: 'Ingresar la fecha del evento' }],
@@ -281,12 +277,11 @@ import './CreateAdmin.css';
             </Col>
 
 
-            <Col span={4.5}>
+            <Col>
               <Form.Item label="Hora del evento">
                 {getFieldDecorator('hour  ', {
-                  rules: [{ required:true, message: 'Ingresar la hora del evento' }],
+                  rules: [{ required: true, message: 'Ingresar la hora del evento' }],
                   setFieldsValue:this.state.hour,
-                  initialValue: moment('00:00:00', 'HH:mm:ss')
                 })(
                     <TimePicker
                         size='large'

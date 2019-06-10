@@ -150,9 +150,9 @@ class Egresado(models.Model):
 
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    address = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
     id_phone = models.IntegerField(blank=True, null=True)
-    phone = models.CharField(max_length=20, blank=True)
+    phone = models.IntegerField(null=True)
     
     def __str__(self):
         return self.user.get_full_name()
@@ -164,7 +164,7 @@ class Evento(models.Model):
     date = models.DateField(default=datetime.date.today)
     hour = models.TimeField(default=timezone.now)
     organizer = models.CharField(max_length=120)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='admin')
     interests = models.ManyToManyField(Interes, related_name='insterests',blank=True)
     url = models.TextField()

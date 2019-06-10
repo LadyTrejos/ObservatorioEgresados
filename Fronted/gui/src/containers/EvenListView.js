@@ -1,48 +1,71 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Button } from 'antd';
+import { Row, Button, Input, Col } from 'antd';
 import ViewEvent from '../components/ViewEvent'
 
-  class AdminListView extends React.Component {
-   state={
-       events: []
-   }
+const Search = Input.Search;
 
-   componentDidMount(){
-       this.loadData()
-   }
+class AdminListView extends React.Component {
+state={
+    events: []
+}
 
-   loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/eventos')
+componentDidMount(){
+    this.loadData()
+}
+
+loadData = () => {
+    axios.get('http://localhost:8000/api/eventos/?ordering=-created_at')
     .then(res =>{
         this.setState({
             events: res.data
         })
     })
-   }
+}
 
-   render(){
-       return(
-           <div>
-               <h2>Eventos</h2>
-                <Row>
-                <Button>Buscar</Button>
-                <Button
-                    style={{backgroundColor:'#22BA45'}}
-                    href='/crear-evento'
-                >
-                    Crear eventos
-                </Button>
-                </Row>
-                <ViewEvent data={this.state.events} loadData={this.loadData}/>
-           </div>
-       )
-   }
+handleSearch = (value) => {
+    axios.get(`http://localhost:8000/api/eventos/?search=${value}&&ordering=-created_at`)
+    .then(res =>{
+        this.setState({
+            events: res.data
+        })
+    })
+}
 
-  }
-  
-  
-  
-  
-  
-  export default AdminListView;
+render(){
+    return(
+        <div>
+            <Row type="flex" justify="center" align="middle">
+                <h2 style={{fontSize:30, color:'#001870'}}>Eventos</h2>
+            </Row>
+            <Row gutter={200}>
+                <Col style={{maxWidth:'40%'}}>
+                    <Search 
+                        placeholder="Buscar evento"
+                        onSearch={value => this.handleSearch(value)} 
+                        enterButton 
+                    />
+                </Col>
+                <Col>
+                    <Button
+                        style={{backgroundColor:'#22BA45'}}
+                        href='/crear-evento'
+                    >
+                        Crear eventos
+                    </Button>
+                </Col>
+            </Row>
+            <br/>
+            <br/>
+            <ViewEvent data={this.state.events} loadData={this.loadData}/>
+        </div>
+    )
+}
+
+}
+
+
+
+
+
+export default AdminListView;

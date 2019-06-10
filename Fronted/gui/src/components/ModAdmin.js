@@ -12,7 +12,6 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import history from '../helpers/history';
-import './CreateAdmin.css';
 import NumericInput from './NumericInput';
 
 const { Option } = Select;
