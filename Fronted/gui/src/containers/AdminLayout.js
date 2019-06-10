@@ -70,7 +70,7 @@ class AdminLayout extends React.Component {
                                 <span className="nav-text">
                                     Eventos
                                 </span>
-                                <Link to='/crear-evento'></Link>
+                                <Link to='/eventos'></Link>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <Icon type="team" />
@@ -102,6 +102,7 @@ class AdminLayout extends React.Component {
                                     backgroundColor:'#8796F0', 
                                     fontSize:'150%', 
                                     display:'flex', 
+                                    textAlign: 'right',
                                     flexDirection:'row', 
                                     alignContent:'flex-center', 
                                     justifyContent:'flex-end'}}

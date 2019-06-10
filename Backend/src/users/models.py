@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 from django.forms import ModelForm, PasswordInput
+from drf_extra_fields.fields import Base64ImageField
 
 import datetime
 
@@ -166,6 +167,7 @@ class Evento(models.Model):
     created_at = models.DateField(auto_now_add=True)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='admin')
     interests = models.ManyToManyField(Interes, related_name='insterests',blank=True)
+    url = models.TextField()
 
     def __str__(self):
         return self.name 

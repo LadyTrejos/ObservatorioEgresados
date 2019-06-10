@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import axios from 'axios'
 import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
 import history from '../helpers/history';
+import image from '../prueba.jpg'
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -27,7 +28,7 @@ class ViewEvent extends React.Component {
               date:'date',
               time:'time',
               place:'place',
-              photo:'https://cdn.pixabay.com/photo/2015/04/04/21/41/concert-707155_960_720.jpg'
+              photo:image
               },],
             
         }
@@ -86,7 +87,7 @@ class ViewEvent extends React.Component {
               dataSource={this.props.data}
             
               renderItem={item => (
-                <div>
+                <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
                   <Card
                     style={{width:'30vw', minWidth:300, borderColor:'gray', borderRadius:20}}
                     cover={
@@ -95,7 +96,7 @@ class ViewEvent extends React.Component {
                         <img
                             style={{width: '90%', height: '90%'}}
                             alt="Foto del evento"
-                            src={this.state.events[0].photo}
+                            src={item.url}
                         />
                       </div>    
                     }

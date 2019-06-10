@@ -25,56 +25,7 @@ import './CreateAdmin.css';
 
   const { TextArea } = Input;
   
-  /* intereses */
-  const CheckboxGroup = Checkbox.Group;
-  const plainOptions = ['Deporte', 'Cultura', 'Familiar','Ocio','Academia','Social',];
-  const defaultCheckedList = ['Social','Academia'];
-  class App extends React.Component {
-  state = {
-    checkedList: defaultCheckedList,
-    indeterminate: true,
-    checkAll: false,
-  };
-
-  onChange = checkedList => {
-    this.setState({
-      checkedList,
-      indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-      checkAll: checkedList.length === plainOptions.length,
-    });
-  };
-
-  onCheckAllChange = e => {
-    this.setState({
-      checkedList: e.target.checked ? plainOptions : [],
-      indeterminate: false,
-      checkAll: e.target.checked,
-    });
-  };
-
-  render() {
-    return (
-      <div>
-        <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-          <Checkbox
-            indeterminate={this.state.indeterminate}
-            onChange={this.onCheckAllChange}
-            checked={this.state.checkAll}
-          >
-            Seleccionar todos
-          </Checkbox>
-        </div>
-        <br />
-        <CheckboxGroup
-          options={plainOptions}
-          value={this.state.checkedList}
-          onChange={this.onChange}
-        />
-      </div>
-    );
-  }
-}
-/* fin de intereses*/
+  
  /* imagenes*/
  function getBase64(file) {
    return new Promise((resolve, reject) => {
@@ -85,6 +36,7 @@ import './CreateAdmin.css';
    });
  }
 
+ 
  class PicturesWall extends React.Component {
    state = {
      previewVisible: false,
@@ -92,7 +44,11 @@ import './CreateAdmin.css';
      fileList: [  ],
    };
 
-   handleCancel = () => this.setState({ previewVisible: false });
+  
+
+   handleCancel = () => {this.setState({ previewVisible: false });
+  
+  }
 
    handlePreview = async file => {
      if (!file.url && !file.preview) {
@@ -105,9 +61,13 @@ import './CreateAdmin.css';
      });
    };
 
-   handleChange = ({ fileList }) => this.setState({ fileList });
+   handleChange = ({ fileList }) => {
+     this.setState({ fileList })
+     
+    };
 
    render() {
+     console.log(this.state)
      const { previewVisible, previewImage, fileList } = this.state;
      const uploadButton = (
        <div>
@@ -136,17 +96,10 @@ import './CreateAdmin.css';
 /* fin de imagenes */
 
 
-
-
-
-
-
-
-
-
-
   class createEvento extends React.Component {
-    state = {
+    constructor(props) {
+      super(props);
+      this.state = {
         eventInfo: {
             name:'',
             description:'',
@@ -156,12 +109,16 @@ import './CreateAdmin.css';
             organizer:'',
             created_at: moment().format('DD-MM-YYYY'),
             admin: localStorage.getItem('user'),
-            interests: []
+            interests: [],
+            url:''
         },
         interests: []
     };
+    this.imageRef = React.createRef();
+  }
 
     componentDidMount(){
+      
         axios.get('http://127.0.0.1:8000/api/intereses/')
         .then( res => {
             this.setState({ interests: res.data})
@@ -193,10 +150,12 @@ import './CreateAdmin.css';
     }
 
     postEvent = (interests) => {
+        const urlImage = this.imageRef.current.state.previewImage
         this.setState({
-            eventInfo: { ...this.state.eventInfo, interests: interests}
+            eventInfo: { ...this.state.eventInfo, interests: interests, url:urlImage}
         }, () => {
             const eventData = JSON.stringify(this.state.eventInfo)
+            console.log(eventData)
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
@@ -208,7 +167,7 @@ import './CreateAdmin.css';
     }
 
     handleCreate = () => {
-        
+      
         let interests = [], promises = [];
         let data = ''
         this.state.eventInfo.interests.forEach((interest, i) => {
@@ -221,7 +180,7 @@ import './CreateAdmin.css';
                             { headers: {"Content-type": "application/json"}}
                             )
                 )
-            }
+        }
         })
         axios.all(promises)
         .then(results => {
@@ -229,10 +188,12 @@ import './CreateAdmin.css';
           console.log(interests)
           this.postEvent(interests)
         }
-        )
+      )
+      console.log(this.state)
     }
 
     render() {
+      
 
       const { getFieldDecorator } = this.props.form;
 
@@ -244,6 +205,7 @@ import './CreateAdmin.css';
 
 
       return (
+        
         <Form layout="vertical" >
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
 
@@ -252,7 +214,7 @@ import './CreateAdmin.css';
             <Col span={5}>
               <Form.Item label="Imagen de portada del evento">
                   {getFieldDecorator('multimedia', )
-                  (<PicturesWall />
+                  (<PicturesWall ref={this.imageRef}/>
 
                   )}
                 </Form.Item>
@@ -404,7 +366,7 @@ import './CreateAdmin.css';
                 <Button 
                     size='large' 
                     type="primary"
-                    href='/eventos'
+                    
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Crear
