@@ -8,7 +8,7 @@ import CreateAdmin from './CreateAdmin';
 import AdminListView from '../containers/AdminListView';
 import AdminLayout from '../containers/AdminLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
-import ViewEvent from './ViewEvent';
+import EventListView from '../containers/EvenListView'
 import CreateEvent from './CreateEvent';
 
 
@@ -42,13 +42,14 @@ class Home extends React.Component {
             return (
             <AdminLayout>
                 <Route exact path="/crear-evento" component={CreateEvent} />
+                <Route exact path="/eventos" component={EventListView} />
             </AdminLayout>)
         }
     }
     render() {
         let isLoading = this.state.user ? false : true;
         return(
-            <div>
+            <div >
             {
                 isLoading ? 
                     <Spin tip="Cargando..."/> 

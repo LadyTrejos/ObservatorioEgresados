@@ -42,12 +42,6 @@ class Adminlist extends React.Component {
         });
       };
 
-      handleEdit = (adminID) => {
-        axios.get(`http://127.0.0.1:8000/api/users/${adminID}/`)
-        .then(res => {
-          
-        })
-      }
 
 
     render(){
@@ -65,7 +59,7 @@ class Adminlist extends React.Component {
                     
                     
                     renderItem={item => (
-                        <List.Item 
+                        <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
                                 <Button 
                                   size='large' 
@@ -78,6 +72,7 @@ class Adminlist extends React.Component {
                                   {item.is_active ? "Desactivar cuenta" : "Activar cuenta"}
                                 </Button>
                             ]}>
+                            
                             
                             <List.Item.Meta
                                 avatar={
@@ -112,8 +107,8 @@ class Adminlist extends React.Component {
                             >
                                 <p>¿Está seguro que desea desactivar la cuenta?</p>
                             </Modal>
-
                         </List.Item>
+
                         
                     )}
                 />

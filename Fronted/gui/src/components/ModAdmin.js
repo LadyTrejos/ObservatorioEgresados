@@ -85,6 +85,8 @@ class ModAdmins extends React.Component {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = this.props.match.params.id;
+        console.log(adminData)
+        console.log(userData)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
@@ -154,7 +156,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Nombre(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
                   />)}
 
@@ -175,7 +177,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Apellido(s)'
                     size='large'
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
                   />)}
             </Form.Item>
@@ -211,7 +213,7 @@ class ModAdmins extends React.Component {
                   placeholder='Documento de identidad'
                   readOnly
                   onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF', borderRadius:10}} />)}
+                  style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}} />)}
             </Form.Item>
           </Col>
         </Row>
@@ -231,7 +233,7 @@ class ModAdmins extends React.Component {
                     size='large'
                     readOnly
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
         </Row>
@@ -245,7 +247,7 @@ class ModAdmins extends React.Component {
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
                     onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
               />)}
             </Form.Item>
           </Col>
@@ -263,7 +265,7 @@ class ModAdmins extends React.Component {
                   addonBefore={prefixSelector}
                   onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                  style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
         </Row>

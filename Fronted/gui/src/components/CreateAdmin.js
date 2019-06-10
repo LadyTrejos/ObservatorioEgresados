@@ -125,7 +125,7 @@ class RegistrationForm extends React.Component {
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>
           Crear administrador
         </h1>
-        <Row  type="flex" justify="center" align="middle">
+        <Row  type="flex" justify="center" >
           <Col span={7}>
             
             <Form.Item label='Nombre(s)'>
@@ -137,7 +137,7 @@ class RegistrationForm extends React.Component {
                     placeholder='Nombre(s)'
                     size='large'
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>
                 )}
             </Form.Item>
           </Col>
@@ -155,7 +155,7 @@ class RegistrationForm extends React.Component {
                     placeholder='Apellido(s)'
                     size='large'
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>
                 )}
             </Form.Item>
           </Col>
@@ -190,7 +190,7 @@ class RegistrationForm extends React.Component {
                   size='large' 
                   onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
                   placeholder='Documento de identidad'
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF', borderRadius:10}} />
+                  style={{backgroundColor:'#fff', borderColor:'#fff', borderRadius:10}} />
                 )}
             </Form.Item>
           </Col>
@@ -215,7 +215,7 @@ class RegistrationForm extends React.Component {
                     placeholder='ejemplo@dominio.com'
                     size='large'
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>
                 )}
             </Form.Item>
           </Col>
@@ -229,7 +229,7 @@ class RegistrationForm extends React.Component {
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
                     onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10 }}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
               />)}
             </Form.Item>
           </Col>
@@ -246,7 +246,7 @@ class RegistrationForm extends React.Component {
                   addonBefore={prefixSelector}
                   onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
-                  style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                  style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
           </Col>
         </Row>

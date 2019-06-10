@@ -12,7 +12,7 @@ import {
     Icon,
     Upload,
     Modal,
-
+    message
   } from 'antd';
 import moment from 'moment';
 import { withRouter, Link } from 'react-router-dom';
@@ -200,7 +200,7 @@ import './CreateAdmin.css';
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
-            .then((res) => console.log(res))
+            .then((res) => message.success('El evento ha sido creado con éxito.', 10))
             .catch(err => {
                 console.log(err.message)
               })
@@ -208,24 +208,28 @@ import './CreateAdmin.css';
     }
 
     handleCreate = () => {
-        let interests = []
+        
+        let interests = [], promises = [];
         let data = ''
-        this.state.eventInfo.interests.forEach((interest) => {
-            if(data.includes('>')) {
+        this.state.eventInfo.interests.forEach((interest, i) => {
+            if(interest.includes('>')) {
                 data = interest.split('>')
                 interests.push(data[0])
             } else {
-                console.log(`{"name": "${interest}"}`)
-                axios.post('http://127.0.0.1:8000/api/intereses/',
+                promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
                             `{"name": "${interest}"}`,
                             { headers: {"Content-type": "application/json"}}
                             )
-                .then(res => {
-                    interests.push(res.data.id)
-                    this.postEvent(interests)
-                })
+                )
             }
         })
+        axios.all(promises)
+        .then(results => {
+          results.forEach(item => interests.push(item.data.id))
+          console.log(interests)
+          this.postEvent(interests)
+        }
+        )
     }
 
     render() {
@@ -263,10 +267,11 @@ import './CreateAdmin.css';
                 {getFieldDecorator('name', {
                   rules: [{ required: true, message: 'Ingrese el nombre del evento', whitespace: true }],
                 })(<Input
+                      
                       placeholder='Nombre del evento'
                       size='large'
                       onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, name: e.target.value}})}}
-                      style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                      style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
 
               </Form.Item>
             </Col>
@@ -286,7 +291,7 @@ import './CreateAdmin.css';
                       size='large'
                       onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, description: e.target.value}})} }
 
-                      style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                      style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
 
               </Form.Item>
             </Col>
@@ -344,7 +349,7 @@ import './CreateAdmin.css';
                     placeholder='Lugar del evento'
                     size='large'
                     onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, place: e.target.value }})}}
-                    style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>
                   )}
               </Form.Item>
             </Col>
@@ -365,7 +370,7 @@ import './CreateAdmin.css';
                       placeholder='Nombre, asociación o institución '
                       size='large'
                       onChange={e => {this.setState({ eventInfo: {...this.state.eventInfo, organizer: e.target.value}})}}
-                      style={{backgroundColor:'#E5E9FF', borderColor:'#E5E9FF',borderRadius:10}}/>)}
+                      style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
               </Form.Item>
             </Col>
           </Row>
@@ -398,7 +403,8 @@ import './CreateAdmin.css';
               <Form.Item>
                 <Button 
                     size='large' 
-                    type="primary" 
+                    type="primary"
+                    href='/eventos'
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Crear
@@ -414,7 +420,7 @@ import './CreateAdmin.css';
                     href='/eventos'
                     style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} >
 
-                <Link to='/ver-eventos'>Cancelar</Link>
+                Cancelar
                 </Button>
               </Form.Item>
             </Col>

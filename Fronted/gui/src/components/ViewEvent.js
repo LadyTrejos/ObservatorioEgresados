@@ -1,9 +1,12 @@
-
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal } from 'antd';
+import axios from 'axios'
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
+import history from '../helpers/history';
 
 const { Meta } = Card;
+const confirm = Modal.confirm;
+
 
 const IconText = ({ type, text }) => (
     <span>
@@ -14,13 +17,31 @@ const IconText = ({ type, text }) => (
 
 class ViewEvent extends React.Component {
 
-    showModal = () => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            events: [{
+              title:'Fiesta de integración de egresados',
+              description:'Cada año, en la redacción de Gatopardo nos preocupamos por llevarle a nuestros lectores las historias más interesantes',
+              tags: 'tag',
+              date:'date',
+              time:'time',
+              place:'place',
+              photo:'https://cdn.pixabay.com/photo/2015/04/04/21/41/concert-707155_960_720.jpg'
+              },],
+            
+        }
+        this.showConfirm = this.showConfirm.bind(this)
+    }
+
+      showModal = () => {
         this.setState({
           visible: true,
         });
       };
-      handleOk = e => {
-        console.log(e);
+
+      handleOk = (e, id) => {
+        console.log(id)
         this.setState({
           visible: false,
         });
@@ -34,116 +55,91 @@ class ViewEvent extends React.Component {
       };
 
       
-    constructor(props) {
-        super(props);
-        this.state = {
-            events: [{
-            title:'Fiesta de integración de egresados',
-            description:'Cada año, en la redacción de Gatopardo nos preocupamos por llevarle a nuestros lectores las historias más interesantes',
-            tags: 'tag',
-            date:'date',
-            time:'time',
-            place:'place',
-            photo:'https://cdn.pixabay.com/photo/2015/04/04/21/41/concert-707155_960_720.jpg'
-            },
-            {
-                title:'holi',
-                description:'soy la descripción',
-                tags:'tag',
-                date:'date',
-                time:'time',
-                place:'place',
-                photo:'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                }
-            ],
+      showConfirm(item) {
+        
+        confirm({
+          title: '¿Está seguro(a) que desea eliminar este evento?',
+          content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
+          onOk: () => {
+            console.log(this.state)
+            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
+            .then(() => 
+              this.props.loadData()
+            )
+          },
+          onCancel() {},
+        });
+      }
 
-            
-            }
-    }
     
     render(){
-
-        let eventItems = this.state.events.map(
-            (event) => {
-                return(
-                <Card
-            alignContent='center'
-            style={{width:'30vw', minWidth:400, borderColor:'gray', borderRadius:20}}
-            cover={
-            <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"5%" }}>
-            <img
-                style={{width: '90%', height: '90%'}}
-                alt="Foto del evento"
-                src={event.photo}
-            />
-            </div>    
-            }
-           
-        >
-            <Meta
-            style={{textAlign:'center'}}
-            title= {event.title}
-            />
-            <br/>
-            <Meta
-            style={{color:'#2F3E9E'}}
-            description={event.description}
-             />
-            <br/>
-            <br/>
-            
-            <Tag>{event.tags}</Tag>
-            <Tag>{event.tags}</Tag>
-            <Tag>{event.tags}</Tag>
-            <Divider/>
-            <IconText type="calendar" text={event.date}/>
-            <br/>
-            <IconText type="clock-circle" text={event.time}/>
-            <br/>
-            <IconText type="environment" text={event.place}/>
-            <br/>
-            <br/>
-            <Row type='flex' justify='center' align='middle' gutter={50}>
-                <Col>
-                    <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>Editar</Button>
-                </Col>
-                <Col >
-                    <Button onClick={this.showModal} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>Eliminar</Button>
-                </Col>
-            </Row>
-            <Modal
-                title="¿Está seguro(a) que desea eliminar el evento?"
-                visible={this.state.visible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-                footer={[
-                <Button key="back" onClick={this.handleCancel}>
-                    Cancelar
-                </Button>,
-                <Button key="submit" htmlType="submit" type="primary" onClick={this.handleOk}>
-                   Eliminar
-                </Button>,
-                ]}
-            >
-                <p>Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.</p>
-            </Modal>
-
-            
-        </Card>
-                )
-            }
-        )
-
         return(
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:'#E5E9FF' }}>       
-        <Row > {eventItems}      
+            <List
+              itemLayout="horizontal"
+              size="middle"
+              pagination={{
+                onChange: page => {
+                    console.log(page);
+                },
+                pageSize: 2
+              }}
+              dataSource={this.props.data}
             
-            
-        </Row>
-        
-    </div>  )
+              renderItem={item => (
+                <div>
+                  <Card
+                    style={{width:'30vw', minWidth:300, borderColor:'gray', borderRadius:20}}
+                    cover={
+                      <div 
+                        style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"5%" }}>
+                        <img
+                            style={{width: '90%', height: '90%'}}
+                            alt="Foto del evento"
+                            src={this.state.events[0].photo}
+                        />
+                      </div>    
+                    }
+                  >
+                    <Meta
+                      style={{textAlign:'center'}}
+                      title= {item.name}
+                    />
+                    <br/>
+                    <Meta
+                      style={{color:'#2F3E9E'}}
+                      description={item.description}
+                    />
+                    <br/>
+                    <br/>
+                    
+                    <Tag>{item.interests[0]}</Tag>
+                    <Divider/>
+                    <IconText type="calendar" text={item.date}/>
+                    <br/>
+                    <IconText type="clock-circle" text={item.hour}/>
+                    <br/>
+                    <IconText type="environment" text={item.place}/>
+                    <br/>
+                    <br/>
+                    <Row type='flex' justify='center' align='middle' gutter={50}>
+                        <Col>
+                            <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
+                              Editar
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button onClick={() => {this.showConfirm(item)}} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
+                              Eliminar
+                            </Button>
+                        </Col>
+                    </Row>
+                </Card>
+              </div>
+            )}
+          />
+        )
     }
-      }
+}
 
 export default ViewEvent
          
