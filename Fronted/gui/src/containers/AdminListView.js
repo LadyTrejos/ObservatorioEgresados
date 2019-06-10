@@ -9,18 +9,22 @@ import AdminList from '../components/AdminList'
    }
 
    componentDidMount(){
-       axios.get('http://127.0.0.1:8000/api/admin-list')
-       .then(res =>{
-           this.setState({
-               admins: res.data
-           })
-       })
+       this.loadData()
+   }
+
+   loadData = () => {
+    axios.get('http://127.0.0.1:8000/api/admin-list')
+    .then(res =>{
+        this.setState({
+            admins: res.data
+        })
+    })
    }
 
    render(){
        return(
            <div>
-               <AdminList data={this.state.admins}/>
+               <AdminList data={this.state.admins} loadData={this.loadData}/>
            </div>
        )
    }

@@ -3,7 +3,6 @@ from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
 from rest_framework.authtoken.models import Token
-from drf_extra_fields.fields import Base64ImageField
 
 
 class UserSerializer(serializers.ModelSerializer):

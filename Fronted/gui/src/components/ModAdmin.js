@@ -6,7 +6,8 @@ import {
     Row,
     Col,
     Button,
-    Modal
+    Modal,
+    message
   } from 'antd';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -84,8 +85,6 @@ class ModAdmins extends React.Component {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = this.props.match.params.id;
-        console.log(adminData)
-        console.log(userData)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
@@ -108,7 +107,9 @@ class ModAdmins extends React.Component {
     this.setState({ userInfo: {
       ...this.state.userInfo, is_active: !this.state.userInfo.is_active
     }}, () => {
-      this.handleSave(e);
+      this.handleSave(e)
+      let action = this.state.userInfo.is_active ? "activado" : "desactivado"
+      message.success(`El administrador ha sido ${action}.`)
     })
     
   };
@@ -279,7 +280,7 @@ class ModAdmins extends React.Component {
                   title="Confirmación"
                   visible={this.state.visible}
                   footer={[
-                    <Button key="back" onClick={(e) => this.handleCancel(e)}>
+                    <Button key="back" onClick={this.handleCancel}>
                       Cancelar
                     </Button>,
                     <Button key="deactivate" type="danger" onClick={(e) => this.handleDeactivate(e)}>
@@ -309,9 +310,9 @@ class ModAdmins extends React.Component {
                   size='large' 
                   type="primary" 
                   htmlType="submit" 
-                  href='/ver-admins'
                   style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
-                  onClick={() => this.props.logout} >
+                  onClick={() => history.push('/ver-admins')}
+              >
               Cancelar
               </Button>
             </Form.Item>

@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 from django.forms import ModelForm, PasswordInput
-from drf_extra_fields.fields import Base64ImageField
 
 import datetime
 

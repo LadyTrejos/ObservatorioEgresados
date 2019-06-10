@@ -6,6 +6,7 @@ import {
     Row,
     Col,
     Button,
+    message
   } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
@@ -78,7 +79,10 @@ class RegistrationForm extends React.Component {
                 axios.post('http://localhost:8000/api/admins/', 
                         adminData, 
                         { headers: {"Content-type": "application/json"}})
-                history.push('/ver-admins')
+                .then(() => {
+                  message.success('El administrador ha sido creado con éxito.' )
+                  history.push('/ver-admins')
+                })
             })
             .catch(err => {
               console.log(err.message)

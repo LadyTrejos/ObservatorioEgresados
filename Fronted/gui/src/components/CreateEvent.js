@@ -17,6 +17,8 @@ import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import history from '../helpers/history';
+
 const { Option } = Select;
 
 
@@ -155,7 +157,10 @@ const { TextArea } = Input;
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
-            .then((res) => message.success('El evento ha sido creado con éxito.', 10))
+            .then((res) => {
+              message.success('El evento ha sido creado con éxito.', 10)
+              history.push('/eventos')
+            })
             .catch(err => {
                 console.log(err.message)
               })
@@ -361,7 +366,6 @@ const { TextArea } = Input;
                 <Button 
                     size='large' 
                     type="primary"
-                    
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Crear
