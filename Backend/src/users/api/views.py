@@ -2,6 +2,8 @@ from users.models import User, Egresado, Admin, Evento, Interes
 from .serializers import UserSerializer, EgresadoSerializer, AdminSerializer, EventoSerializer, InteresSerializer
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -22,6 +24,11 @@ class AdminViewSet(viewsets.ModelViewSet):
 class EventoViewSet(viewsets.ModelViewSet):
     serializer_class = EventoSerializer
     queryset = Evento.objects.all()
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
+    filter_fields = ('admin',)
+    ordering_fields = ('created_at', 'name')
+    search_fields = ('name',)
+
 
 class InteresViewSet(viewsets.ModelViewSet):
     serializer_class = InteresSerializer

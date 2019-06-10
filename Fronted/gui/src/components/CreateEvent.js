@@ -20,61 +20,12 @@ import axios from 'axios';
 
 import './CreateAdmin.css';
 
-  const { Option } = Select;
+const { Option } = Select;
 
 
-  const { TextArea } = Input;
+const { TextArea } = Input;
   
-  /* intereses */
-  const CheckboxGroup = Checkbox.Group;
-  const plainOptions = ['Deporte', 'Cultura', 'Familiar','Ocio','Academia','Social',];
-  const defaultCheckedList = ['Social','Academia'];
-  class App extends React.Component {
-  state = {
-    checkedList: defaultCheckedList,
-    indeterminate: true,
-    checkAll: false,
-  };
-
-  onChange = checkedList => {
-    this.setState({
-      checkedList,
-      indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-      checkAll: checkedList.length === plainOptions.length,
-    });
-  };
-
-  onCheckAllChange = e => {
-    this.setState({
-      checkedList: e.target.checked ? plainOptions : [],
-      indeterminate: false,
-      checkAll: e.target.checked,
-    });
-  };
-
-  render() {
-    return (
-      <div>
-        <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-          <Checkbox
-            indeterminate={this.state.indeterminate}
-            onChange={this.onCheckAllChange}
-            checked={this.state.checkAll}
-          >
-            Seleccionar todos
-          </Checkbox>
-        </div>
-        <br />
-        <CheckboxGroup
-          options={plainOptions}
-          value={this.state.checkedList}
-          onChange={this.onChange}
-        />
-      </div>
-    );
-  }
-}
-/* fin de intereses*/
+  
  /* imagenes*/
  function getBase64(file) {
    return new Promise((resolve, reject) => {
@@ -108,6 +59,7 @@ import './CreateAdmin.css';
    handleChange = ({ fileList }) => this.setState({ fileList });
 
    render() {
+     console.log(this.state)
      const { previewVisible, previewImage, fileList } = this.state;
      const uploadButton = (
        <div>
@@ -154,7 +106,6 @@ import './CreateAdmin.css';
             date:'',
             hour:'',
             organizer:'',
-            created_at: moment().format('DD-MM-YYYY'),
             admin: localStorage.getItem('user'),
             interests: []
         },

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'users'
 ]
 

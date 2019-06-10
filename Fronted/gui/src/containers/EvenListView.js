@@ -13,7 +13,7 @@ import ViewEvent from '../components/ViewEvent'
    }
 
    loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/eventos')
+    axios.get('http://localhost:8000/api/eventos/?ordering=-created_at')
     .then(res =>{
         this.setState({
             events: res.data

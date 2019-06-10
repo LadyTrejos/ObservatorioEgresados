@@ -86,7 +86,7 @@ class ViewEvent extends React.Component {
               dataSource={this.props.data}
             
               renderItem={item => (
-                <div>
+                <div style={{display:"flex", justifyContent:"center", alignItems:"center" }}>
                   <Card
                     style={{width:'30vw', minWidth:300, borderColor:'gray', borderRadius:20}}
                     cover={

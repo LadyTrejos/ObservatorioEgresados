@@ -39,8 +39,8 @@ class RegistrationForm extends React.Component {
       },
       adminInfo: {
         address: '',
-        phone:'',
-        id_phone:'',
+        phone: null,
+        id_phone: null,
       },
       phonecodeItems: []
     };

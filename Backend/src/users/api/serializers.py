@@ -88,24 +88,37 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
 
 class EgresadoSerializer(serializers.ModelSerializer):
+    date_of_birth = serializers.DateField(required=False, allow_null=True)
+    genre = serializers.CharField(required=False, allow_blank=True)
+
     class Meta: 
         model = Egresado 
         fields = "__all__"
 
 class AdminSerializer(serializers.ModelSerializer):
+    address = serializers.CharField(required=False, allow_blank=True)
+    id_phone = serializers.IntegerField(required=False, allow_null=True)
+    phone = serializers.IntegerField(required=False, allow_null=True)
     class Meta: 
         model = Admin 
-        fields = "__all__"
+        fields = (
+            'user',
+            'address',
+            'id_phone',
+            'phone'
+            )
 
-class EventoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Evento
-        fields = "__all__"
 
 class InteresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interes
         fields = ('id', 'name')
+
+class EventoSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Evento
+        fields = "__all__"
 
 
 class TokenSerializer(serializers.ModelSerializer):
