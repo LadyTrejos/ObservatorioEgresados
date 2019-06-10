@@ -96,8 +96,8 @@ class AdminLayout extends React.Component {
                         </Button>
                             
                     </Sider>
-                    <Layout style={{backgroundColor:'#E5E9FF', alignItems:'center'}}>
-                        <Header style={{width:'90vw',height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
+                    <Layout style={{backgroundColor:'#E5E9FF'}}>
+                        <Header style={{height: '10%', backgroundColor:'#8796F0', textAlign: 'right', fontSize:'150%'}}>
                             <h1 >Observatorio de egresados</h1>
                         </Header>
                         <Content style={{ margin: '24px 0px 0', backgroundColor:'#E5E9FF'}}>

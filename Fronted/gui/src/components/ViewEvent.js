@@ -83,6 +83,7 @@ class ViewEvent extends React.Component {
               dataSource={this.props.data}
             
               renderItem={item => (
+                <div>
                   <Card
                     style={{width:'30vw', minWidth:400, borderColor:'gray', borderRadius:20}}
                     cover={
@@ -117,7 +118,7 @@ class ViewEvent extends React.Component {
                     <IconText type="environment" text={item.place}/>
                     <br/>
                     <br/>
-                    <Row type='flex' justify='center' align='middle' >
+                    <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
                             <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
                               Editar
@@ -130,6 +131,7 @@ class ViewEvent extends React.Component {
                         </Col>
                     </Row>
                 </Card>
+              </div>
             )}
           />
         )
@@ -137,4 +139,3 @@ class ViewEvent extends React.Component {
 }
 
 export default ViewEvent
-         
