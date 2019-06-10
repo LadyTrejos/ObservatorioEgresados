@@ -38,24 +38,25 @@ render(){
             <Row type="flex" justify="center" align="middle">
                 <h2 style={{fontSize:30, color:'#001870'}}>Eventos</h2>
             </Row>
-            <Row gutter={200}>
-                <Col style={{maxWidth:'40%'}}>
-                    <Search 
-                        placeholder="Buscar evento"
-                        onSearch={value => this.handleSearch(value)} 
-                        enterButton 
-                    />
-                </Col>
-                <Col>
+            <Row >
+                <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-end'}}>
                     <Button
-                        style={{backgroundColor:'#22BA45'}}
+                        style={{backgroundColor:'#22BA45', color:'#ffff'}}
                         href='/crear-evento'
+                        size='large'
                     >
-                        Crear eventos
+                        Crear evento
                     </Button>
-                </Col>
+                </div>
+                <Search 
+                    placeholder="Buscar evento"
+                    onSearch={value => this.handleSearch(value)} 
+                    enterButton 
+                    size='large'
+                    style={{maxWidth: 300}}
+                />
             </Row>
-            <br/>
+            
             <br/>
             <ViewEvent data={this.state.events} loadData={this.loadData}/>
         </div>
