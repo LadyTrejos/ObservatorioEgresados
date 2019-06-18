@@ -3,6 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
 from rest_framework.authtoken.models import Token
+from django.core.mail import send_mail
 
 class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
@@ -73,6 +74,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
         user.id = self.cleaned_data.get('id')
+        user.email = self.cleaned_data.get('email')
         user.id_type = self.cleaned_data.get('id_type')
         user.name = self.cleaned_data.get('name')
         user.last_name = self.cleaned_data.get('last_name')
@@ -81,7 +83,16 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.city = self.cleaned_data.get('city')
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
-        user.set_password(self.cleaned_data.get('password'))
+        password = self.cleaned_data.get('password1')
+        user.set_password(password)
+        
+        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \
+             Esta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
+        if ( self.cleaned_data.get('is_admin')):
+             send_mail('Prueba',
+             message,
+             'observatorioutp@utp.edu.co', 
+                [self.cleaned_data.get('email')],  fail_silently=False,)
         user.save()
         adapter.save_user(request, user, self)
         return user
