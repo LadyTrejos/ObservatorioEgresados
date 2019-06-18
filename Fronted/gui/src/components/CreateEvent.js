@@ -17,6 +17,8 @@ import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import history from '../helpers/history';
+
 const { Option } = Select;
 
 
@@ -155,7 +157,10 @@ const { TextArea } = Input;
             axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
-            .then((res) => message.success('El evento ha sido creado con éxito.', 10))
+            .then((res) => {
+              message.success('El evento ha sido creado con éxito.', 10)
+              history.push('/eventos')
+            })
             .catch(err => {
                 console.log(err.message)
               })
@@ -300,7 +305,9 @@ const { TextArea } = Input;
             <Col span={7}>
               <Form.Item label="Lugar del evento">
                 {getFieldDecorator('place', {
-                  rules: [{ required:true, message: '¿Dónde se realizará?' }],
+                  rules: [{ required:true, message: '¿Dónde se realizará?' },
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                    message: "Dirección no válida"}],
                 })(
                     <Input
                     placeholder='Lugar del evento'
@@ -322,6 +329,8 @@ const { TextArea } = Input;
                       required: true,
                       message: '¿Quién organiza el evento?',
                     },
+                    {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                      message: "Nombre no válido"}
                   ],
                 })(<Input
                       placeholder='Nombre, asociación o institución '
@@ -338,6 +347,8 @@ const { TextArea } = Input;
                     {getFieldDecorator('interests', {
                         rules: [
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
+                        {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                          message: "Introduce solo letras"}
                         ],
                     })(
                         <Select 
@@ -361,7 +372,6 @@ const { TextArea } = Input;
                 <Button 
                     size='large' 
                     type="primary"
-                    
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Crear

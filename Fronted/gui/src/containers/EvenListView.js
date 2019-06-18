@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Button, Input, Col } from 'antd';
+import { Row, Button, Input } from 'antd';
 import ViewEvent from '../components/ViewEvent'
 
 const Search = Input.Search;

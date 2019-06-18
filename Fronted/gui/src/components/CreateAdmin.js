@@ -6,6 +6,7 @@ import {
     Row,
     Col,
     Button,
+    message
   } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
@@ -78,7 +79,10 @@ class RegistrationForm extends React.Component {
                 axios.post('http://localhost:8000/api/admins/', 
                         adminData, 
                         { headers: {"Content-type": "application/json"}})
-                history.push('/ver-admins')
+                .then(() => {
+                  message.success('El administrador ha sido creado con éxito.' )
+                  history.push('/ver-admins')
+                })
             })
             .catch(err => {
               console.log(err.message)
@@ -122,6 +126,8 @@ class RegistrationForm extends React.Component {
     
   };
 
+  
+
   render() {
 
     const { getFieldDecorator } = this.props.form;
@@ -148,7 +154,7 @@ class RegistrationForm extends React.Component {
             
             <Form.Item label='Nombre(s)'>
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true},
+                rules: [{ required: true, message: 'Ingresar nombre(s)'},
                         {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                         message: "Nombre no válido"}],
               })(<Input 
@@ -166,7 +172,7 @@ class RegistrationForm extends React.Component {
           <Col span={7}>
             <Form.Item label='Apellido(s)'>
               {getFieldDecorator('lastname', {
-                rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true },
+                rules: [{ required: true, message: 'Ingresar apellido(s)'},
                 {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                   message: "Apellido no válido"}],
               })(<Input 
@@ -203,7 +209,7 @@ class RegistrationForm extends React.Component {
             <Form.Item label="Documento de identidad">
               {getFieldDecorator('id', {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }, 
-              {validator: this.getPattern, message: 'El documento ingresado no es válido' }
+              {validator: this.getPattern }
               ]
               })(
 
@@ -247,8 +253,10 @@ class RegistrationForm extends React.Component {
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
             <Form.Item label="Dirección">
-              {getFieldDecorator('address', {
-              })(<Input 
+              {getFieldDecorator('address',  {rules: [{ required:true, message: '¿Dónde se realizará?' },
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                    message: "Dirección no válida"}],}
+              )(<Input 
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
                     onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
@@ -261,7 +269,8 @@ class RegistrationForm extends React.Component {
         <Row type="flex" justify="center" align="middle">
           <Col span={7}>
             <Form.Item label="Número de celular">
-              {getFieldDecorator('phone', {
+              {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
+              message:'El número debe contener 10 dígitos'}]
               })(
                 <NumericInput 
                   size='large'
