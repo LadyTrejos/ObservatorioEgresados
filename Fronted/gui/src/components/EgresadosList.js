@@ -1,24 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Skeleton, Form, Divider,Row, Col,Button, Modal } from "antd";
+import { List, Avatar, Icon, Form, Button, Modal, message } from "antd";
+import { withRouter } from 'react-router-dom';
+import axios from 'axios';
+import history from '../helpers/history';
 
-
-
-import { withRouter, Link } from 'react-router-dom';
-import axios from "axios";
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
-const nameList =['jorge', 'ivan', 'lady', 'johanna', 'daniel', 'carmen', 'lina', 'nico', 'yami', 'fanny']
 
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    id: `${i}`,
-    name: `Iván ${i}`,
-    genero:'masculino',
-    correo: `ivan${i}@gmail.com`,
-});
-}
+const confirm = Modal.confirm;
 
 const IconText = ({ type, text }) => (
   <span>
@@ -29,11 +18,13 @@ const IconText = ({ type, text }) => (
 
 
 
-class Adminlist extends React.Component {
-    state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-      };
+class EgresadosList extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      visible: false
+    }
+  }
 
     handleOk = e => {
         console.log(e);
@@ -76,18 +67,8 @@ class Adminlist extends React.Component {
           },
           onCancel() {},
         });
-      };
-
-<<<<<<< Updated upstream
-      handleEdit = (adminID) => {
-        axios.get(`http://127.0.0.1:8000/api/users/${adminID}/`)
-        .then(res => {
-          console.log(`soy AdminList${adminID}`)
-          console.log(res.data)
-        })
       }
 
-=======
     handleDeactivate = (item) => {
       console.log(item)
       item.is_active = !item.is_active
@@ -108,10 +89,8 @@ class Adminlist extends React.Component {
         })
 
     }
->>>>>>> Stashed changes
 
     render(){
-        console.log(colorList[Math.floor(Math.random() * 10)])
         return(
                 <List
                     itemLayout="horizontal"
@@ -126,17 +105,17 @@ class Adminlist extends React.Component {
 
 
                     renderItem={item => (
-                        <List.Item
+                        <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
                                 <Button
                                   size='large'
                                   style={{backgroundColor:'#FF5126', borderColor:'#FF5126', borderRadius:10}}
-                                  onClick={() => history.push(`editar-egresado/${item.id}`)}
+                                  ///onClick={() => history.push(`editar-egresado/${item.id}`)} editar esto ///
                                 >
                                   Editar
                                 </Button>,
                                 <Button onClick={() => {this.showConfirm(item)}} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0', borderRadius:'10%'}}>
-                                  {item.is_active ? "Desactivar cuenta" : "Activar cuenta"}
+                                  {item.is_active ? "Desactivarhdhdhdh cuenta" : "Activar cuenta"}
                                 </Button>
                             ]}>
 
@@ -159,12 +138,12 @@ class Adminlist extends React.Component {
                             />
 
                             <Modal
-                                title="Confirmación"
+                                title={`¿Está seguro(a) que desea ${ item.is_active ? "desactivar" : "activar" } esta cuenta?`}
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={[
-                                <Button key="back" onClick={this.handleCancel}>
+                                  <Button key="back" onClick={(e) => this.handleCancel(e)}>
                                     Cancelar
                                   </Button>,
                                   <Button
@@ -182,6 +161,7 @@ class Adminlist extends React.Component {
                                 : "Al activar la cuenta, el administrador podrá ingresar al sistema. " }
                                 </p>
                             </Modal>
+                        </List.Item>
 
 
                     )}
@@ -190,8 +170,10 @@ class Adminlist extends React.Component {
     }
     }
 
-    const AdminList = Form.create({ name: 'AdminList' })(Adminlist);
+   const EgresadosList = Form.create({ name: 'EgresadosList' })(Egresadoslist);
+
+///este error marica ^
+///                  |
 
 
-
-    export default withRouter(AdminList);
+    export default withRouter(EgresadosList);

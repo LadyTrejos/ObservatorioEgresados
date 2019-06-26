@@ -72,23 +72,55 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.city = self.cleaned_data.get('city')
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
+<<<<<<< Updated upstream
         user.set_password(self.cleaned_data.get('password1'))
+=======
+        password = self.cleaned_data.get('password1')
+        user.set_password(password)
+
+        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \
+             Esta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
+        if ( self.cleaned_data.get('is_admin')):
+             send_mail('Prueba',
+             message,
+             'observatorioutp@utp.edu.co',
+                [self.cleaned_data.get('email')],  fail_silently=False,)
+>>>>>>> Stashed changes
         user.save()
         adapter.save_user(request, user, self)
         return user
 
 class EgresadoSerializer(serializers.ModelSerializer):
+<<<<<<< Updated upstream
     class Meta:
         model = Egresado
         fields = (
+=======
+    date_of_birth = serializers.DateField(required=False, allow_null=True)
+    genre = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = Egresado
+        #fields = "__all__"
+        fields =(
+>>>>>>> Stashed changes
             'user',
             'date_of_birth',
             'genre',
             'interests',
             'friends'
+<<<<<<< Updated upstream
         )
 
 class AdminSerializer(serializers.ModelSerializer):
+=======
+            )
+
+class AdminSerializer(serializers.ModelSerializer):
+    address = serializers.CharField(required=False, allow_blank=True)
+    id_phone = serializers.IntegerField(required=False, allow_null=True)
+    phone = serializers.IntegerField(required=False, allow_null=True)
+>>>>>>> Stashed changes
     class Meta:
         model = Admin
         fields = (
@@ -117,3 +149,13 @@ class InteresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interes
         fields = "__all__"
+<<<<<<< Updated upstream
+=======
+
+
+class TokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Token
+        fields = ('key', 'user')
+>>>>>>> Stashed changes

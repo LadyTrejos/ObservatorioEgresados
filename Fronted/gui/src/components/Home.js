@@ -3,13 +3,18 @@ import CreateAdmin from './CreateAdmin';
 import { Route } from 'react-router-dom';
 import CustomLayout from '../containers/Layout';
 import ModAdmin from './ModAdmin';
-import AdminList from './AdminList';
+import ModEgresado from './ModEgresado';
+import CreateAdmin from './CreateAdmin';
 import AdminListView from '../containers/AdminListView';
-import CreateEvento from './CreateEvento';
+
+import AdminLayout from '../containers/AdminLayout';
+import SuperuserLayout from '../containers/SuperuserLayout';
+import EventListView from '../containers/EvenListView'
+import CreateEvent from './CreateEvent';
+import EgresadoListView from '../containers/EgresadoListView';
+
 
 class Home extends React.Component {
-<<<<<<< Updated upstream
-=======
     constructor(props) {
         super(props);
         this.state = {
@@ -32,14 +37,21 @@ class Home extends React.Component {
             return (
             <SuperuserLayout>
                 <Route exact path="/editar-admin/:id/" component={ModAdmin} />
+
                 <Route exact path="/crear-admin" component={CreateAdmin} />
                 <Route exact path="/ver-admins" component={AdminListView} />
+
             </SuperuserLayout>)
         } else if (this.state.user.is_admin){
             return (
             <AdminLayout>
                 <Route exact path="/crear-evento" component={CreateEvent} />
+<<<<<<< Updated upstream
                 <Route exact path="/ver-evento" component={EventListView} />
+=======
+                <Route exact path="/eventos" component={EventListView} />
+                <Route exact path="/ver-egresados" component={EgresadoListView} />
+                <Route exact path="/editar-egresado/:id/" component={ModEgresado}/>
             </AdminLayout>)
         }
     }
@@ -47,13 +59,6 @@ class Home extends React.Component {
     render() {
         return(
             <div>
-<<<<<<< Updated upstream
-                <CustomLayout>
-                    <Route exact path="/modificar-admin" component={ModAdmin} />
-                    <Route exact path="/crear-admin" component={CreateAdmin} />
-                    <Route exact path="/createEvento" component={CreateEvento} />
-                </CustomLayout>
-=======
             {
                 isLoading ?
                     <Spin tip="Cargando..."/>
@@ -63,7 +68,6 @@ class Home extends React.Component {
 
                 )
             }
->>>>>>> Stashed changes
             </div>
         );
     }

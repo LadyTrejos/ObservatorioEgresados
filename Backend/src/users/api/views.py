@@ -27,11 +27,10 @@ class InteresViewSet(viewsets.ModelViewSet):
     serializer_class = InteresSerializer
     queryset = Interes.objects.all()
 
+
+#///aquii////
 class AdminListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_admin = True)
-<<<<<<< Updated upstream
-    serializer_class = UserSerializer
-=======
     serializer_class = UserSerializer
 
 class EventoListView(viewsets.ReadOnlyModelViewSet):
@@ -41,6 +40,11 @@ class EventoListView(viewsets.ReadOnlyModelViewSet):
 class CurrentUserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
+<<<<<<< Updated upstream
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
+=======
+class EgresadoListView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.filter(is_graduated = True)
+    serializer_class = UserSerializer
 >>>>>>> Stashed changes
