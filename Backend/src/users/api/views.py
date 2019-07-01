@@ -38,3 +38,6 @@ class AdminListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_admin = True)
     serializer_class = UserSerializer
 
+class EgresadoListView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.filter(is_graduated = True)
+    serializer_class = UserSerializer

@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class CustomRegisterSerializer(RegisterSerializer):
-    
+
     id = serializers.CharField(required=True)
     id_type = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
@@ -38,7 +38,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     is_graduated = serializers.BooleanField()
     is_admin = serializers.BooleanField()
 
-    class Meta: 
+    class Meta:
         model = User
         fields = (
             'email',
@@ -52,7 +52,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             'is_graduated',
             'is_admin'
         )
-    
+
     def get_cleaned_data(self):
         return {
             'id': self.validated_data.get('id', ''),
@@ -85,13 +85,13 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.is_admin = self.cleaned_data.get('is_admin')
         password = self.cleaned_data.get('password1')
         user.set_password(password)
-        
+
         message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \
              Esta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
         if ( self.cleaned_data.get('is_admin')):
              send_mail('Prueba',
              message,
-             'observatorioutp@utp.edu.co', 
+             'observatorioutp@utp.edu.co',
                 [self.cleaned_data.get('email')],  fail_silently=False,)
         user.save()
         adapter.save_user(request, user, self)
@@ -101,16 +101,24 @@ class EgresadoSerializer(serializers.ModelSerializer):
     date_of_birth = serializers.DateField(required=False, allow_null=True)
     genre = serializers.CharField(required=False, allow_blank=True)
 
-    class Meta: 
-        model = Egresado 
-        fields = "__all__"
+    class Meta:
+        model = Egresado
+    #    fields = "__all__"
+        fields= (
+        'user',
+        'date_of_birth',
+        'genre',
+        'interests',
+        'friends'
+
+        )
 
 class AdminSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False, allow_blank=True)
     id_phone = serializers.IntegerField(required=False, allow_null=True)
     phone = serializers.IntegerField(required=False, allow_null=True)
-    class Meta: 
-        model = Admin 
+    class Meta:
+        model = Admin
         fields = (
             'user',
             'address',
