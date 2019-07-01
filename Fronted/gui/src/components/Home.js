@@ -10,6 +10,7 @@ import AdminLayout from '../containers/AdminLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import EventListView from '../containers/EvenListView'
 import CreateEvent from './CreateEvent';
+import ModAccountAdmin from './ModAccountAdmin';
 
 
 class Home extends React.Component {
@@ -42,6 +43,7 @@ class Home extends React.Component {
             return (
             <AdminLayout>
                 <Route exact path="/crear-evento" component={CreateEvent} />
+                <Route exact path="/perfilAdmin" component={ModAccountAdmin}/>
                 <Route exact path="/eventos" component={EventListView} />
             </AdminLayout>)
         }

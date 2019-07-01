@@ -35,7 +35,7 @@ class LoginForm extends React.Component {
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%'}}>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%', width:'100%'}}>
               <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
               <strong>Observatorio de egresados</strong>
             </div>
@@ -43,7 +43,7 @@ class LoginForm extends React.Component {
             <div style={stylesObj} className="container">
             
             </div>
-            {/*
+            
             <div className='Div2'>
                 <h1 className='h1Q'>¿Aún no tienes una cuenta?</h1>
                 <Form.Item style={{left:'40%'}}>
@@ -53,7 +53,7 @@ class LoginForm extends React.Component {
                             
                 </Form.Item>
             </div>
-            */}
+            *
             
             <div className='Div3' >
                 <h1 className='h1IS'>Iniciar sesión</h1>

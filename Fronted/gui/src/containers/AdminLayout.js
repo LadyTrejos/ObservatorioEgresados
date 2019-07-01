@@ -57,13 +57,13 @@ class AdminLayout extends React.Component {
 
                         
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'left'}}>
-                            {/*<Menu.Item key="1">
+                            <Menu.Item key="1">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
-                                <Link to='/crear-admin'></Link>
-                            </Menu.Item>*/}
+                                <Link to='/perfilAdmin'></Link>
+                            </Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="2">
                                 <Icon type="calendar" />

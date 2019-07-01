@@ -347,8 +347,7 @@ const { TextArea } = Input;
                     {getFieldDecorator('interests', {
                         rules: [
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
-                        {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
-                          message: "Introduce solo letras"}
+                        
                         ],
                     })(
                         <Select 
