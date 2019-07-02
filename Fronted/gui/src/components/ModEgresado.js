@@ -259,17 +259,21 @@ class ModificarEgresado extends React.Component {
 
         <Row type="flex" justify="center" align="middle">
           <Col span={7}>
-            <Form.Item label="Genero">
-              {getFieldDecorator('genre', {rules:[{pattern:/^[a-z,A-Z]{10}$/gi}],
-                initialValue: this.state.egresadoInfo.genre
-              })(
-                <NumericInput
-                  size='large'
-                  addonBefore={prefixSelector}
-                  onChange={value => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, genre: value } })}
-                  placeholder='Ej: 1234567890'
-                  style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
-            </Form.Item>
+          <Form.Item label="Género: " hasFeedback>
+                            {getFieldDecorator('genre', {
+                                rules: [{ required:true, message: '¿Cuál es su género?' }],
+                            })(
+                                <Select 
+                                placeholder="Seleccione una opción"
+                                size='large'
+                                onChange={ value => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, genre: value } })}
+                                >
+                                <Option value="F">Femenino</Option>
+                                <Option value="M">Masculino</Option>
+                                <Option value="P">Prefiere no responder</Option>
+                                </Select>
+                                )}
+                        </Form.Item>
           </Col>
         </Row>
 
