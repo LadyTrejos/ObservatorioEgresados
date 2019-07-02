@@ -43,27 +43,43 @@ const { TextArea } = Input;
      fileList: [  ],
    };
 
-  
+  handleCancel = () => {this.setState({ previewVisible: false });}
 
-   handleCancel = () => {this.setState({ previewVisible: false });
-  
-  }
+  handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
 
-   handlePreview = async file => {
-     if (!file.url && !file.preview) {
-       file.preview = await getBase64(file.originFileObj);
-     }
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+    });
+  };
 
-     this.setState({
-       previewImage: file.url || file.preview,
-       previewVisible: true,
-     });
-   };
-
-   handleChange = ({ fileList }) => {
-     this.setState({ fileList })
-     
+   handleChange = (info) => {
+     if (info.file.status === "uploading") {
+       this.setState({ loading: true });
+       return;
+      }
+      if (info.file.status === "done") {
+        // Get this url from response in real world.
+        console.log(info.fileList)
+        this.setState({ fileList: info.fileList })
+    }
     };
+    
+
+    beforeUpload = (file) => {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJPG) {
+        message.error('Solo se pueden subir imágenes');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('La imagen debe ser menor a 2MB');
+      }
+      return isJPG && isLt2M;
+    }
 
    render() {
      console.log(this.state)
@@ -77,11 +93,14 @@ const { TextArea } = Input;
      return (
        <div className="clearfix">
          <Upload
+           name="avatar"
            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+           className="avatar-uploader"
            listType="picture-card"
            fileList={fileList}
            onPreview={this.handlePreview}
            onChange={this.handleChange}
+           beforeUpload={this.beforeUpload}
          >
            {fileList.length >= 1   ? null : uploadButton}
          </Upload>
@@ -133,10 +152,9 @@ const { TextArea } = Input;
     };
 
     disabledDate = (current) => {
-      let min = "1942-01-01";
       return (
-        (current && current < moment(min, "YYYY-MM-DD")) ||
-        (current && current < moment().add( "year"))
+        (current && current < moment()) ||
+      (current && current > moment().add(2, "year"))
       );
     }
 
@@ -343,7 +361,7 @@ const { TextArea } = Input;
 
           <Row type="flex" justify="center" align="middle">
             <Col span={7}>
-                <Form.Item label="Intereses">
+                <Form.Item label="Intereses" extra="Para añadir un nuevo interés escriba el nombre en este espacio y finalice con la tecla Enter">
                     {getFieldDecorator('interests', {
                         rules: [
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },

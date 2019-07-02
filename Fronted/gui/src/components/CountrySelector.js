@@ -12,7 +12,9 @@ class CountrySelector extends React.Component {
             country: '',
             state: '',
             city: '',
-            phonecodes: []
+            phonecodes: [],
+            stateDisabled: true,
+            cityDisabled: true
         }
     }
 
@@ -43,48 +45,52 @@ class CountrySelector extends React.Component {
     }
 
     handleCountryChange = (value)=>{
-		
-        let Country = country.getCountryById(value)
+		let data = value.split('>')
+        //let Country = country.getCountryById(value)
             
             this.setState({
-                  country: Country.name
+                  country: data[1],
+                  stateDisabled: false
             });
         
-        let states = country.getStatesOfCountry(value);
+        let states = country.getStatesOfCountry(data[0]);
             this.countryData.states = states;
       }
       
     handleStateChange = (value)=>{
-        let region = country.getStateById(value)
+        let data = value.split('>')
+        //let region = country.getStateById(value)
         this.setState({
-        region: region.name
-    });
+            region: data[1],
+            cityDisabled: false
+        });
 
-        let cities = country.getCitiesOfState(value);
+        let cities = country.getCitiesOfState(data[0]);
         this.countryData.cities = cities;
     }
     
     handleCitiesChange = (value)=>{
-        let city = country.getCityById(value)
+        let data = value.split('>')
+        //let city = country.getCityById(value)
         this.setState({
-            city: city.name 
+            city: data[1] 
         });
     }
 
     render() {
         
         let countryItems = this.countryData.countries.map((count) =>
-            <Option key={count.id} value={count.id}> {count.name} </Option>
+            <Option key={count.id} value={`${count.id}>${count.name}`}> {count.name} </Option>
         );
 
         let stateItems = this.countryData.states ? 
             (this.countryData.states.map((state) =>
-            <Option key={state.id} value={state.id}> {state.name} </Option>))
+            <Option key={state.id} value={`${state.id}>${state.name}`}> {state.name} </Option>))
             : null;
 
         let cityItems = this.countryData.cities ? 
             (this.countryData.cities.map((city) =>
-            <Option key={city.id} value={city.id}> {city.name} </Option>))
+            <Option key={city.id} value={`${city.id}>${city.name}`}> {city.name} </Option>))
             : null;
 
         return(
@@ -99,6 +105,7 @@ class CountrySelector extends React.Component {
                 </Select>
                 <Select
                     showSearch
+                    disabled={this.state.stateDisabled}
                     size='large'
                     placeholder='Región'
                     onChange={this.handleStateChange}
@@ -107,6 +114,7 @@ class CountrySelector extends React.Component {
                 </Select>
                 <Select
                     showSearch
+                    disabled={this.state.cityDisabled}
                     size='large'
                     placeholder='Ciudad'
                     onChange={this.handleCitiesChange}

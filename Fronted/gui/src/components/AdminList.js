@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Form, Button, Modal, message } from "antd";
+import { List, Avatar, Icon, Form, Button, Modal, Row, Empty, message } from "antd";
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import history from '../helpers/history';
@@ -92,6 +92,9 @@ class Adminlist extends React.Component {
 
     render(){
         return(
+          <div>
+            {
+              this.props.data.length > 0 ? 
                 <List
                     itemLayout="horizontal"
                     size="middle"
@@ -166,7 +169,13 @@ class Adminlist extends React.Component {
                         
                     )}
                 />
-        );
+              :
+              <Row type="flex" justify="center" align="middle">
+                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado administradores.</h2>}/>
+              </Row>
+              }
+            </div>  
+          );
     }
     }
 
