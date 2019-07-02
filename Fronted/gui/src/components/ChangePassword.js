@@ -15,7 +15,9 @@ import {
     constructor(props) {
       super(props);
       this.state={
-          admins: []
+        pass1:'',
+        pass2:'',
+        admins: []
       }
   }
   handleCancel = e => {

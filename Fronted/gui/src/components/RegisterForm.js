@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 import moment from 'moment';
 import ReCAPTCHA from 'react-google-recaptcha';
+import axios from 'axios';
 
 
 import '../App.css';
@@ -86,6 +87,30 @@ class RegisterForm extends React.Component {
 
   onChangeCaptcha = () => {
     this.setState({ captcha: true });
+  };
+
+  handleSave = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const userData = JSON.stringify(this.state.userInfo)
+        const egresadoData = JSON.stringify(this.state.egresadoInfo)
+        const egreID = this.props.match.params.id;
+        axios.put(`http://127.0.0.1:8000/api/users/${egreID}/`,
+                    userData,
+                    { headers: {"Content-Type": "application/json"}})
+        .then(() => {
+            axios.put(`http://127.0.0.1:8000/api/egresados/${egreID}/`,
+                    egresadoData,
+                    { headers: {"Content-Type": "application/json"}})
+            history.push('/ver-egresados')
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
+      }
+    });
+
   };
 
   render() {
@@ -303,7 +328,7 @@ class RegisterForm extends React.Component {
                             )}
                         </Form.Item>
                         <br/>
-                        <Button type="primary" htmlType="submit" size='large' disabled={!this.state.captcha} >
+                        <Button type="primary" htmlType="submit" size='large' disabled={!this.state.captcha} onClick={this.save} >
                             Registrarse
                         </Button>
 

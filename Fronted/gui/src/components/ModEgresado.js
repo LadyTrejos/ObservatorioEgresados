@@ -5,15 +5,16 @@ import {
     Select,
     Row,
     Col,
+    DatePicker,
     Button,
     Modal,
     message
   } from 'antd';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 
 import history from '../helpers/history';
-import NumericInput from './NumericInput';
 
 const { Option } = Select;
 ///modificar todo esto
@@ -130,12 +131,20 @@ class ModificarEgresado extends React.Component {
     });
   };
 
+  disabledDate = (current) => {
+    let min = "01-01-1942";
+    return (
+      (current && current < moment(min, "DD-MM-YYYY")) ||
+      (current && current > moment().add(-20, "year"))
+    );
+  }
+
   render() {
+    
     const { getFieldDecorator } = this.props.form;
 
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: this.state.egresadoInfo.date_of_birth,
-    })
+    const date_of_birth = this.state.egresadoInfo ? moment(this.state.egresadoInfo.date_of_birth, "YYYY-MM-DD") : null; 
+    console.log(date_of_birth)
     /*(
       <Select
         size='large'
@@ -244,14 +253,18 @@ class ModificarEgresado extends React.Component {
 
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
-            <Form.Item label="fecha de nacimiento">
-              {getFieldDecorator('address', {
-                initialValue: this.state.egresadoInfo.date_of_birth
-              })(<Input
-                    placeholder='DD/MM/AAAA'
-                    size='large'
-                    onChange={e => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, date_of_birth: e.target.value } })}
-                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
+            <Form.Item label="Fecha de nacimiento">
+              {getFieldDecorator('date_of_birth', {
+                initialValue: date_of_birth
+                
+              })(<DatePicker
+                
+                placeholder='Seleccione fecha'
+                size='large'
+                format="DD-MM-YYYY"
+                onChange={(date, dateString) => this.setState({  egresadoInfo: {...this.state.egresadoInfo, date_of_birth: dateString }})}
+                disabledDate={this.disabledDate}
+
               />)}
             </Form.Item>
           </Col>
@@ -262,6 +275,7 @@ class ModificarEgresado extends React.Component {
           <Form.Item label="Género: " hasFeedback>
                             {getFieldDecorator('genre', {
                                 rules: [{ required:true, message: '¿Cuál es su género?' }],
+                                initialValue: this.state.egresadoInfo.genre
                             })(
                                 <Select 
                                 placeholder="Seleccione una opción"

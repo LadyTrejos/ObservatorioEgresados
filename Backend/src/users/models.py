@@ -136,6 +136,8 @@ GENDER_CHOICES = (
     ('P', 'Prefiere no responder'),
 )
 
+
+
 class Egresado(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
