@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox, message, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
+import axios from 'axios';
 import moment from 'moment';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -32,7 +33,8 @@ class RegisterForm extends React.Component {
             country: '',
             region: '',
             city:'',
-            is_graduated: true
+            is_graduated: true,
+            is_active: false
           },
           egresadoInfo: {
             date_of_birth: '',
@@ -50,7 +52,29 @@ class RegisterForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onAuth(values.email, values.password)
+        const userData = JSON.stringify(this.state.userInfo)
+        const egresadoData = JSON.stringify(this.state.egresadoInfo)
+        axios.post('http://localhost:8000/rest-auth/registration/', 
+                        userData, 
+                        { headers: {"Content-type": "application/json"}})
+            .then(() => {
+                axios.post('http://localhost:8000/api/egresados/', 
+                        egresadoData, 
+                        { headers: {"Content-type": "application/json"}})
+                .then(() => 
+                    <Alert
+                        message="Success Tips"
+                        description="Detailed description and advice about successful copywriting."
+                        type="success"
+                        showIcon
+                        />
+                  
+                )
+            })
+            .catch(err => {
+              console.log(err.message)
+            })
+
       }
     });
   };
@@ -129,7 +153,7 @@ class RegisterForm extends React.Component {
                     <Spin indicator={antIcon} />
                     :
                     <Form onSubmit={this.handleSubmit} className='Input'>                    
-                        <Form.Item label='Nombre(s)'>
+                        <Form.Item label='Nombre(s)' hasFeedback>
                             {getFieldDecorator('name', {
                                 rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true},
                                         {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
@@ -141,7 +165,7 @@ class RegisterForm extends React.Component {
                                     />
                                 )}
                         </Form.Item>
-                        <Form.Item label='Apellido(s)'>
+                        <Form.Item label='Apellido(s)' hasFeedback>
                             {getFieldDecorator('lastname', {
                                 rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true },
                                 {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
@@ -158,9 +182,9 @@ class RegisterForm extends React.Component {
                             <CountrySelector ref={this.countryRef}/>
                         </Form.Item>
 
-                        <Form.Item label="Tipo de documento">
+                        <Form.Item label="Tipo de documento" hasFeedback>
                             {getFieldDecorator('id_type', {
-                                rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                                rules: [{ required:true, message: 'Ingresar el tipo de documento' }],
                             })(
                                 <Select 
                                 placeholder="Seleccione un tipo"
@@ -185,16 +209,18 @@ class RegisterForm extends React.Component {
                                 <Input
                                 size='large' 
                                 placeholder='Documento de identidad'
-                                onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }>
+                                onChange={ e => this.setState({ 
+                                    userInfo: { ...this.state.userInfo, id: e.target.value },
+                                    egresadoInfo: { ...this.state.egresadoInfo, user: e.target.value }
+                                    }) }>
                                 </Input>
 
                                 )}
                         </Form.Item>
 
                         <Form.Item label="Fecha de nacimiento: " hasFeedback>
-                            {getFieldDecorator('date_of_birth', {
-                            rules: [{ required:true, message: 'Ingresar la fecha de nacimiento' }],
-                            }) (
+                            {getFieldDecorator('date_of_birth')
+                             (
                             <DatePicker
                                 placeholder='Seleccione fecha'
                                 size='large'
@@ -206,9 +232,7 @@ class RegisterForm extends React.Component {
                         </Form.Item>
 
                         <Form.Item label="Género: " hasFeedback>
-                            {getFieldDecorator('genre', {
-                                rules: [{ required:true, message: '¿Cuál es su género?' }],
-                            })(
+                            {getFieldDecorator('genre')(
                                 <Select 
                                 placeholder="Seleccione una opción"
                                 size='large'
@@ -230,7 +254,7 @@ class RegisterForm extends React.Component {
                                 },
                                 {
                                     required: true,
-                                    message: 'Ingresar correo electrónico',
+                                    message: '¿Cuál es su correo electrónico?',
                                 },
                                 ],
                             })(<Input 
@@ -275,15 +299,17 @@ class RegisterForm extends React.Component {
                                 type="password"
                                 size="large"
                                 placeholder="Contraseña"
+                                onChange={e => this.setState({ userInfo: { ...this.state.userInfo, password2: e.target.value } })}
                                 onBlur={this.handleConfirmBlur}
                             />)}
                         </Form.Item>
                         <Form.Item>
                             {getFieldDecorator('agreement', {
                                 valuePropName: 'checked',
+                                rules: [{required:true, message: "Debe aceptar la política de privacidad"}]
                             })(
                                 <Checkbox>
-                                    Acepto la <a>política de privacidad</a>
+                                    Acepto la <a href="/privacy" target="_blank">política de privacidad</a>
                                 </Checkbox>
                             )}
                         </Form.Item>
