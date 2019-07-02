@@ -120,6 +120,8 @@ class RegisterForm extends React.Component {
     callback();
   };
 
+  
+
   handleConfirmBlur = e => {
     const { value } = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
@@ -310,12 +312,20 @@ class RegisterForm extends React.Component {
                                 )}
                         </Form.Item>
 
-                        <Form.Item label="Contraseña: " hasFeedback>
+                        <Form.Item label={<span>
+                              Contraseña&nbsp;
+                              
+                              <Tooltip title="Utilice 8 caracteres como mínimo y 15 como máximo, con una combinación de letras números y símbolos como !@#$%^&*">
+                                <Icon type="question-circle-o" />
+                              </Tooltip>
+
+                            </span>} hasFeedback>
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: 'Ingrese su contraseña' },
                                 {
                                 validator: this.validateToNextPassword,
-                                }],
+                                },
+                              {pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/, message:'Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos'} ],
                             })(
                                 <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

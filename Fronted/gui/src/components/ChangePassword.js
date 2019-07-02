@@ -51,17 +51,14 @@ import {
   }
 
   passwordValidate = (rule,value,callback) => {
-    console.log(value)
      const password = value;
      const reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
      if(reg.test(password)){
         this.setState({ ...this.state, pass1: value})
-         console.log("sí cumple")
          callback()
          
      }
      else{
-         console.log("no cumple")
          callback('Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos')
      }
 
