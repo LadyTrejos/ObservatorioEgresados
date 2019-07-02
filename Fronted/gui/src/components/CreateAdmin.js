@@ -135,7 +135,9 @@ class RegistrationForm extends React.Component {
       rules: [{required:true, message: 'Ingresar indicativo'}]
     })(
       <Select 
+        showSearch
         size='large' 
+        style={{minWidth: '10vw'}}
         onChange={(value) => this.setState({ adminInfo: { ...this.state.adminInfo, id_phone: value } })}
       >
         {this.state.phonecodeItems}
@@ -263,7 +265,7 @@ class RegistrationForm extends React.Component {
         </Row>
 
         <Row type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col >
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {
                 rules: [{ required: true, message: 'Ingresar número telefónico' }]
@@ -280,7 +282,7 @@ class RegistrationForm extends React.Component {
 
         <Row type="flex" justify="center" align="middle">
           <Col span={5}>
-            <Form.Item>
+            <Form.Item label="Lugar de residencia">
               <CountrySelector ref={this.countryRef}/>
 						</Form.Item>
           </Col>

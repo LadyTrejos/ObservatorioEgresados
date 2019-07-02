@@ -5,8 +5,9 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 
 import '../App.css';
-import './LoginForm.css'
+import './LoginForm.css';
 import logo from '../static/img/logo.png'
+import history from '../helpers/history';
 
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -43,17 +44,15 @@ class LoginForm extends React.Component {
             <div style={stylesObj} className="container">
             
             </div>
-            {/*
             <div className='Div2'>
                 <h1 className='h1Q'>¿Aún no tienes una cuenta?</h1>
-                <Form.Item style={{left:'40%'}}>
-                    <Button htmlType="submit" className='Button2'>
-                        <strong>Regístrate</strong> 
-                    </Button>
-                            
-                </Form.Item>
+                <Button 
+                  className='ButtonRegister'
+                  onClick={() => history.push('/registro')}
+                  >
+                    <strong>Regístrate</strong> 
+                </Button>
             </div>
-            */}
             
             <div className='Div3' >
                 <h1 className='h1IS'>Iniciar sesión</h1>
@@ -92,10 +91,11 @@ class LoginForm extends React.Component {
                             )}
                         </Form.Item>
                         <br/>
-                        <Button type="primary" htmlType="submit" size='large' >
-                            Iniciar
-                        </Button>
-
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit" size='large'>
+                              Iniciar
+                          </Button>
+                        </Form.Item>
                     </Form>
                 }
             </div>

@@ -1,14 +1,14 @@
-.Button{
+.ButtonLogin{
   background-color:#FF5126;
   border-color: #FF5126;
 
 }
 
-.Button2{
+.ButtonRegister{
   background-color:#2F3E9E;
   border-color: #2F3E9E;
   width:10%;
-  left: 30%;
+  left: 70%;
   margin-top: 15%;
 }
 .container {
