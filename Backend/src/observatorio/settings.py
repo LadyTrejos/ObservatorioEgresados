@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         'rest_framework.permissions.AllowAny'
     ],
-    "DATE_INPUT_FORMATS": ["%d-%m-%Y"],
+    "DATE_INPUT_FORMATS": [("%d-%m-%Y"),],
 }
 
 

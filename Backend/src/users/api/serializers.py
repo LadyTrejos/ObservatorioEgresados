@@ -109,7 +109,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
 
 class EgresadoSerializer(serializers.ModelSerializer):
-    date_of_birth = serializers.DateField(required=False, allow_null=True)
+    date_of_birth = serializers.DateField(required=False, allow_null=True,format="%d-%m-%Y", input_formats=['%d-%m-%Y'])
     genre = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
