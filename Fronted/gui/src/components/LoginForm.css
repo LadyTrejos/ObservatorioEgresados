@@ -29,8 +29,8 @@
   position: absolute;
   border-radius: 25px;
   text-align: center;
-  min-height: 400px;
-  min-width: 400px;
+  min-height: '40vh';
+  min-width: '40vw';
   
 }
 

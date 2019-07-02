@@ -323,7 +323,9 @@ const { TextArea } = Input;
             <Col span={7}>
               <Form.Item label="Lugar del evento">
                 {getFieldDecorator('place', {
-                  rules: [{ required:true, message: '¿Dónde se realizará?' }],
+                  rules: [{ required:true, message: '¿Dónde se realizará?' },
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                    message: "Dirección no válida"}],
                 })(
                     <Input
                     placeholder='Lugar del evento'
@@ -345,6 +347,8 @@ const { TextArea } = Input;
                       required: true,
                       message: '¿Quién organiza el evento?',
                     },
+                    {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                      message: "Nombre no válido"}
                   ],
                 })(<Input
                       placeholder='Nombre, asociación o institución '
@@ -361,6 +365,7 @@ const { TextArea } = Input;
                     {getFieldDecorator('interests', {
                         rules: [
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
+                        
                         ],
                     })(
                         <Select 

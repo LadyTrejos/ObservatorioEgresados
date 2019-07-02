@@ -126,7 +126,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Interes(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -139,7 +139,7 @@ GENDER_CHOICES = (
 class Egresado(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    date_of_birth = models.DateField(default=datetime.date.today)
+    date_of_birth = models.DateField(default="01-01-2000")
     genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     interests = models.ManyToManyField(Interes, blank=True)
     friends = models.ManyToManyField("self", blank=True)
@@ -152,7 +152,7 @@ class Admin(models.Model):
     address = models.CharField(max_length=100, blank=True, null=True)
     id_phone = models.IntegerField(blank=True, null=True)
     phone = models.IntegerField(null=True)
-    
+
     def __str__(self):
         return self.user.get_full_name()
 
@@ -169,7 +169,7 @@ class Evento(models.Model):
     url = models.TextField()
 
     def __str__(self):
-        return self.name 
+        return self.name
 
 # FORMS
 

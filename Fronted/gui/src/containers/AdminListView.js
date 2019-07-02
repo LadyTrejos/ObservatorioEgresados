@@ -32,7 +32,4 @@ import AdminList from '../components/AdminList'
   }
   
   
-  
-  
-  
   export default AdminListView;

@@ -6,6 +6,7 @@ import axios from 'axios';
 import './Layout.css'
 import * as actions from '../store/actions/auth';
 import logo from '../static/img/logo.png'
+import history from '../helpers/history'; 
 
 
 const { Header, Content, Sider } = Layout;
@@ -32,38 +33,40 @@ class AdminLayout extends React.Component {
         let isLoading = this.state.user ? false : true;
             return(
                 <div>
+                    
                 {
-                    isLoading ? 
-                        <Spin tip="Cargando..."/> 
-                    : 
+                    isLoading ?
+                        <Spin tip="Cargando..."/>
+                    :
                     (
+                 
                 <Layout style={{height:'100vh'}}>
                     <Sider
                         style={{backgroundColor: '#2F3E9E', textAlign:'center', flex:1,justifyContent:'flex-end', alignContent:'left'}}
                         breakpoint="lg"
                         collapsedWidth="0"
                         onBreakpoint={broken => {
-                        
+
                         }}
                         onCollapse={(collapsed, type) => {
                         }}
                         >
-                    
-                        
+
+
                         <h1 className='h1'>Menú</h1>
                         <Avatar type="user" size={80} icon='user' />
                         <h1 className='h12'>{this.state.user.name.toUpperCase() }</h1>
-                        
 
-                        
+
+
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'left'}}>
-                            {/*<Menu.Item key="1">
+                            <Menu.Item key="1">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
-                                <Link to='/crear-admin'></Link>
-                            </Menu.Item>*/}
+                                <Link to='/perfil'></Link>
+                            </Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="2">
                                 <Icon type="calendar" />
@@ -72,45 +75,47 @@ class AdminLayout extends React.Component {
                                 </span>
                                 <Link to='/eventos'></Link>
                             </Menu.Item>
-                            {/*
+
                             <Menu.Item key="3">
                                 <Icon type="team" />
                                 <span className="nav-text">
                                     Egresados
                                 </span>
-                                <Link to='/crear-admin'></Link>
+                                <Link to='/ver-egresados'></Link>
                             </Menu.Item>
+                            {  /*
                             <Menu.Item key="4">
-                                <Icon type="bell" />
+                                <Icon type="bexll" />
                                 <span className="nav-text">
                                     Solicitudes de registro
                                 </span>
                                 <Link to='/crear-admin'></Link>
                             </Menu.Item> */}
                         </Menu>
-                        
-                        <Button 
-                            type="primary" 
-                            onClick={this.props.logout} 
+
+                        <Button
+                            type="primary"
+                            onClick={this.props.logout}
                             style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                             Cerrar sesión
                         </Button>
-                            
+
                     </Sider>
                     <Layout style={{backgroundColor:'#E5E9FF'}}>
-                        <Header 
-                            style={{height: '10%', 
-                                    backgroundColor:'#8796F0', 
-                                    fontSize:'150%', 
-                                    display:'flex', 
+                        <Header
+                            style={{height: '10%',
+                                    minHeight: 60,
+                                    backgroundColor:'#8796F0',
+                                    fontSize:'150%',
+                                    display:'flex',
                                     textAlign: 'right',
-                                    flexDirection:'row', 
-                                    alignContent:'flex-center', 
+                                    flexDirection:'row',
+                                    alignContent:'flex-center',
                                     justifyContent:'flex-end'}}
                         >
                             <img src={logo} alt="Logo de la página" style={{width: 50, height: 50}}/>
                             <h1 style={{color:'#fff'}}><strong>Observatorio de egresados</strong></h1>
-                            
+
                         </Header>
                         <Content style={{ margin: '24px 0px 0', backgroundColor:'#E5E9FF'}}>
                             <div style={{ padding: 24, background: '#E5E9FF', minHeight: 360}}>
@@ -118,14 +123,14 @@ class AdminLayout extends React.Component {
                             </div>
                         </Content>
                     </Layout>
-                    
+
             </Layout>)
-            } 
+            }
             </div>
         )
 
     }
-  
+
 }
 
 const mapStateToProps = state => {

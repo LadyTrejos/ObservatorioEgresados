@@ -14,13 +14,16 @@ import axios from 'axios';
 
 import history from '../helpers/history';
 import NumericInput from './NumericInput';
+import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
 
-class ModAdmins extends React.Component {
+class ModAccountAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        pass1:'',
+        pass2:'',
       userInfo:{
         email: '',
         password: '',
@@ -46,7 +49,7 @@ class ModAdmins extends React.Component {
   }
   
   componentWillMount(){
-    const adminID = this.props.match.params.id;
+    const adminID = localStorage.getItem('user');
     axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
     .then(res => {
       this.setState({ 
@@ -84,7 +87,8 @@ class ModAdmins extends React.Component {
       if (!err) {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
-        const adminID = this.props.match.params.id;
+        const adminID = localStorage.getItem('user');
+        console.log("ID: "+adminID)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
@@ -92,7 +96,7 @@ class ModAdmins extends React.Component {
             axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
-            history.push('/ver-admins')
+            history.push('/eventos')
         })
         .catch(err => {
           console.log(err.message)
@@ -127,9 +131,11 @@ class ModAdmins extends React.Component {
     });
   };
 
+
+
+
   render() {
     const { getFieldDecorator } = this.props.form;
-
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: this.state.adminInfo.id_phone,
     })(
@@ -142,7 +148,7 @@ class ModAdmins extends React.Component {
     );
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
-        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
+        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar perfil</h1>
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
             <Form.Item 
@@ -269,6 +275,16 @@ class ModAdmins extends React.Component {
             </Form.Item>
           </Col>
         </Row>
+        <Row type="flex" justify="center" align="middle">
+          <Col span={2.5}>
+          <ChangePassword/>
+          </Col>
+        </Row>
+        
+
+        
+
+        
 
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
@@ -326,8 +342,8 @@ class ModAdmins extends React.Component {
   }
 }
 
-const ModAdmin = Form.create({ name: 'ModAdmin' })(ModAdmins);
+const ModAccAdmin = Form.create({ name: 'ModAdmin' })(ModAccountAdmin);
 
 
 
-export default withRouter(ModAdmin);
+export default withRouter(ModAccAdmin);

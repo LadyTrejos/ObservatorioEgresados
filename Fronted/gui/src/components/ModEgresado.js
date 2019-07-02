@@ -16,40 +16,42 @@ import history from '../helpers/history';
 import NumericInput from './NumericInput';
 
 const { Option } = Select;
-
-class ModAdmins extends React.Component {
+///modificar todo esto
+class ModificarEgresado extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userInfo:{
         email: '',
         password: '',
-        name:'', 
+        name:'',
         last_name:'',
         id:'',
         id_type: '',
         country: '',
         region: '',
         city:'',
-        is_graduated: false,
-        is_admin: true,
+        is_graduated: true,
+        is_admin: false,
         is_active: true
       },
-      adminInfo: {
-        address: '',
-        phone:'',
-        id_phone:'',
+      egresadoInfo: {
+        user: '',
+        date_of_birth: '',
+        genre: '',
+        interests: '',
+        friends: ''
       },
       phonecodeItems: []
     };
     this.countryRef = React.createRef();
   }
-  
+
   componentWillMount(){
-    const adminID = this.props.match.params.id;
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+    const egreID = this.props.match.params.id;
+    axios.get(`http://127.0.0.1:8000/api/users/${egreID}`)
     .then(res => {
-      this.setState({ 
+      this.setState({
         userInfo: {
           name: res.data.name,
           last_name: res.data.last_name,
@@ -64,42 +66,43 @@ class ModAdmins extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
+    axios.get(`http://127.0.0.1:8000/api/egresados/${egreID}`)
     .then(res => {
       this.setState({
-        adminInfo : {
+        egresadoInfo : {
           user: res.data.user,
-          address: res.data.address,
-          id_phone: res.data.id_phone,
-          phone: res.data.phone
+          date_of_birth: res.data.date_of_birth,
+          genre: res.data.genre,
+          interests: res.data.interests,
+          friends: res.data.interests
         }
       })
     })
-        
+
 }
-  
+
   handleSave = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const userData = JSON.stringify(this.state.userInfo)
-        const adminData = JSON.stringify(this.state.adminInfo)
-        const adminID = this.props.match.params.id;
-        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
-                    userData, 
+        const egresadoData = JSON.stringify(this.state.egresadoInfo)
+        const egreID = this.props.match.params.id;
+        axios.put(`http://127.0.0.1:8000/api/users/${egreID}/`,
+                    userData,
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
-                    adminData, 
+            axios.put(`http://127.0.0.1:8000/api/egresados/${egreID}/`,
+                    egresadoData,
                     { headers: {"Content-Type": "application/json"}})
-            history.push('/ver-admins')
+            history.push('/ver-egresados')
         })
         .catch(err => {
           console.log(err.message)
         })
       }
     });
-    
+
   };
 
   handleDeactivate = e => {
@@ -109,9 +112,9 @@ class ModAdmins extends React.Component {
     }}, () => {
       this.handleSave(e)
       let action = this.state.userInfo.is_active ? "activado" : "desactivado"
-      message.success(`El administrador ha sido ${action}.`)
+      message.success(`El egresado ha sido ${action}.`)
     })
-    
+
   };
 
   handleCancel = e => {
@@ -131,29 +134,30 @@ class ModAdmins extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: this.state.adminInfo.id_phone,
-    })(
-      <Select 
-        size='large' 
-        onChange={(value) => this.setState({ adminInfo: { ...this.state.adminInfo, id_phone: value } })}
+      initialValue: this.state.egresadoInfo.date_of_birth,
+    })
+    /*(
+      <Select
+        size='large'
+        onChange={(value) => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, date_of_birth: value } })}
       >
         {this.state.phonecodeItems}
       </Select>,
-    );
+    );*/
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
-        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
+        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar egresado</h1>
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
-            <Form.Item 
+            <Form.Item
               label='Nombre(s)'
             >
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: 'Ingresar nombre(s)'},
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi,
                   message: "Nombre no válido"}],
                 initialValue: this.state.userInfo.name
-              })(<Input 
+              })(<Input
                     placeholder='Nombre(s)'
                     size='large'
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
@@ -164,17 +168,17 @@ class ModAdmins extends React.Component {
           </Col>
         </Row>
         <Row  type="flex" justify="center" align="middle">
-          
+
           <Col span={7}>
-            <Form.Item 
+            <Form.Item
               label='Apellido(s)'
             >
               {getFieldDecorator('lastname', {
                 rules: [{ required: true, message: 'Ingresar apellido(s)'},
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi,
                   message: "Apellido no válido"}],
                 initialValue: this.state.userInfo.last_name
-              })(<Input 
+              })(<Input
                     placeholder='Apellido(s)'
                     size='large'
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
@@ -188,7 +192,7 @@ class ModAdmins extends React.Component {
           <Col span={3.5}>
             <Form.Item label="Tipo de documento">
               {getFieldDecorator('id_type', {
-                rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
+                rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 initialValue: this.state.userInfo.id_type
               })(
                 <Select size='large' disabled>
@@ -202,14 +206,14 @@ class ModAdmins extends React.Component {
 
           </Col>
 
-          <Col span={4.5}> 
+          <Col span={4.5}>
             <Form.Item label="Documento de identidad">
               {getFieldDecorator('id', {
-                rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
+                rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
                 initialValue: this.state.userInfo.id
               })(
                 <Input
-                  size='large'  
+                  size='large'
                   placeholder='Documento de identidad'
                   readOnly
                   onChange={ e => this.setState({ userInfo: { ...this.state.userInfo, id: e.target.value } }) }
@@ -228,7 +232,7 @@ class ModAdmins extends React.Component {
                     message: 'Ingresar correo electrónico',
                   }],
                 initialValue: this.state.userInfo.email
-              })(<Input 
+              })(<Input
                     placeholder='ejemplo@dominio.com'
                     size='large'
                     readOnly
@@ -240,13 +244,13 @@ class ModAdmins extends React.Component {
 
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
-            <Form.Item label="Dirección">
+            <Form.Item label="fecha de nacimiento">
               {getFieldDecorator('address', {
-                initialValue: this.state.adminInfo.address
-              })(<Input 
-                    placeholder='Cr 27 Cll 4 # 45-56'
+                initialValue: this.state.egresadoInfo.date_of_birth
+              })(<Input
+                    placeholder='DD/MM/AAAA'
                     size='large'
-                    onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
+                    onChange={e => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, date_of_birth: e.target.value } })}
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
               />)}
             </Form.Item>
@@ -255,15 +259,14 @@ class ModAdmins extends React.Component {
 
         <Row type="flex" justify="center" align="middle">
           <Col span={7}>
-            <Form.Item label="Número de celular">
-              {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
-              message:'El número debe contener 10 dígitos'}],
-                initialValue: this.state.adminInfo.phone
+            <Form.Item label="Genero">
+              {getFieldDecorator('genre', {rules:[{pattern:/^[a-z,A-Z]{10}$/gi}],
+                initialValue: this.state.egresadoInfo.genre
               })(
-                <NumericInput 
+                <NumericInput
                   size='large'
                   addonBefore={prefixSelector}
-                  onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
+                  onChange={value => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, genre: value } })}
                   placeholder='Ej: 1234567890'
                   style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}/>)}
             </Form.Item>
@@ -277,7 +280,6 @@ class ModAdmins extends React.Component {
                   {this.state.userInfo.is_active ? "Desactivar cuenta" : "Activar cuenta"}
               </Button>
               <Modal
-                  onCancel={this.handleCancel}
                   title="Confirmación"
                   visible={this.state.visible}
                   footer={[
@@ -307,12 +309,12 @@ class ModAdmins extends React.Component {
 
           <Col >
             <Form.Item>
-              <Button 
-                  size='large' 
-                  type="primary" 
-                  htmlType="submit" 
-                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
-                  onClick={() => history.push('/ver-admins')}
+              <Button
+                  size='large'
+                  type="primary"
+                  htmlType="submit"
+                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}}
+                  onClick={() => history.push('/ver-egresados')}
               >
               Cancelar
               </Button>
@@ -320,14 +322,14 @@ class ModAdmins extends React.Component {
           </Col>
         </Row>
 
-        
+
       </Form>
     );
   }
 }
 
-const ModAdmin = Form.create({ name: 'ModAdmin' })(ModAdmins);
+const ModEgresado = Form.create({ name: 'ModEgresado' })(ModificarEgresado);
 
 
 
-export default withRouter(ModAdmin);
+export default withRouter(ModEgresado);
