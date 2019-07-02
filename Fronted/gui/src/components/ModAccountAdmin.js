@@ -5,8 +5,6 @@ import {
     Select,
     Row,
     Col,
-    Icon,
-    Tooltip,
     Button,
     Modal,
     message
@@ -16,6 +14,7 @@ import axios from 'axios';
 
 import history from '../helpers/history';
 import NumericInput from './NumericInput';
+import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
 
@@ -88,7 +87,8 @@ class ModAccountAdmin extends React.Component {
       if (!err) {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
-        const adminID = this.props.match.params.id;
+        const adminID = localStorage.getItem('user');
+        console.log("ID: "+adminID)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
@@ -96,7 +96,7 @@ class ModAccountAdmin extends React.Component {
             axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
-            history.push('/ver-admins')
+            history.push('/eventos')
         })
         .catch(err => {
           console.log(err.message)
@@ -125,56 +125,14 @@ class ModAccountAdmin extends React.Component {
     });
   };
 
-  handleCancelPassword = e => {
-    console.log(e);
-    this.setState({
-      visiblePassword: false,
-    });
-  };
-
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
 
-  showModalPassword = () => {
-    this.setState({
-      visiblePassword: true,
-    });
-  };
 
-  passwordValidate = (rule,value,callback) => {
-    console.log(value)
-     const password = value;
-     const reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
-     if(reg.test(password)){
-        this.setState({ ...this.state, pass1: value})
-         console.log("sí cumple")
-         
-     }
-     else{
-         console.log("no cumple")
-         callback('Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos')
-     }
 
-  }
-
-  passwordConfirm = (rule,value,callback) => {
-    
-    
-    if (value !== this.state.pass1){
-        
-        callback("Las contraseñas no coinciden")
-    }
-    
-  }
-
-  changePassword = () => {
-    this.setState({ userInfo: {
-      ...this.state.userInfo, password: this.state.pass1
-    }})
-  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -317,68 +275,16 @@ class ModAccountAdmin extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
-            <Form.Item>
-              <Button onClick={this.showModalPassword} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
-                  Cambiar contraseña
-              </Button>
-              <Modal
-                  title="Cambiar contraseña"
-                  visible={this.state.visiblePassword}
-                  footer={[
-                    <Button key="back" onClick={this.handleCancelPassword}>
-                      Cancelar
-                    </Button>,
-                    <Button key="save" onClick={this.changePassword}>
-                      Guardar
-                  </Button>
-                  ]}
-                >
-                    <Form.Item label="Contraseña actual">
-                        {getFieldDecorator('address1', {
-                          
-                        })(<Input 
-                            placeholder='Contraseña actual'
-                            size='large'
-                            style={{backgroundColor:'#fff', borderColor:'#2F3E9E',borderRadius:10, width:'70%' }}
-                    />)}
-                    </Form.Item>
-
-                    <Form.Item label={<span>
-                          Nueva contraseña&nbsp;
-                          <Tooltip title="Utilice 8 caracteres como mínimo y 15 como máximo, con una combinación de letras números y símbolos como !@#$%^&*">
-                            <Icon type="question-circle-o" />
-                          </Tooltip>
-
-                        </span>}
-                        >
-                        {getFieldDecorator('address2', {rules: [{ required:true, message: 'Ingresar la nueva contraseña' },{validator:this.passwordValidate}]
-                        })(<Input 
-                            placeholder='Nueva contraseña'
-                            size='large'
-                            style={{backgroundColor:'#fff', borderColor:'#2F3E9E',borderRadius:10,width:'70%'}}
-                    />)}
-                    </Form.Item>
-
-                    <Form.Item label="Confirmar nueva contraseña">
-                        
-                        {getFieldDecorator('address3', {rules: [{ required:true, message: 'Confirmar contraseña' },{validator:this.passwordConfirm}]
-                        })(<Input 
-                            placeholder='Confirmar nueva contraseña'
-                            size='large'
-                            style={{backgroundColor:'#fff', borderColor:'#2F3E9E',borderRadius:10,width:'70%' }}
-                    />)}
-                          
-                    </Form.Item>
-
-                    
-                 
-              </Modal>
-            </Form.Item>
+          <ChangePassword/>
           </Col>
         </Row>
+        
+
+        
+
+        
 
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
@@ -387,6 +293,7 @@ class ModAccountAdmin extends React.Component {
                   {this.state.userInfo.is_active ? "Desactivar cuenta" : "Activar cuenta"}
               </Button>
               <Modal
+                  onCancel={this.handleCancel}
                   title="Confirmación"
                   visible={this.state.visible}
                   footer={[
