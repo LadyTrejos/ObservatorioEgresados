@@ -45,6 +45,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     city = serializers.CharField(required=True)
     is_graduated = serializers.BooleanField()
     is_admin = serializers.BooleanField()
+    is_active = serializers.BooleanField(default=True)
 
     class Meta:
         model = User
@@ -58,7 +59,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'region',
             'city',
             'is_graduated',
-            'is_admin'
+            'is_admin',
+            'is_active'
         )
 
     def get_cleaned_data(self):
@@ -75,6 +77,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             'city': self.validated_data.get('city', ''),
             'is_graduated': self.validated_data.get('is_graduated', ''),
             'is_admin': self.validated_data.get('is_admin', ''),
+            'is_active': self.validated_data.get('is_active','')
         }
 
     def save(self, request):
@@ -91,6 +94,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.city = self.cleaned_data.get('city')
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
+        user.is_active = self.cleaned_data.get('is_active')
         password = self.cleaned_data.get('password1')
         user.set_password(password)
 

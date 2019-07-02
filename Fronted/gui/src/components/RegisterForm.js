@@ -1,12 +1,11 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox, message, Alert } from 'antd';
+import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox, Tooltip, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 import axios from 'axios';
 import moment from 'moment';
 import ReCAPTCHA from 'react-google-recaptcha';
-import axios from 'axios';
 
 
 import '../App.css';
@@ -35,9 +34,12 @@ class RegisterForm extends React.Component {
             region: '',
             city:'',
             is_graduated: true,
-            is_active: false
+            is_active: false,
+            is_admin:false,
+
           },
           egresadoInfo: {
+            user:'',
             date_of_birth: '',
             genre: '',
             interests: [],
@@ -50,13 +52,24 @@ class RegisterForm extends React.Component {
       }
 
   handleSubmit = e => {
+    const selector = this.countryRef.current;
+    console.log(JSON.stringify(this.state.userInfo))
+    console.log(JSON.stringify(this.state.egresadoInfo))
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const userData = JSON.stringify(this.state.userInfo)
-        const egresadoData = JSON.stringify(this.state.egresadoInfo)
-        axios.post('http://localhost:8000/rest-auth/registration/', 
-                        userData, 
+        this.setState({ userInfo: { ...this.state.userInfo, 
+          country: selector.state.country,
+          region: selector.state.region,
+          city: selector.state.city,
+          },
+          adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
+        },
+        () => {
+          const userData = JSON.stringify(this.state.userInfo)
+          const egresadoData = JSON.stringify(this.state.egresadoInfo)
+          axios.post('http://localhost:8000/rest-auth/registration/', 
+                          userData, 
                         { headers: {"Content-type": "application/json"}})
             .then(() => {
                 axios.post('http://localhost:8000/api/egresados/', 
@@ -75,15 +88,18 @@ class RegisterForm extends React.Component {
             .catch(err => {
               console.log(err.message)
             })
-
-      }
+          }
+        )
+        }
+      
     });
   };
 
   disabledDate = (current) => {
+    let min = "01-01-1942";
     return (
-      (current && current < moment()) ||
-    (current && current > moment().add(2, "year"))
+      (current && current < moment(min, "DD-MM-YYYY")) ||
+      (current && current > moment().add(-20, "year"))
     );
   }
 
@@ -113,29 +129,23 @@ class RegisterForm extends React.Component {
     this.setState({ captcha: true });
   };
 
-  handleSave = e => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const userData = JSON.stringify(this.state.userInfo)
-        const egresadoData = JSON.stringify(this.state.egresadoInfo)
-        const egreID = this.props.match.params.id;
-        axios.put(`http://127.0.0.1:8000/api/users/${egreID}/`,
-                    userData,
-                    { headers: {"Content-Type": "application/json"}})
-        .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/egresados/${egreID}/`,
-                    egresadoData,
-                    { headers: {"Content-Type": "application/json"}})
-            history.push('/ver-egresados')
-        })
-        .catch(err => {
-          console.log(err.message)
-        })
-      }
-    });
-
+  getPattern = (rule, value, callback) => {
+    let reg = null;
+    // Expresión regular dependiendo del tipo de documento seleccionado
+    if ( this.state.userInfo.id_type === 'PA'){
+      reg = /^[A-Z]{2}[0-9]{6}$/;
+    } else {
+      reg = /^[0-9]{6,10}$/
+    }
+    // Verificar si se cumple la expresión regular
+    if(value && !reg.test(value)){
+      callback('El documento ingresado no es válido')
+    } else {
+      callback();
+    }
+    
   };
+  
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -180,7 +190,7 @@ class RegisterForm extends React.Component {
                     <Form onSubmit={this.handleSubmit} className='Input'>                    
                         <Form.Item label='Nombre(s)' hasFeedback>
                             {getFieldDecorator('name', {
-                                rules: [{ required: true, message: 'Ingresar nombre(s)', whitespace: true},
+                                rules: [{ required: true, message: 'Ingresar nombre(s)'},
                                         {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                                         message: "Nombre no válido"}],
                             })(<Input 
@@ -192,7 +202,7 @@ class RegisterForm extends React.Component {
                         </Form.Item>
                         <Form.Item label='Apellido(s)' hasFeedback>
                             {getFieldDecorator('lastname', {
-                                rules: [{ required: true, message: 'Ingresar apellido(s)', whitespace: true },
+                                rules: [{ required: true, message: 'Ingresar apellido(s)'},
                                 {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                                 message: "Apellido no válido"}],
                             })(<Input 
@@ -224,10 +234,17 @@ class RegisterForm extends React.Component {
                                 )}
                         </Form.Item>
 
-                        <Form.Item label="Documento de identidad" hasFeedback>
+                        <Form.Item label={<span>
+                          Documento de identidad&nbsp;
+                          
+                          <Tooltip title="El documento debe tener al menos 6 dígitos y máximo 10.">
+                            <Icon type="question-circle-o" />
+                          </Tooltip>
+
+                        </span>} hasFeedback>
                             {getFieldDecorator('id', {
                                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }, 
-                            {validator: this.getPattern, message: 'El documento ingresado no es válido' }
+                            {validator: this.getPattern}
                             ]
                             })(
 
@@ -242,6 +259,8 @@ class RegisterForm extends React.Component {
 
                                 )}
                         </Form.Item>
+
+                                          
 
                         <Form.Item label="Fecha de nacimiento: " hasFeedback>
                             {getFieldDecorator('date_of_birth')
@@ -354,7 +373,7 @@ class RegisterForm extends React.Component {
                             )}
                         </Form.Item>
                         <br/>
-                        <Button type="primary" htmlType="submit" size='large' disabled={!this.state.captcha} onClick={this.save} >
+                        <Button type="primary" htmlType="submit" size='large' disabled={!this.state.captcha} >
                             Registrarse
                         </Button>
 

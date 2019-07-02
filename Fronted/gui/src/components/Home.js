@@ -51,6 +51,11 @@ class Home extends React.Component {
                   <Route exact path="/ver-egresados" component={EgresadoListView} />
                   <Route exact path="/editar-egresado/:id/" component={ModEgresado}/>
               </AdminLayout>)
+              }else if(this.state.user.is_graduated){
+                return (
+                    <AdminLayout>
+                        <h1>Entró como egresado</h1>
+                    </AdminLayout>)
               }
               }
 

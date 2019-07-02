@@ -48,7 +48,7 @@ export const authLogin = (email, password) => {
         })
         .then(res => {
             const token = res.data.key;
-            const expirationDate = new Date(new Date().getTime() + 3600 * 1000)
+            const expirationDate = new Date(new Date().getTime() + 7200 * 1000)
             localStorage.setItem('token', token);
             localStorage.setItem('expirationDate', expirationDate);
             localStorage.setItem('user', res.data.user);
