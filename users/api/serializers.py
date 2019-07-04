@@ -4,14 +4,9 @@ from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
 from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from smtplib import SMTPException
-from rest_framework.exceptions import APIException
-
-class ServiceUnavailable(APIException):
-    status_code = 500
-    default_detail = 'No se pudo enviar el correo.'
-    default_code = 'email_server_not_found'
-
 
 class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
@@ -98,13 +93,23 @@ class CustomRegisterSerializer(RegisterSerializer):
         password = self.cleaned_data.get('password1')
         user.set_password(password)
 
-        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \nEsta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
+
+        # message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \nEsta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
         if ( self.cleaned_data.get('is_admin')):
+            # Enviar correo con contraseña temporal al administrador
+            ctx = {
+                'name': self.cleaned_data.get('name'),
+                'email': self.cleaned_data.get('email'),
+                'password': self.cleaned_data.get('password1'),
+            }
+            subject = 'Bienvenido(a) a Observatorio UTP'
+            from_email = 'Observatorio UTP <observatorioutp@utp.edu.co>'
+            to = self.cleaned_data.get('email')
+            html_message = render_to_string('../templates/welcome_admin.html', ctx)
+            plain_message = strip_tags(html_message)
             try:
-                send_mail('Prueba',
-                message,
-                'observatorioutp@utp.edu.co', 
-                    [self.cleaned_data.get('email')],  fail_silently=False,)
+                send_mail(subject, plain_message, from_email, [to], html_message=html_message,
+                fail_silently=False,)
             except SMTPException:
                 print('No se ha podido conectar al servidor de correo.')
         user.save()
