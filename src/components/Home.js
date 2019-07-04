@@ -8,12 +8,15 @@ import ModEgresado from './ModEgresado';
 import CreateAdmin from './CreateAdmin';
 import AdminListView from '../containers/AdminListView';
 import EgresadoListView from '../containers/EgresadoListView';
+import EgresadoListView1 from '../containers/EgresadoListView1';
 import AdminLayout from '../containers/AdminLayout';
+import EgresadoLayout from '../containers/EgresadoLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import EventListView from '../containers/EvenListView'
+import EventListView1 from '../containers/EvenListView1'
 import CreateEvent from './CreateEvent';
 import ModAccountAdmin from './ModAccountAdmin';
-import HOSTNAME from '../helpers/hostname';
+import ModAccountGraduated from './ModAccountGraduated';
 
 
 class Home extends React.Component {
@@ -36,7 +39,6 @@ class Home extends React.Component {
 
     getRoutes = () => {
         if(this.state.user.is_superuser){
-            console.log('es superusuario')
             return (
               <SuperuserLayout>
                   <Route exact path="/editar-admin/:id/" component={ModAdmin} />
@@ -53,17 +55,22 @@ class Home extends React.Component {
                   <Route exact path="/ver-egresados" component={EgresadoListView} />
                   <Route exact path="/editar-egresado/:id/" component={ModEgresado}/>
               </AdminLayout>)
-              }else if(this.state.user.is_graduated){
-                return (
-                    <AdminLayout>
-                        <h1>Entró como egresado</h1>
-                    </AdminLayout>)
+            }  else if (this.state.user.is_graduated ){
+              return (
+              <EgresadoLayout>
+                  <Route exact path="/crear-evento" component={CreateEvent} />
+                  <Route exact path="/perfilEgresado" component={ModAccountGraduated}/>
+                  <Route exact path="/ver-evento1" component={EventListView1} />
+                  <Route exact path="/ver-egresados1" component={EgresadoListView1} />
+                  <Route exact path="/eventos1" component={EventListView1} />
+
+
+              </EgresadoLayout>)
               }
               }
 
     render() {
         let isLoading = this.state.user ? false : true;
-        console.log('is loading: ', isLoading);
         return(
             <div >
             {

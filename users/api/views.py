@@ -41,3 +41,7 @@ class AdminListView(viewsets.ReadOnlyModelViewSet):
 class EgresadoListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_graduated = True)
     serializer_class = UserSerializer
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
+    filter_fields = ('id',)
+    ordering_fields = ('id', 'email')
+    search_fields = ('id','email')

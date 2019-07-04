@@ -1,8 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
-import HOSTNAME from '../helpers/hostname';
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -21,15 +20,16 @@ class ViewEvent extends React.Component {
         super(props);
         this.state = {
             interests: {}
+
         }
         this.showConfirm = this.showConfirm.bind(this)
     }
 
     componentDidMount(){
-      axios.get(`${HOSTNAME}/api/intereses/`)
+      axios.get('http://127.0.0.1:8000/api/intereses/')
       .then(res => {
         let interests = {}
-        res.data.map( item => 
+        res.data.map( item =>
           interests[item.id] = item.name
         )
         this.setState({ interests: interests })
@@ -64,8 +64,8 @@ class ViewEvent extends React.Component {
           content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
           onOk: () => {
             console.log(this.state)
-            axios.delete(`${HOSTNAME}/api/eventos/${item.id}/`)
-            .then(() => 
+            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
+            .then(() =>
               this.props.loadData()
             )
           },
@@ -73,12 +73,10 @@ class ViewEvent extends React.Component {
         });
       }
 
+
     render(){
         return(
-          <div>
-            {
-              this.props.data.length > 0 ? 
-              <List
+            <List
               itemLayout="horizontal"
               size="middle"
               pagination={{
@@ -88,6 +86,7 @@ class ViewEvent extends React.Component {
                 pageSize: 2
               }}
               dataSource={this.props.data}
+
               renderItem={item => (
                 <div style={{display:"flex", justifyContent:"center", alignItems:"center" }}>
                   <Card
@@ -114,6 +113,7 @@ class ViewEvent extends React.Component {
                     />
                     <br/>
                     <br/>
+
                     { item.interests.map( item => (
                       <Tag key={item}>{this.state.interests[item]}</Tag>
                       ))
@@ -129,31 +129,17 @@ class ViewEvent extends React.Component {
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
                             <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
-                              Editar
+                              sucribirse
                             </Button>
                         </Col>
-                        <Col>
-                            <Button onClick={() => {this.showConfirm(item)}} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
-                              Eliminar
-                            </Button>
-                        </Col>
+
                     </Row>
                 </Card>
               </div>
             )}
           />
-          :
-          <Row type="flex" justify="center" align="middle">
-            <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</h2>}/>
-          </Row>
-          }
-          </div>  
-        );
+        )
     }
 }
 
-<<<<<<< HEAD
 export default ViewEvent
-=======
-export default ViewEvent
->>>>>>> c7701ac2f01a9ed14ea037cfe827105dee47033e
