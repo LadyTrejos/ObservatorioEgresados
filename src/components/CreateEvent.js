@@ -67,11 +67,10 @@ const { TextArea } = Input;
         console.log(info.fileList)
         this.setState({ fileList: info.fileList })
     }
-    };
-    */
-   handleChange = ({fileList}) => {
-    this.setState({fileList})
-   }
+ };*/
+
+    handleChange = ({ fileList }) => this.setState({ fileList });
+    
 
     beforeUpload = (file) => {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';

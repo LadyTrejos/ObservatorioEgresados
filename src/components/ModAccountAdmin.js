@@ -12,6 +12,9 @@ import {
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import * as actions from '../store/actions/auth';
+
 import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
 import NumericInput from './NumericInput';
@@ -130,6 +133,7 @@ changeProfile = () =>{
       this.handleSave(e)
       let action = this.state.userInfo.is_active ? "activado" : "desactivado"
       message.success(`El administrador ha sido ${action}.`)
+      this.props.logout()
     })
     
   };
@@ -373,7 +377,17 @@ changeProfile = () =>{
 
 
 const ModAccAdmin = Form.create({ name: 'ModAdmin' })(ModAccountAdmin);
+const mapStateToProps = state => {
+  return {
+    loading: state.loading,
+    error: state.error
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(actions.logout())
+  }
+}
 
 
-
-export default withRouter(ModAccAdmin);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ModAccAdmin));
