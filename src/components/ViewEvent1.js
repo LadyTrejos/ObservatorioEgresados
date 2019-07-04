@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
 import HOSTNAME from '../helpers/hostname';
 
 const { Meta } = Card;
@@ -77,6 +77,9 @@ class ViewEvent extends React.Component {
 
     render(){
         return(
+          <div>
+            {
+              this.props.data.length > 0 ? 
             <List
               itemLayout="horizontal"
               size="middle"
@@ -139,6 +142,12 @@ class ViewEvent extends React.Component {
               </div>
             )}
           />
+          :
+              <Row type="flex" justify="center" align="middle">
+                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</h2>}/>
+              </Row>
+              }
+            </div>
         )
     }
 }

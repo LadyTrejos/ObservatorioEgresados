@@ -56,7 +56,7 @@ const { TextArea } = Input;
       previewVisible: true,
     });
   };
-
+  /*
    handleChange = (info) => {
      if (info.file.status === "uploading") {
        this.setState({ loading: true });
@@ -68,7 +68,10 @@ const { TextArea } = Input;
         this.setState({ fileList: info.fileList })
     }
     };
-    
+    */
+   handleChange = ({fileList}) => {
+    this.setState({fileList})
+   }
 
     beforeUpload = (file) => {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';

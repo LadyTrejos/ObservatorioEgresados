@@ -39,7 +39,7 @@ const Search = Input.Search;
        return(
          <div>
              <Row type="flex" justify="center" align="middle">
-                 <h2 style={{fontSize:30, color:'#001870'}}>egresados</h2>
+                 <h2 style={{fontSize:30, color:'#001870'}}>Egresados</h2>
              </Row>
              <Row >
                  <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-end'}}>

@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Form, Button, Modal, message } from "antd";
+import { List, Avatar, Icon, Form, Button, Modal, message, Row, Empty } from "antd";
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import history from '../helpers/history';
@@ -93,6 +93,9 @@ class Egresadoslist extends React.Component {
 
     render(){
         return(
+          <div>
+            {
+              this.props.data.length > 0 ? 
                 <List
                     itemLayout="horizontal"
                     size="middle"
@@ -128,21 +131,19 @@ class Egresadoslist extends React.Component {
                                     </div>
                                 }
                             />
-
-
                         </List.Item>
-
-
                     )}
                 />
+                :
+              <Row type="flex" justify="center" align="middle">
+                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han registrado egresados.</h2>}/>
+              </Row>
+              }
+            </div> 
         );
     }
     }
 
-   const EgresadosList = Form.create({ name: 'EgresadosList' })(Egresadoslist);
+   const EgresadosList1 = Form.create({ name: 'EgresadosList' })(Egresadoslist);
 
-///este error marica ^
-///                  |
-
-
-    export default withRouter(EgresadosList);
+    export default withRouter(EgresadosList1);
