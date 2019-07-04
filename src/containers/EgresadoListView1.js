@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Button, Input } from 'antd';
 import EgresadosList from '../components/EgresadosList1'
+import HOSTNAME from '../helpers/hostname';
 const Search = Input.Search;
 
 

@@ -6,6 +6,7 @@ import axios from 'axios';
 import './Layout.css'
 import * as actions from '../store/actions/auth';
 import logo from '../static/img/logo.png'
+import HOSTNAME from '../helpers/hostname';
 
 
 const { Header, Content, Sider } = Layout;

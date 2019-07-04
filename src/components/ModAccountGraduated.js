@@ -14,9 +14,10 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 
-import history from '../helpers/history';
 import NumericInput from './NumericInput';
 import ChangePassword from './ChangePassword'
+import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 
