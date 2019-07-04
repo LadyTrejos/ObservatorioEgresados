@@ -5,14 +5,21 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 
 import '../App.css';
-import './LoginForm.css'
+import './LoginForm.css';
 import logo from '../static/img/logo.png'
+import history from '../helpers/history';
 
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class LoginForm extends React.Component {
+  state ={
+    user:'',
+    password:'',
+  };
+
   handleSubmit = e => {
+    
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -20,46 +27,40 @@ class LoginForm extends React.Component {
       }
     });
   };
-
+ 
   render() {
     const { getFieldDecorator } = this.props.form;
     const stylesObj = {
         background: '#2F3E9E'
       };
-    let errorMessage = null;
-    if (this.props.error) {
-      errorMessage = (
-        <p>{ this.props.error.message }</p>
-      )
-    }
+    
+    
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'center', fontSize:'200%', height:'20%'}}>
-              <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
-              <strong>Observatorio de egresados</strong>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'300%'}}>
+                <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
+                <strong>Observatorio de egresados</strong>
             </div>
 
             <div style={stylesObj} className="container">
             
             </div>
-            {/*
             <div className='Div2'>
                 <h1 className='h1Q'>¿Aún no tienes una cuenta?</h1>
-                <Form.Item style={{left:'40%'}}>
-                    <Button htmlType="submit" className='Button2'>
-                        <strong>Regístrate</strong> 
-                    </Button>
-                            
-                </Form.Item>
+                <Button 
+                  className='ButtonRegister'
+                  onClick={() => history.push('/registro')}
+                  >
+                    <strong>Regístrate</strong> 
+                </Button>
             </div>
-            */}
             
             <div className='Div3' >
                 <h1 className='h1IS'>Iniciar sesión</h1>
                 <Avatar type="user" size={80} icon='user' style={{color:'black', backgroundColor:'#8F9AE0'}} />
                 
-                { errorMessage }
+                  
                 {
                     this.props.loading ? 
                     
@@ -67,7 +68,7 @@ class LoginForm extends React.Component {
                     
                     :
                     
-                    <Form onSubmit={this.handleSubmit} className='Input'>                    
+                    <Form onSubmit={this.handleSubmit} className='Input1'>                    
                         <Form.Item >
                             {getFieldDecorator('email', {
                                 rules: [{ required: true, message: 'Ingrese su correo electrónico' }],
@@ -88,14 +89,16 @@ class LoginForm extends React.Component {
                                 type="password"
                                 size="large"
                                 placeholder="Contraseña"
+                                onChange={e => this.setState({password: e.target.value})}
                                 />,
                             )}
                         </Form.Item>
                         <br/>
-                        <Button type="primary" htmlType="submit" size='large' >
-                            Iniciar
-                        </Button>
-
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit" size='large'>
+                              Iniciar
+                          </Button>
+                        </Form.Item>
                     </Form>
                 }
             </div>

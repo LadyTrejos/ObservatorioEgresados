@@ -137,7 +137,9 @@ class RegistrationForm extends React.Component {
       rules: [{required:true, message: 'Ingresar indicativo'}]
     })(
       <Select 
+        showSearch
         size='large' 
+        style={{minWidth: '10vw'}}
         onChange={(value) => this.setState({ adminInfo: { ...this.state.adminInfo, id_phone: value } })}
       >
         {this.state.phonecodeItems}
@@ -190,7 +192,7 @@ class RegistrationForm extends React.Component {
           <Col span={3.5}>
             <Form.Item label="Tipo de documento">
               {getFieldDecorator('id_type', {
-                initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el documento de identidad' }],
+                initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el tipo de documento' }],
               })(
                 <Select 
                   size='large'
@@ -237,7 +239,7 @@ class RegistrationForm extends React.Component {
                   },
                   {
                     required: true,
-                    message: 'Ingresar correo electrónico',
+                    message: '¿Cuál es su correo electrónico?',
                   },
                 ],
               })(<Input 
@@ -250,24 +252,8 @@ class RegistrationForm extends React.Component {
           </Col>
         </Row>
 
-        <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
-            <Form.Item label="Dirección">
-              {getFieldDecorator('address',  {rules: [{ required:true, message: '¿Dónde se realizará?' },
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
-                    message: "Dirección no válida"}],}
-              )(<Input 
-                    placeholder='Cr 27 Cll 4 # 45-56'
-                    size='large'
-                    onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
-                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
-              />)}
-            </Form.Item>
-          </Col>
-        </Row>
-
         <Row type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col >
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
               message:'El número debe contener 10 dígitos'}]
@@ -284,7 +270,7 @@ class RegistrationForm extends React.Component {
 
         <Row type="flex" justify="center" align="middle">
           <Col span={5}>
-            <Form.Item>
+            <Form.Item label="Lugar de residencia: ">
               <CountrySelector ref={this.countryRef}/>
 						</Form.Item>
           </Col>

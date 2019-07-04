@@ -25,7 +25,7 @@ SECRET_KEY = '^b2^5j-5g$lp!*_p)myjev3!(1vth@v_9f+!5p8!q9nf8nhf2m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         'rest_framework.permissions.AllowAny'
     ],
-    "DATE_INPUT_FORMATS": ["%d-%m-%Y"],
+    "DATE_INPUT_FORMATS": [("%d-%m-%Y"),],
 }
 
 

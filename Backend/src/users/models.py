@@ -82,7 +82,7 @@ IDTYPE_CHOICES = (
 )
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=20, primary_key=True,unique=True)
     id_type = models.CharField(max_length=2, choices=IDTYPE_CHOICES, default='CC')
     name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -96,6 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
+
 
     objects = UserManager()
 
@@ -124,6 +125,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
+
 class Interes(models.Model):
     name = models.CharField(max_length=120, unique=True)
 
@@ -136,10 +139,12 @@ GENDER_CHOICES = (
     ('P', 'Prefiere no responder'),
 )
 
+
+
 class Egresado(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(default="2000-01-01")
     genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     interests = models.ManyToManyField(Interes, blank=True)
     friends = models.ManyToManyField("self", blank=True)

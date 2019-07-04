@@ -14,13 +14,15 @@ import axios from 'axios';
 
 import history from '../helpers/history';
 import NumericInput from './NumericInput';
+import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
 
-class ModAdmins extends React.Component {
+class ModAccountAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      profile: true,
       userInfo:{
         email: '',
         password: '',
@@ -46,7 +48,7 @@ class ModAdmins extends React.Component {
   }
   
   componentWillMount(){
-    const adminID = this.props.match.params.id;
+    const adminID = localStorage.getItem('user');
     axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
     .then(res => {
       this.setState({ 
@@ -77,6 +79,18 @@ class ModAdmins extends React.Component {
     })
         
 }
+changeProfile = () =>{
+  
+  if (this.state.profile){
+    this.setState({ profile: false })
+  }
+  else{
+    this.setState({ profile: true })
+    window.location.reload();
+  }
+  
+}
+
   
   handleSave = e => {
     e.preventDefault();
@@ -84,7 +98,8 @@ class ModAdmins extends React.Component {
       if (!err) {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
-        const adminID = this.props.match.params.id;
+        const adminID = localStorage.getItem('user');
+        console.log("ID: "+adminID)
         axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
@@ -92,7 +107,11 @@ class ModAdmins extends React.Component {
             axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
-            history.push('/ver-admins')
+            history.push('/perfil')
+            window.location.reload();
+            this.state.profile ? this.setState({ profile: false }):this.setState({ profile: true })
+            
+          
         })
         .catch(err => {
           console.log(err.message)
@@ -127,9 +146,10 @@ class ModAdmins extends React.Component {
     });
   };
 
+
+
   render() {
     const { getFieldDecorator } = this.props.form;
-
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: this.state.adminInfo.id_phone,
     })(
@@ -142,7 +162,7 @@ class ModAdmins extends React.Component {
     );
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
-        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
+        <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>{this.state.profile ? "Perfil" : "Modificar perfil"}</h1>
         <Row  type="flex" justify="center" align="middle">
           <Col span={7}>
             <Form.Item 
@@ -156,6 +176,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Nombre(s)'
                     size='large'
+                    readOnly={this.state.profile}
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, name: e.target.value } }) }
                   />)}
@@ -177,6 +198,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Apellido(s)'
                     size='large'
+                    readOnly={this.state.profile}
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10}}
                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, last_name: e.target.value } })}
                   />)}
@@ -246,6 +268,7 @@ class ModAdmins extends React.Component {
               })(<Input 
                     placeholder='Cr 27 Cll 4 # 45-56'
                     size='large'
+                    readOnly={this.state.profile}
                     onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
                     style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
               />)}
@@ -262,6 +285,7 @@ class ModAdmins extends React.Component {
               })(
                 <NumericInput 
                   size='large'
+                  readOnly={this.state.profile}
                   addonBefore={prefixSelector}
                   onChange={value => this.setState({ adminInfo: { ...this.state.adminInfo, phone: value } })}
                   placeholder='Ej: 1234567890'
@@ -269,7 +293,12 @@ class ModAdmins extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-
+        <Row type="flex" justify="center" align="middle">
+          <Col span={2.5}>
+          <ChangePassword/>
+          </Col>
+        </Row>
+        
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
             <Form.Item>
@@ -296,6 +325,7 @@ class ModAdmins extends React.Component {
           </Col>
         </Row>
 
+        { !this.state.profile ?
         <Row type="flex" justify="center" align="middle" gutter={20}>
           <Col >
             <Form.Item>
@@ -307,18 +337,32 @@ class ModAdmins extends React.Component {
 
           <Col >
             <Form.Item>
-              <Button 
-                  size='large' 
-                  type="primary" 
-                  htmlType="submit" 
-                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
-                  onClick={() => history.push('/ver-admins')}
-              >
-              Cancelar
-              </Button>
+                <Button 
+                    size='large' 
+                    type="primary" 
+                    htmlType="submit" 
+                    style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+                    onClick={this.changeProfile}
+                >
+                Cancelar
+                </Button>
+                
             </Form.Item>
           </Col>
+          
         </Row>
+        :
+        <Row type="flex" justify="center" align="middle" gutter={20}>
+          <Button
+            size='large' 
+            type="primary" 
+            htmlType="submit" 
+            style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+            onClick={this.changeProfile}>
+            Editar datos
+          </Button>
+        </Row>
+                }
 
         
       </Form>
@@ -326,8 +370,9 @@ class ModAdmins extends React.Component {
   }
 }
 
-const ModAdmin = Form.create({ name: 'ModAdmin' })(ModAdmins);
+
+const ModAccAdmin = Form.create({ name: 'ModAdmin' })(ModAccountAdmin);
 
 
 
-export default withRouter(ModAdmin);
+export default withRouter(ModAccAdmin);

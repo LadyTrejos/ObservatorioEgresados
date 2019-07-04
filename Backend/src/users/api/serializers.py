@@ -4,6 +4,14 @@ from allauth.account.adapter import get_adapter
 from users.models import User, Egresado, Admin, Evento, Interes
 from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
+from smtplib import SMTPException
+from rest_framework.exceptions import APIException
+
+class ServiceUnavailable(APIException):
+    status_code = 500
+    default_detail = 'No se pudo enviar el correo.'
+    default_code = 'email_server_not_found'
+
 
 class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
@@ -37,6 +45,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     city = serializers.CharField(required=True)
     is_graduated = serializers.BooleanField()
     is_admin = serializers.BooleanField()
+    is_active = serializers.BooleanField(default=True)
 
     class Meta:
         model = User
@@ -50,7 +59,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'region',
             'city',
             'is_graduated',
-            'is_admin'
+            'is_admin',
+            'is_active'
         )
 
     def get_cleaned_data(self):
@@ -67,6 +77,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             'city': self.validated_data.get('city', ''),
             'is_graduated': self.validated_data.get('is_graduated', ''),
             'is_admin': self.validated_data.get('is_admin', ''),
+            'is_active': self.validated_data.get('is_active','')
         }
 
     def save(self, request):
@@ -83,22 +94,26 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.city = self.cleaned_data.get('city')
         user.is_graduated = self.cleaned_data.get('is_graduated')
         user.is_admin = self.cleaned_data.get('is_admin')
+        user.is_active = self.cleaned_data.get('is_active')
         password = self.cleaned_data.get('password1')
         user.set_password(password)
 
         message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \
              Esta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
         if ( self.cleaned_data.get('is_admin')):
-             send_mail('Prueba',
-             message,
-             'observatorioutp@utp.edu.co',
-                [self.cleaned_data.get('email')],  fail_silently=False,)
+            try:
+                send_mail('Prueba',
+                message,
+                'observatorioutp@utp.edu.co', 
+                    [self.cleaned_data.get('email')],  fail_silently=False,)
+            except SMTPException:
+                print('No se ha podido conectar al servidor de correo.')
         user.save()
         adapter.save_user(request, user, self)
         return user
 
 class EgresadoSerializer(serializers.ModelSerializer):
-    date_of_birth = serializers.DateField(required=False, allow_null=True)
+    date_of_birth = serializers.DateField(required=False, allow_null=True,format="%d-%m-%Y", input_formats=['%d-%m-%Y'])
     genre = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:

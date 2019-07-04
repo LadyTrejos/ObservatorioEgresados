@@ -32,11 +32,13 @@ class AdminLayout extends React.Component {
         let isLoading = this.state.user ? false : true;
             return(
                 <div>
+                    
                 {
                     isLoading ?
                         <Spin tip="Cargando..."/>
                     :
                     (
+                 
                 <Layout style={{height:'100vh'}}>
                     <Sider
                         style={{backgroundColor: '#2F3E9E', textAlign:'center', flex:1,justifyContent:'flex-end', alignContent:'left'}}
@@ -57,13 +59,13 @@ class AdminLayout extends React.Component {
 
 
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'left'}}>
-                            {/*<Menu.Item key="1">
+                            <Menu.Item key="1">
                                 <Icon type="user-add" />
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
-                                <Link to='/crear-admin'></Link>
-                            </Menu.Item>*/}
+                                <Link to='/perfil'></Link>
+                            </Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="2">
                                 <Icon type="calendar" />
