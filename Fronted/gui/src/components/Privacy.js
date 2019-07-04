@@ -29,7 +29,8 @@ render(){
                         -  Los usuarios que son egresado podrán ver su propia información y editarla.<br/><br/>
                         -  Los administradores podrán ver la información completa de los usuarios egresados y editar sus datos.<br/><br/>
                         -  Si se detectan malas conductas por parte de usuarios egresados, cualquier administrador está en el derecho de inhabilitarlo de la plataforma.<br/><br/>
-                        -  Los usuarios egresados podrán ver el nombre, apellido, correo electrónico, intereses y carrera de los demás egresados.
+                        -  Los usuarios egresados podrán ver el nombre, apellido, correo electrónico, intereses y carrera de los demás egresados.<br/><br/>
+                        -  Cuando un egresado se registra debe esperar que un administrador active su cuenta para poder ingresar a la plataforma
                     </p>
                 
                 </Card>
