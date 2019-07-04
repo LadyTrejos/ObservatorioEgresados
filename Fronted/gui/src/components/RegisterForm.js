@@ -53,8 +53,7 @@ class RegisterForm extends React.Component {
 
   handleSubmit = e => {
     const selector = this.countryRef.current;
-    console.log(JSON.stringify(this.state.userInfo))
-    console.log(JSON.stringify(this.state.egresadoInfo))
+    
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -66,6 +65,8 @@ class RegisterForm extends React.Component {
           adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
         },
         () => {
+          console.log(JSON.stringify(this.state.userInfo))
+          console.log(JSON.stringify(this.state.egresadoInfo))
           const userData = JSON.stringify(this.state.userInfo)
           const egresadoData = JSON.stringify(this.state.egresadoInfo)
           axios.post('http://localhost:8000/rest-auth/registration/', 
@@ -86,7 +87,14 @@ class RegisterForm extends React.Component {
                 )
             })
             .catch(err => {
+              if(err.message==='Request failed with status code 500'){
+                axios.post('http://localhost:8000/api/egresados/', 
+                        egresadoData, 
+                        { headers: {"Content-type": "application/json"}})
+              }
+              history.push('/login')
               console.log(err.message)
+
             })
           }
         )
@@ -136,20 +144,52 @@ class RegisterForm extends React.Component {
     // Expresión regular dependiendo del tipo de documento seleccionado
     if ( this.state.userInfo.id_type === 'PA'){
       reg = /^[A-Z]{2}[0-9]{6}$/;
-    } else {
+    }else {
       reg = /^[0-9]{6,10}$/
     }
+
     // Verificar si se cumple la expresión regular
     if(value && !reg.test(value)){
       callback('El documento ingresado no es válido')
-    } else {
-      callback();
+    }else {
+      
+      axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-id`)
+      .then(res =>{
+          if(res.data.length>0){
+            console.log(res.data[0].id)
+            if(res.data[0].id === value && value!==''){console.log(res.data)
+                callback('Este documento ya se encuentra registrado')
+              }
+              else {
+                callback()
+              }
+            }else {
+              callback()
+            }
+                  
+      })
     }
-    
   };
+
+  handleSearch = (rule,value,callback) => {
+    axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-email`)
+    .then(res =>{
+      if(res.data.length>0){
+          if(res.data[0].email===value && value!=="")
+            {callback("Este correo electrónico ya está registrado")}
+            else {
+              callback()
+            }
+      }
+            else{
+              callback()
+            }
+    })
+}
   
 
   render() {
+    
     const { getFieldDecorator } = this.props.form;
     const stylesObj = {
         background: '#2F3E9E'
@@ -192,7 +232,7 @@ class RegisterForm extends React.Component {
                     <Form onSubmit={this.handleSubmit} className='Input'>                    
                         <Form.Item label='Nombre(s)' hasFeedback>
                             {getFieldDecorator('name', {
-                                rules: [{ required: true, message: 'Ingresar nombre(s)'},
+                                rules: [{ required: true, message: 'Ingrese nombre(s)'},
                                         {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                                         message: "Nombre no válido"}],
                             })(<Input 
@@ -204,7 +244,7 @@ class RegisterForm extends React.Component {
                         </Form.Item>
                         <Form.Item label='Apellido(s)' hasFeedback>
                             {getFieldDecorator('lastname', {
-                                rules: [{ required: true, message: 'Ingresar apellido(s)'},
+                                rules: [{ required: true, message: 'Ingrese apellido(s)'},
                                 {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                                 message: "Apellido no válido"}],
                             })(<Input 
@@ -221,7 +261,7 @@ class RegisterForm extends React.Component {
 
                         <Form.Item label="Tipo de documento" hasFeedback>
                             {getFieldDecorator('id_type', {
-                                rules: [{ required:true, message: 'Ingresar el tipo de documento' }],
+                                rules: [{ required:true, message: 'Ingrese el tipo de documento' }],
                             })(
                                 <Select 
                                 placeholder="Seleccione un tipo"
@@ -245,7 +285,7 @@ class RegisterForm extends React.Component {
 
                         </span>} hasFeedback>
                             {getFieldDecorator('id', {
-                                rules: [{ required:true, message: 'Ingresar el documento de identidad' }, 
+                                rules: [{ required:true, message: 'Ingrese el documento de identidad' }, 
                             {validator: this.getPattern}
                             ]
                             })(
@@ -253,10 +293,13 @@ class RegisterForm extends React.Component {
                                 <Input
                                 size='large' 
                                 placeholder='Documento de identidad'
-                                onChange={ e => this.setState({ 
+                                onChange={e => {this.setState({ 
                                     userInfo: { ...this.state.userInfo, id: e.target.value },
                                     egresadoInfo: { ...this.state.egresadoInfo, user: e.target.value }
-                                    }) }>
+                                    }) }}
+                                    
+                                 >
+                             
                                 </Input>
 
                                 )}
@@ -265,7 +308,8 @@ class RegisterForm extends React.Component {
                                           
 
                         <Form.Item label="Fecha de nacimiento: " hasFeedback>
-                            {getFieldDecorator('date_of_birth')
+                            {getFieldDecorator('date_of_birth',{initialValue:moment().add(-20, "year")})
+                            
                              (
                             <DatePicker
                                 placeholder='Seleccione fecha'
@@ -293,21 +337,24 @@ class RegisterForm extends React.Component {
 
                         <Form.Item label="Correo electrónico: " hasFeedback>
                             {getFieldDecorator('email', {
+                              
                                 rules: [
                                 {
                                     type: 'email',
-                                    message: 'El correo no es válido',
+                                    message: 'Correo electrónico no válido',
                                 },
                                 {
                                     required: true,
                                     message: '¿Cuál es su correo electrónico?',
                                 },
+                                {validator:this.handleSearch, validationTrigger:'onBlur'}
                                 ],
                             })(<Input 
                                     prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                     placeholder='ejemplo@dominio.com'
                                     size='large'
                                     onChange={e => this.setState({ userInfo: { ...this.state.userInfo, email: e.target.value } })}
+                                    
                                     />
                                 )}
                         </Form.Item>

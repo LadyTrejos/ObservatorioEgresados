@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
 import history from '../../helpers/history';
+import {message} from 'antd';
 
 export const authStart = () => {
     return {
@@ -57,6 +58,12 @@ export const authLogin = (email, password) => {
             history.push('/');
         })
         .catch(err => {
+            if(err.message==='Network Error'){
+                message.error(`Servidor fuera de línea`)
+            }
+            if(err.message==='Request failed with status code 400'){
+                message.error(`Usuario o contraseña incorrecta`)
+            }
             dispatch(authFail(err))
         })
     }
