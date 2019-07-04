@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -76,10 +76,7 @@ class ViewEvent extends React.Component {
 
     render(){
         return(
-          <div>
-            {
-              this.props.data.length > 0 ? 
-              <List
+            <List
               itemLayout="horizontal"
               size="middle"
               pagination={{
@@ -132,26 +129,16 @@ class ViewEvent extends React.Component {
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
                             <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
-                              Editar
+                              sucribirse
                             </Button>
                         </Col>
-                        <Col>
-                            <Button onClick={() => {this.showConfirm(item)}} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
-                              Eliminar
-                            </Button>
-                        </Col>
+
                     </Row>
                 </Card>
               </div>
             )}
           />
-          :
-          <Row type="flex" justify="center" align="middle">
-            <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</h2>}/>
-          </Row>
-          }
-          </div>  
-        );
+        )
     }
 }
 

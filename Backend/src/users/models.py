@@ -96,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
-    
+
 
     objects = UserManager()
 
@@ -124,8 +124,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
-    
-        
+
+
 
 class Interes(models.Model):
     name = models.CharField(max_length=120, unique=True)

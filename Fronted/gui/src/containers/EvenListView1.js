@@ -1,11 +1,11 @@
    import React from 'react';
 import axios from 'axios';
 import { Row, Button, Input } from 'antd';
-import ViewEvent from '../components/ViewEvent'
+import ViewEvent from '../components/ViewEvent1'
 
 const Search = Input.Search;
 
-class AdminListView extends React.Component {
+class EgresadoListView1 extends React.Component {
 state={
     events: []
 }
@@ -40,13 +40,7 @@ render(){
             </Row>
             <Row >
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-end'}}>
-                    <Button
-                        style={{backgroundColor:'#22BA45', color:'#ffff'}}
-                        href='/crear-evento'
-                        size='large'
-                    >
-                        Crear evento
-                    </Button>
+
                 </div>
                 <Search
                     placeholder="Buscar evento"
@@ -69,4 +63,4 @@ render(){
 
 
 
-export default AdminListView;
+export default EgresadoListView1;
