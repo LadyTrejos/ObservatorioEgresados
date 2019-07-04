@@ -6,7 +6,7 @@ import HOSTNAME from '../helpers/hostname';
 
 const Search = Input.Search;
 
-class AdminListView extends React.Component {
+class EventListView extends React.Component {
 state={
     events: []
 }
@@ -69,8 +69,4 @@ render(){
 
 
 
-<<<<<<< HEAD
-export default AdminListView;
-=======
-export default AdminListView;
->>>>>>> c7701ac2f01a9ed14ea037cfe827105dee47033e
+export default EventListView;
