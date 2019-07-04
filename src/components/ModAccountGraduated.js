@@ -10,13 +10,14 @@ import {
     Modal,
     message
   } from 'antd';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
+import * as actions from '../store/actions/auth';
 
 import history from '../helpers/history';
-import NumericInput from './NumericInput';
-import ChangePassword from './ChangePassword'
+//import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
 
@@ -39,7 +40,7 @@ class ModAccountGraduated extends React.Component {
         is_admin: false,
         is_active: true
       },
-      egresadoInfo: {
+      graduatedInfo: {
         user: '',
         date_of_birth: '',
         genre: '',
@@ -52,8 +53,8 @@ class ModAccountGraduated extends React.Component {
   }
   
   componentWillMount(){
-    const adminID = localStorage.getItem('user');
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+    const graduatedID = localStorage.getItem('user');
+    axios.get(`http://127.0.0.1:8000/api/users/${graduatedID}`)
     .then(res => {
       this.setState({ 
         userInfo: {
@@ -70,10 +71,10 @@ class ModAccountGraduated extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/egresados/${adminID}`)
+    axios.get(`http://127.0.0.1:8000/api/egresados/${graduatedID}`)
     .then(res => {
       this.setState({
-        egresadoInfo : {
+        graduatedInfo : {
             user: res.data.user,
             date_of_birth: res.data.date_of_birth,
             genre: res.data.genre,
@@ -102,15 +103,15 @@ changeProfile = () =>{
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const userData = JSON.stringify(this.state.userInfo)
-        const adminData = JSON.stringify(this.state.adminInfo)
-        const adminID = localStorage.getItem('user');
-        console.log("ID: "+adminID)
-        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
+        const graduatedData = JSON.stringify(this.state.graduatedInfo)
+        const graduatedID = localStorage.getItem('user');
+        console.log("ID: "+graduatedID)
+        axios.put(`http://127.0.0.1:8000/api/users/${graduatedID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/egresados/${adminID}/`, 
-                    adminData, 
+            axios.put(`http://127.0.0.1:8000/api/egresados/${graduatedID}/`, 
+                    graduatedData, 
                     { headers: {"Content-Type": "application/json"}})
             history.push('/perfilEgresado')
             window.location.reload();
@@ -134,6 +135,8 @@ changeProfile = () =>{
       this.handleSave(e)
       let action = this.state.userInfo.is_active ? "activada" : "desactivada"
       message.success(`Su cuenta ha sido ${action}.`)
+      this.props.logout()
+
     })
     
   };
@@ -158,7 +161,7 @@ changeProfile = () =>{
     const prefixSelector = getFieldDecorator('prefix')(
       <Select 
         size='large' 
-        onChange={(value) => this.setState({ adminInfo: { ...this.state.adminInfo, id_phone: value } })}
+        onChange={(value) => this.setState({ graduatedInfo: { ...this.state.graduatedInfo, id_phone: value } })}
       >
         {this.state.phonecodeItems}
       </Select>,
@@ -261,13 +264,13 @@ changeProfile = () =>{
           <Col span={7}>
             <Form.Item label="Fecha de nacimiento">
               {getFieldDecorator('date_of_birth', {
-                initialValue: moment(this.state.egresadoInfo.date_of_birth, "DD-MM-YYYY")
+                initialValue: moment(this.state.graduatedInfo.date_of_birth, "DD-MM-YYYY")
                 
               })(<DatePicker
                 placeholder='Seleccione fecha'
                 size='large'
                 format="DD-MM-YYYY"
-                onChange={(date, dateString) => this.setState({  egresadoInfo: {...this.state.egresadoInfo, date_of_birth: dateString }})}
+                onChange={(date, dateString) => this.setState({  graduatedInfo: {...this.state.graduatedInfo, date_of_birth: dateString }})}
                 disabledDate={this.disabledDate}
                 disabled
 
@@ -281,12 +284,12 @@ changeProfile = () =>{
           <Form.Item label="Género: " hasFeedback>
               {getFieldDecorator('genre', {
                   rules: [{ required:true, message: '¿Cuál es su género?' }],
-                  initialValue: this.state.egresadoInfo.genre
+                  initialValue: this.state.graduatedInfo.genre
               })(
                   <Select 
                   placeholder="Seleccione una opción"
                   size='large'
-                  onChange={ value => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, genre: value } })}
+                  onChange={ value => this.setState({ graduatedInfo: { ...this.state.graduatedInfo, genre: value } })}
                   disabled={this.state.profile}
                   >
                   <Option value="F">Femenino</Option>
@@ -298,11 +301,11 @@ changeProfile = () =>{
           </Col>
         </Row>
 
-        <Row type="flex" justify="center" align="middle">
+        {/*<Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
           <ChangePassword/>
           </Col>
-        </Row>
+              </Row>*/}
         
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
@@ -375,9 +378,19 @@ changeProfile = () =>{
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.loading,
+    error: state.error
+  }
+}
 
-const ModAccGraduated = Form.create({ name: 'ModAdmin' })(ModAccountGraduated);
+const ModAccGraduated = Form.create({ name: 'ModAccGraduated' })(ModAccountGraduated);
+const mapDispatchToProps = dispatch => {
+    return {
+      logout: () => dispatch(actions.logout())
+    }
+}
 
 
-
-export default withRouter(ModAccGraduated);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ModAccGraduated));

@@ -56,7 +56,7 @@ const { TextArea } = Input;
     });
   };
 
-   handleChange = (info) => {
+  /* handleChange = (info) => {
      if (info.file.status === "uploading") {
        this.setState({ loading: true });
        return;
@@ -66,7 +66,9 @@ const { TextArea } = Input;
         console.log(info.fileList)
         this.setState({ fileList: info.fileList })
     }
-    };
+ };*/
+
+    handleChange = ({ fileList }) => this.setState({ fileList });
     
 
     beforeUpload = (file) => {

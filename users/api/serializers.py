@@ -98,8 +98,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         password = self.cleaned_data.get('password1')
         user.set_password(password)
 
-        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \
-             Esta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
+        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \nEsta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
         if ( self.cleaned_data.get('is_admin')):
             try:
                 send_mail('Prueba',
