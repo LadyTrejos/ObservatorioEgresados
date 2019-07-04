@@ -5,20 +5,17 @@ import { Spin } from 'antd';
 
 import CreateAdmin from './CreateAdmin';
 import CreateEvent from './CreateEvent';
-import ModAdmin from './ModAdmin';
-import ModEgresado from './ModEgresado';
 import ModAccountAdmin from './ModAccountAdmin';
 import ModAccountGraduated from './ModAccountGraduated';
+import ModAdmin from './ModAdmin';
+import ModEgresado from './ModEgresado';
+import ModEvent from './ModEvent';
 
 import AdminListView from '../containers/AdminListView';
-import CreateEvent from './CreateEvent';
 import EgresadoListView from '../containers/EgresadoListView';
 import EgresadoListView1 from '../containers/EgresadoListView1';
 import EventListView from '../containers/EvenListView'
 import EventListView1 from '../containers/EvenListView1'
-import ModAccountAdmin from './ModAccountAdmin';
-import ModAccountGraduated from './ModAccountGraduated';
-import ModEvent from './ModEvent';
 
 import AdminLayout from '../containers/AdminLayout';
 import EgresadoLayout from '../containers/EgresadoLayout';
