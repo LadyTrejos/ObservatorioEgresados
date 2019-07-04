@@ -53,7 +53,7 @@ class ModAccountGraduated extends React.Component {
   
   componentWillMount(){
     const adminID = localStorage.getItem('user');
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+    axios.get(`${HOSTNAME}/api/users/${adminID}/`)
     .then(res => {
       this.setState({ 
         userInfo: {
@@ -70,7 +70,7 @@ class ModAccountGraduated extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/egresados/${adminID}`)
+    axios.get(`${HOSTNAME}/api/egresados/${adminID}/`)
     .then(res => {
       this.setState({
         egresadoInfo : {
@@ -105,11 +105,11 @@ changeProfile = () =>{
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = localStorage.getItem('user');
         console.log("ID: "+adminID)
-        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
+        axios.put(`${HOSTNAME}/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/egresados/${adminID}/`, 
+            axios.put(`${HOSTNAME}/api/egresados/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
             history.push('/perfilEgresado')

@@ -50,7 +50,7 @@ class Egresadoslist extends React.Component {
           onOk: () => {
             item.is_active = !item.is_active
             const userData = JSON.stringify(item)
-            axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`,
+            axios.put(`${HOSTNAME}/api/users/${item.id}/`,
                           userData,
                           { headers: {"Content-Type": "application/json"}})
               .then(() => {
@@ -73,7 +73,7 @@ class Egresadoslist extends React.Component {
       console.log(item)
       item.is_active = !item.is_active
       const userData = JSON.stringify(item)
-      axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`,
+      axios.put(`${HOSTNAME}/api/users/${item.id}/`,
                     userData,
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {

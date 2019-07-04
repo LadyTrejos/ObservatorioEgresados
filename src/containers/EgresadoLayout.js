@@ -19,7 +19,7 @@ class AdminLayout extends React.Component {
 
     componentDidMount() {
         const userID = localStorage.getItem('user');
-        axios.get(`http://127.0.0.1:8000/api/users/${userID}`)
+        axios.get(`${HOSTNAME}/api/users/${userID}/`)
         .then(res => {
             this.setState({
                 user: res.data

@@ -15,7 +15,7 @@ componentDidMount(){
 }
 
 loadData = () => {
-    axios.get('http://localhost:8000/api/eventos/?ordering=-created_at')
+    axios.get(`${HOSTNAME}/api/eventos/?ordering=-created_at/`)
     .then(res =>{
         this.setState({
             events: res.data
@@ -24,7 +24,7 @@ loadData = () => {
 }
 
 handleSearch = (value) => {
-    axios.get(`http://localhost:8000/api/eventos/?search=${value}&&ordering=-created_at`)
+    axios.get(`${HOSTNAME}/api/eventos/?search=${value}&&ordering=-created_at/`)
     .then(res =>{
         this.setState({
             events: res.data

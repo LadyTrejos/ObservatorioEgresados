@@ -15,7 +15,7 @@ const Search = Input.Search;
    }
 
    loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/egresado-list/?ordering=-is_graduated')
+    axios.get(`${HOSTNAME}/api/egresado-list/?ordering=-is_graduated/`)
     .then(res =>{
         this.setState({
             egresados: res.data
@@ -23,7 +23,7 @@ const Search = Input.Search;
     })
    }
    handleSearch = (value) => {
-       axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-id`)
+       axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id/`)
        .then(res =>{
            this.setState({
                egresados : res.data

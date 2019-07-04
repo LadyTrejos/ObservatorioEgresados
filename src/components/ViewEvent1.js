@@ -26,7 +26,7 @@ class ViewEvent extends React.Component {
     }
 
     componentDidMount(){
-      axios.get('http://127.0.0.1:8000/api/intereses/')
+      axios.get(`${HOSTNAME}/api/intereses/`)
       .then(res => {
         let interests = {}
         res.data.map( item =>
@@ -64,7 +64,7 @@ class ViewEvent extends React.Component {
           content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
           onOk: () => {
             console.log(this.state)
-            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
+            axios.delete(`${HOSTNAME}/api/eventos/${item.id}/`)
             .then(() =>
               this.props.loadData()
             )

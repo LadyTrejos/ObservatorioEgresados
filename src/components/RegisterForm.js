@@ -87,7 +87,7 @@ class RegisterForm extends React.Component {
             })
             .catch(err => {
               if(err.message==='Request failed with status code 500'){
-                axios.post('http://localhost:8000/api/egresados/', 
+                axios.post(`${HOSTNAME}/api/egresados/`, 
                         egresadoData, 
                         { headers: {"Content-type": "application/json"}})
               }
@@ -152,7 +152,7 @@ class RegisterForm extends React.Component {
       callback('El documento ingresado no es válido')
     }else {
       
-      axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-id`)
+      axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id/`)
       .then(res =>{
           if(res.data.length>0){
             console.log(res.data[0].id)
@@ -171,7 +171,7 @@ class RegisterForm extends React.Component {
   };
 
   handleSearch = (rule,value,callback) => {
-    axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-email`)
+    axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-email/`)
     .then(res =>{
       if(res.data.length>0){
           if(res.data[0].email===value && value!=="")
