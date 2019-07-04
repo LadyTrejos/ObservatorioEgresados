@@ -129,14 +129,10 @@ class ViewEvent extends React.Component {
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
                             <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
-                              Editar
+                              sucribirse
                             </Button>
                         </Col>
-                        <Col>
-                            <Button onClick={() => {this.showConfirm(item)}} size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
-                              Eliminar
-                            </Button>
-                        </Col>
+
                     </Row>
                 </Card>
               </div>

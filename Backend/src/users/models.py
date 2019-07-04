@@ -139,7 +139,7 @@ GENDER_CHOICES = (
 class Egresado(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    date_of_birth = models.DateField(default=null)
+    date_of_birth = models.DateField(null=True)
     genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     interests = models.ManyToManyField(Interes, blank=True)
     friends = models.ManyToManyField("self", blank=True)
