@@ -52,6 +52,7 @@ class AdminLayout extends React.Component {
 
                         <h1 className='h1'>Menú</h1>
                         <Avatar type="user" size={80} icon='user' />
+                        <h1 className='h14'>Egresado</h1>
                         <h1 className='h12'>{this.state.user.name.toUpperCase() }</h1>
 
 
