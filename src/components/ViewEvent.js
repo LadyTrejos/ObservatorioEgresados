@@ -1,6 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
+import history from '../helpers/history';
 import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
 
 const { Meta } = Card;
@@ -131,7 +132,10 @@ class ViewEvent extends React.Component {
                     <br/>
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
-                            <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
+                            <Button 
+                            size='large'
+                            style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}
+                            onClick={() => history.push(`/editar-evento/${item.id}`)}>
                               Editar
                             </Button>
                         </Col>

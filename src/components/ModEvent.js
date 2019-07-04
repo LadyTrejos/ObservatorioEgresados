@@ -136,6 +136,27 @@ const { TextArea } = Input;
     this.imageRef = React.createRef();
   }
 
+    componentWillMount(){
+        const eventID = this.props.match.params.id;
+        axios.get(`http://127.0.0.1:8000/api/eventos/${eventID}`)
+        .then(res => {
+        this.setState({ 
+            eventInfo: {
+            name: res.data.name,
+            description: res.data.description,
+            place: res.data.place,
+            date: res.data.date,
+            hour: res.data.hour,
+            organizer: res.data.organizer,
+            admin: res.data.admin,
+            interests: res.data.interests,
+            url: res.data.url,
+            }
+        })
+        })
+       
+    }
+
     componentDidMount(){
       
         axios.get('http://127.0.0.1:8000/api/intereses/')
@@ -217,7 +238,7 @@ const { TextArea } = Input;
 
     render() {
       
-
+      console.log(this.state)
       const { getFieldDecorator } = this.props.form;
 
       const interestItems = [] 
@@ -230,7 +251,7 @@ const { TextArea } = Input;
       return (
         
         <Form layout="vertical" >
-          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
+          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Editar evento</h1>
 
 
           <Row type="flex" justify="center" align="middle">
@@ -393,7 +414,7 @@ const { TextArea } = Input;
                     type="primary"
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  Crear
+                  Guardar
                 </Button>
               </Form.Item>
             </Col>

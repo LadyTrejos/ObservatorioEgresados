@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { Row, Button, Input } from 'antd';
 import ViewEvent from '../components/ViewEvent'
+import history from '../helpers/history';
 
 const Search = Input.Search;
 
@@ -42,8 +43,8 @@ render(){
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-end'}}>
                     <Button
                         style={{backgroundColor:'#22BA45', color:'#ffff'}}
-                        href='/crear-evento'
                         size='large'
+                        onClick={() => history.push(`/crear-evento/`)}
                     >
                         Crear evento
                     </Button>
