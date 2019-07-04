@@ -152,8 +152,4 @@ class ViewEvent extends React.Component {
     }
 }
 
-<<<<<<< HEAD
 export default ViewEvent
-=======
-export default ViewEvent
->>>>>>> c7701ac2f01a9ed14ea037cfe827105dee47033e
