@@ -16,6 +16,7 @@ import EventListView from '../containers/EvenListView'
 import EventListView1 from '../containers/EvenListView1'
 import CreateEvent from './CreateEvent';
 import ModAccountAdmin from './ModAccountAdmin';
+import ModAccountGraduated from './ModAccountGraduated';
 
 
 class Home extends React.Component {
@@ -57,8 +58,8 @@ class Home extends React.Component {
             }  else if (this.state.user.is_graduated ){
               return (
               <EgresadoLayout>
-                  //<Route exact path="/crear-evento" component={CreateEvent} />
-
+                  <Route exact path="/crear-evento" component={CreateEvent} />
+                  <Route exact path="/perfilEgresado" component={ModAccountGraduated}/>
                   <Route exact path="/ver-evento1" component={EventListView1} />
                   <Route exact path="/ver-egresados1" component={EgresadoListView1} />
                   <Route exact path="/eventos1" component={EventListView1} />
