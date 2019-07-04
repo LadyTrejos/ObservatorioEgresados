@@ -18,7 +18,6 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import history from '../helpers/history';
-import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 
@@ -56,8 +55,8 @@ const { TextArea } = Input;
       previewVisible: true,
     });
   };
-  /*
-   handleChange = (info) => {
+
+  /* handleChange = (info) => {
      if (info.file.status === "uploading") {
        this.setState({ loading: true });
        return;
@@ -137,9 +136,30 @@ const { TextArea } = Input;
     this.imageRef = React.createRef();
   }
 
+    componentWillMount(){
+        const eventID = this.props.match.params.id;
+        axios.get(`http://127.0.0.1:8000/api/eventos/${eventID}`)
+        .then(res => {
+        this.setState({ 
+            eventInfo: {
+            name: res.data.name,
+            description: res.data.description,
+            place: res.data.place,
+            date: res.data.date,
+            hour: res.data.hour,
+            organizer: res.data.organizer,
+            admin: res.data.admin,
+            interests: res.data.interests,
+            url: res.data.url,
+            }
+        })
+        })
+       
+    }
+
     componentDidMount(){
       
-        axios.get(`${HOSTNAME}/api/intereses/`)
+        axios.get('http://127.0.0.1:8000/api/intereses/')
         .then( res => {
             this.setState({ interests: res.data})
         })
@@ -175,7 +195,7 @@ const { TextArea } = Input;
         }, () => {
             const eventData = JSON.stringify(this.state.eventInfo)
             console.log(eventData)
-            axios.post(`${HOSTNAME}/api/eventos/`, 
+            axios.post('http://127.0.0.1:8000/api/eventos/', 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
             .then((res) => {
@@ -199,7 +219,7 @@ const { TextArea } = Input;
                   data = interest.split('>')
                   interests.push(data[0])
               } else {
-                  promises.push(axios.post(`${HOSTNAME}/api/intereses/`,
+                  promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
                               `{"name": "${interest}"}`,
                               { headers: {"Content-type": "application/json"}}
                               )
@@ -218,7 +238,7 @@ const { TextArea } = Input;
 
     render() {
       
-
+      console.log(this.state)
       const { getFieldDecorator } = this.props.form;
 
       const interestItems = [] 
@@ -231,7 +251,7 @@ const { TextArea } = Input;
       return (
         
         <Form layout="vertical" >
-          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
+          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Editar evento</h1>
 
 
           <Row type="flex" justify="center" align="middle">
@@ -394,7 +414,7 @@ const { TextArea } = Input;
                     type="primary"
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  Crear
+                  Guardar
                 </Button>
               </Form.Item>
             </Col>

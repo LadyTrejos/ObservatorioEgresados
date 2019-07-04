@@ -312,7 +312,7 @@ class ModAdmins extends React.Component {
                   size='large' 
                   type="primary" 
                   htmlType="submit" 
-                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+                  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} 
                   onClick={() => history.push('/ver-admins')}
               >
               Cancelar

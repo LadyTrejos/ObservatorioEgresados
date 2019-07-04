@@ -64,7 +64,7 @@ class AdminLayout extends React.Component {
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
-                                <Link to='/perfilEgresado'></Link>
+                                <Link to='/perfil'></Link>
                             </Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="2">

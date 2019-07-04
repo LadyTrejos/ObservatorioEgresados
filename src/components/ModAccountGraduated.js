@@ -114,7 +114,7 @@ changeProfile = () =>{
             axios.put(`${HOSTNAME}/api/egresados/${graduatedID}/`, 
                     graduatedData, 
                     { headers: {"Content-Type": "application/json"}})
-            history.push('/perfilEgresado')
+            history.push('/perfil')
             window.location.reload();
             this.state.profile ? this.setState({ profile: false }):this.setState({ profile: true })
             
@@ -350,7 +350,7 @@ changeProfile = () =>{
                     size='large' 
                     type="primary" 
                     htmlType="submit" 
-                    style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+                    style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} 
                     onClick={this.changeProfile}
                 >
                 Cancelar
@@ -366,7 +366,7 @@ changeProfile = () =>{
             size='large' 
             type="primary" 
             htmlType="submit" 
-            style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+            style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} 
             onClick={this.changeProfile}>
             Editar datos
           </Button>

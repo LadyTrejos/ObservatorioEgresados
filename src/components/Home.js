@@ -11,10 +11,14 @@ import ModAccountAdmin from './ModAccountAdmin';
 import ModAccountGraduated from './ModAccountGraduated';
 
 import AdminListView from '../containers/AdminListView';
+import CreateEvent from './CreateEvent';
 import EgresadoListView from '../containers/EgresadoListView';
 import EgresadoListView1 from '../containers/EgresadoListView1';
 import EventListView from '../containers/EvenListView'
 import EventListView1 from '../containers/EvenListView1'
+import ModAccountAdmin from './ModAccountAdmin';
+import ModAccountGraduated from './ModAccountGraduated';
+import ModEvent from './ModEvent';
 
 import AdminLayout from '../containers/AdminLayout';
 import EgresadoLayout from '../containers/EgresadoLayout';
@@ -51,17 +55,17 @@ class Home extends React.Component {
               } else if (this.state.user.is_admin){
               return (
               <AdminLayout>
-                  <Route exact path="/crear-evento" component={CreateEvent} />
-                  <Route exact path="/eventos" component={EventListView} />
+                  <Route exact path="/crear-evento/" component={CreateEvent} />
+                  <Route exact path="/eventos/" component={EventListView} />
                   <Route exact path='/perfil' component={ModAccountAdmin}/>
+                  <Route exact path='/editar-evento/:id/' component={ModEvent}/>
                   <Route exact path="/ver-egresados" component={EgresadoListView} />
                   <Route exact path="/editar-egresado/:id/" component={ModEgresado}/>
               </AdminLayout>)
             }  else if (this.state.user.is_graduated ){
               return (
               <EgresadoLayout>
-                  <Route exact path="/crear-evento" component={CreateEvent} />
-                  <Route exact path="/perfilEgresado" component={ModAccountGraduated}/>
+                  <Route exact path="/perfil" component={ModAccountGraduated}/>
                   <Route exact path="/ver-evento1" component={EventListView1} />
                   <Route exact path="/ver-egresados1" component={EgresadoListView1} />
                   <Route exact path="/eventos1" component={EventListView1} />

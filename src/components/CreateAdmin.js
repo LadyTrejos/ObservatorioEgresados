@@ -255,6 +255,22 @@ class RegistrationForm extends React.Component {
           </Col>
         </Row>
 
+        <Row  type="flex" justify="center" align="middle">
+          <Col span={7}>
+            <Form.Item label="Dirección">
+              {getFieldDecorator('address',  {rules: [{ required:true, message: '¿Dónde se realizará?' },
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                    message: "Dirección no válida"}],}
+              )(<Input 
+                    placeholder='Cr 27 Cll 4 # 45-56'
+                    size='large'
+                    onChange={e => this.setState({ adminInfo: { ...this.state.adminInfo, address: e.target.value } })}
+                    style={{backgroundColor:'#fff', borderColor:'#fff',borderRadius:10 }}
+              />)}
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Row type="flex" justify="center" align="middle">
           <Col >
             <Form.Item label="Número de celular">
@@ -296,14 +312,13 @@ class RegistrationForm extends React.Component {
               <Button size='large' 
                       type="primary" 
                       href="/ver-admins"
-                      style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}} 
+                      style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} 
               >    
               Cancelar
               </Button>
             </Form.Item>
           </Col>
         </Row>
-        
       </Form>
     );
   }
