@@ -3,21 +3,23 @@ import { Route } from 'react-router-dom';
 import axios from 'axios';
 import { Spin } from 'antd';
 
+import CreateAdmin from './CreateAdmin';
+import CreateEvent from './CreateEvent';
 import ModAdmin from './ModAdmin';
 import ModEgresado from './ModEgresado';
-import CreateAdmin from './CreateAdmin';
-import AdminListView from '../containers/AdminListView';
-import EgresadoListView from '../containers/EgresadoListView';
-import EgresadoListView1 from '../containers/EgresadoListView1';
-import AdminLayout from '../containers/AdminLayout';
-import EgresadoLayout from '../containers/EgresadoLayout';
-import SuperuserLayout from '../containers/SuperuserLayout';
-import EventListView from '../containers/EvenListView'
-import EventListView1 from '../containers/EvenListView1'
-import CreateEvent from './CreateEvent';
 import ModAccountAdmin from './ModAccountAdmin';
 import ModAccountGraduated from './ModAccountGraduated';
 
+import AdminListView from '../containers/AdminListView';
+import EgresadoListView from '../containers/EgresadoListView';
+import EgresadoListView1 from '../containers/EgresadoListView1';
+import EventListView from '../containers/EvenListView'
+import EventListView1 from '../containers/EvenListView1'
+
+import AdminLayout from '../containers/AdminLayout';
+import EgresadoLayout from '../containers/EgresadoLayout';
+import SuperuserLayout from '../containers/SuperuserLayout';
+import HOSTNAME from '../helpers/hostname';
 
 class Home extends React.Component {
     constructor(props) {
