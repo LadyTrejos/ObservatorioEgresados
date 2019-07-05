@@ -1,11 +1,14 @@
 from django.db import models
-from djongo import models as djongomodels
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 from django.forms import ModelForm, PasswordInput
-
+from django.db.models import signals
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save
+from django.conf import settings
+from djongo import models as djongomodels
 import datetime
 
 
@@ -196,3 +199,12 @@ class UserForm(ModelForm):
             'is_graduated',
             'is_admin'
         )
+
+#signal used for is_active=False to is_active=True
+@receiver(pre_save, sender=User, dispatch_uid='active')
+def active(sender, instance, **kwargs):
+    if instance.is_active and User.objects.filter(pk=instance.id, is_active=False).exists():
+        subject = 'Active account'
+        mesagge = '%s your account is now active' %(instance.name)
+        from_email = 'Observatorio UTP <observatorioutp@gmail.com>'
+        send_mail(subject, mesagge, from_email, [instance.email], fail_silently=False)

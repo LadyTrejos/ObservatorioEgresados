@@ -55,6 +55,13 @@ class RegisterForm extends React.Component {
       }
 
   handleSubmit = e => {
+    const args = {
+      message: 'Registro exitoso.',
+      description:
+        'La solicitud de registro ha sido enviada. \nPara ingresar debe esperar que un administrador valide su solicitud. \nSe le notificará por correo electrónico cuando su cuenta haya sido activada.',
+      duration: 0,
+    };
+    notification.success(args);
     const selector = this.countryRef.current;
     
     e.preventDefault();
@@ -83,16 +90,13 @@ class RegisterForm extends React.Component {
                   const args = {
                     message: 'Registro exitoso.',
                     description:
-                      'La solicitud de registro ha sido enviada. Para ingresar debe esperar que un administrador valide su solicitud. Se le notificará por correo electrónico cuando su cuenta haya sido activada.',
+                      'La solicitud de registro ha sido enviada. \nPara ingresar debe esperar que un administrador valide su solicitud. \nSe le notificará por correo electrónico cuando su cuenta haya sido activada.',
                     duration: 0,
                   };
                   notification.success(args);
                   this.props.form.resetFields();
                 })
               }
-              //history.push('/login')
-              //console.log(err.message)
-
             })
           }
         )
