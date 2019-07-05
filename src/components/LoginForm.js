@@ -38,7 +38,7 @@ class LoginForm extends React.Component {
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'300%'}}>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'100%'}}>
                 <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
                 <strong>Observatorio de egresados</strong>
             </div>
