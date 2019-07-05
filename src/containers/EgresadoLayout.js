@@ -28,7 +28,20 @@ class AdminLayout extends React.Component {
         })
     }
 
+    checkIsActive =async()=>{
+        const userID = localStorage.getItem('user');
+        let res = await axios.get(`${HOSTNAME}/api/users/${userID}/`)
+            this.setState({
+                is_active: res.data.is_active,
+               
+            })
+    }
+
     render() {
+        this.checkIsActive()
+        if(this.state.is_active===false){
+            this.props.logout()
+        }
         // isLoading indica si aún no tiene un usuario en el estado
         let isLoading = this.state.user ? false : true;
             return(

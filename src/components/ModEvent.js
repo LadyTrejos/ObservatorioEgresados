@@ -36,23 +36,29 @@ const { TextArea } = Input;
 
  
  class PicturesWall extends React.Component {
-   state = {
-     previewVisible: false,
-     previewImage: '',
-     fileList: [  ],
-   };
+    constructor(props) {
+        super(props);
+            this.state = {
+                previewVisible: false,
+                previewImage: '',
+                fileList: [  ],
+            };
+            
+            console.log("aca-->"+this.previewImage)
+        }
+    
+   
+     handleCancel = () => {this.setState({ previewVisible: false });}
+   
+     handlePreview = async file => {
+        if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+        }
 
-  handleCancel = () => {this.setState({ previewVisible: false });}
-
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-    });
+        this.setState({
+        previewImage: file.url || file.preview,
+        previewVisible: true,
+        });
   };
 
   /* handleChange = (info) => {
@@ -67,7 +73,16 @@ const { TextArea } = Input;
     }
  };*/
 
-    handleChange = ({ fileList }) => this.setState({ fileList });
+    handleChange = async info => {
+        if (!info.file.url && !info.file.preview) {
+            info.file.preview = await getBase64(info.file.originFileObj)
+        }
+    
+        this.setState({
+        previewImage: info.file.url || info.file.preview,
+        fileList: info.fileList 
+        });
+    };
     
 
     beforeUpload = (file) => {
@@ -83,7 +98,7 @@ const { TextArea } = Input;
     }
 
    render() {
-     console.log(this.state)
+       console.log(this.state)
      const { previewVisible, previewImage, fileList } = this.state;
      const uploadButton = (
        <div>
@@ -120,14 +135,15 @@ const { TextArea } = Input;
       super(props);
       this.state = {
         eventInfo: {
-            name:'',
-            description:'',
-            place:'',
-            date:'',
-            hour:'',
-            organizer:'',
-            admin: localStorage.getItem('user'),
-            interests: [],
+
+            name:"", 
+            description:"",
+            place: "",
+            date:"", 
+            hour: "",
+            organizer:"",
+            admin: localStorage.getItem('user'),      
+            interests:[],
             url:''
         },
         interests: []
@@ -144,10 +160,10 @@ const { TextArea } = Input;
             name: res.data.name,
             description: res.data.description,
             place: res.data.place,
-            date: res.data.date,
+            date: moment(res.data.date,"YYYY-MM-DD"),
             hour: res.data.hour,
             organizer: res.data.organizer,
-            admin: res.data.admin,
+            admin: res.data.admin,       
             interests: res.data.interests,
             url: res.data.url,
             }
@@ -160,7 +176,13 @@ const { TextArea } = Input;
       
         axios.get(`${HOSTNAME}/api/intereses/`)
         .then( res => {
-            this.setState({ interests: res.data})
+            let interests = {}
+            res.data.map( item => 
+                interests[item.id] = item.name
+                )
+            let data = this.state.eventInfo.interests.map( item => `${item}>${interests[item]}`)
+            console.log(data)
+            this.setState({ interests: res.data, eventInfo: { ...this.state.eventInfo, interests: data}},()=>console.log(this.state.eventInfo))
         })
         .catch( err => console.log(err.message))
     }
@@ -183,22 +205,33 @@ const { TextArea } = Input;
     handleInterestChange = (value) => {
         this.setState({
             eventInfo: { ...this.state.eventInfo, interests: value}
-        })
+        }, () => console.log(this.state))
         
     }
 
-    postEvent = (interests) => {
-        const urlImage = this.imageRef.current.state.previewImage
+    putEvent = (interests,id) => {
+        let urlImage = this.imageRef.current.state.previewImage;
+        let date_string = this.state.eventInfo.date;
+
+        if(urlImage===""){
+            urlImage=this.state.eventInfo.url
+        }
+        
+        if(typeof(this.state.eventInfo.date)==="object"){
+            date_string = this.state.eventInfo.date.format('DD-MM-YYYY')
+        }
+        
         this.setState({
-            eventInfo: { ...this.state.eventInfo, interests: interests, url:urlImage}
+            eventInfo: { ...this.state.eventInfo, interests: interests, url:urlImage, date: date_string}
         }, () => {
+            
             const eventData = JSON.stringify(this.state.eventInfo)
-            console.log(eventData)
-            axios.post(`${HOSTNAME}/api/eventos/`, 
+            
+            axios.put(`${HOSTNAME}/api/eventos/${id}/`, 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
             .then((res) => {
-              message.success('El evento ha sido creado con éxito.', 10)
+              message.success('El evento ha sido editado con éxito.', 10)
               history.push('/eventos')
             })
             .catch(err => {
@@ -207,39 +240,44 @@ const { TextArea } = Input;
         })
     }
 
-    handleCreate = (e) => {
+   
+
+    handleCreate = (e,id) => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
+          values = {...values, admin: localStorage.getItem('user')}
         if (!err) {
           let interests = [], promises = [];
           let data = ''
-          this.state.eventInfo.interests.forEach((interest, i) => {
+          values.interests.forEach((interest, i) => {
               if(interest.includes('>')) {
                   data = interest.split('>')
                   interests.push(data[0])
               } else {
-                  promises.push(axios.post(`${HOSTNAME}/api/intereses/`,
-                              `{"name": "${interest}"}`,
-                              { headers: {"Content-type": "application/json"}}
-                              )
-                  )
+                  console.log("acá")
+                  console.log(interest)
+                promises.push(axios.post(`${HOSTNAME}/api/intereses/`,
+                `{"name": "${interest}"}`,
+                { headers: {"Content-type": "application/json"}}
+                )
+    )
+                  
               }
           })
           axios.all(promises)
           .then(results => {
             results.forEach(item => interests.push(item.data.id))
-            this.postEvent(interests)
+            this.putEvent(interests,id)
           }
           )
         }
-      });
+    });
     }
 
     render() {
-      
-      console.log(this.state)
+        console.log(this.state.eventInfo)
+        
       const { getFieldDecorator } = this.props.form;
-
       const interestItems = [] 
       
       this.state.interests.map( (item) => 
@@ -256,7 +294,7 @@ const { TextArea } = Input;
           <Row type="flex" justify="center" align="middle">
             <Col span={5}>
               <Form.Item label="Imagen de portada del evento">
-                  {getFieldDecorator('multimedia', )(<PicturesWall ref={this.imageRef}/>
+                  {getFieldDecorator('url', )(<PicturesWall ref={this.imageRef}/>
                   )}
                 </Form.Item>
             </Col>
@@ -309,7 +347,7 @@ const { TextArea } = Input;
               <Form.Item label="Fecha del evento">
                 {getFieldDecorator('date', {
                   rules: [{ required:true, message: 'Ingresar la fecha del evento' }],
-                  initialValue: moment(this.state.eventInfo.date)
+                  initialValue: this.state.eventInfo.date
                 }) (
                   <DatePicker
                     placeholder='Seleccione fecha'
@@ -317,6 +355,7 @@ const { TextArea } = Input;
                     onChange={(date, dateString) => this.setState({ eventInfo: {...this.state.eventInfo, date: dateString }})}
                     format="DD-MM-YYYY"
                     disabledDate={this.disabledDate}
+                    
 
                   />
                   )}
@@ -327,9 +366,9 @@ const { TextArea } = Input;
 
             <Col>
               <Form.Item label="Hora del evento">
-                {getFieldDecorator('hour  ', {
+                {getFieldDecorator('hour', {
                   rules: [{ required: true, message: 'Ingresar la hora del evento' }],
-                  
+                   initialValue:moment(this.state.eventInfo.hour, 'HH:mm:ss')
                 })(
                     <TimePicker
                         size='large'
@@ -417,7 +456,7 @@ const { TextArea } = Input;
                 <Button 
                     size='large' 
                     type="primary"
-                    onClick={this.handleCreate}
+                    onClick={(e)=>this.handleCreate(e,this.props.match.params.id)}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                   Guardar
                 </Button>

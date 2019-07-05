@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty, message } from 'antd';
 import HOSTNAME from '../helpers/hostname';
 
 const { Meta } = Card;
@@ -20,7 +20,8 @@ class ViewEvent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            interests: {}
+            interests: {},
+            suscrito:false,
 
         }
         this.showConfirm = this.showConfirm.bind(this)
@@ -73,7 +74,18 @@ class ViewEvent extends React.Component {
           onCancel() {},
         });
       }
-
+      IsSuscrito=()=>{
+        
+          this.setState({suscrito: !this.state.suscrito}, () => {
+            this.state.suscrito ?
+              message.success('Acabas de suscribirte al evento.')
+              :
+              message.info('Haz eliminado la suscripción al evento.')
+          })
+          
+        
+      }
+      
 
     render(){
         return(
@@ -132,8 +144,10 @@ class ViewEvent extends React.Component {
                     <br/>
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
-                            <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
-                              sucribirse
+                            <Button size='large' 
+                            style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}
+                            onClick={this.IsSuscrito}>
+                            {this.state.suscrito ? "Eliminar suscripción" : "Suscribirse"}
                             </Button>
                         </Col>
 

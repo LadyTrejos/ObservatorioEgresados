@@ -124,7 +124,7 @@ class Egresadoslist extends React.Component {
                                 title={item.name + ' ' + item.last_name}
                                 description={
                                     <div>
-                                    <IconText type="idcard" text={`Documento: ${item.id}`}/>
+                                    <IconText type="environment" text={`Lugar de residencia: ${item.city} ${item.region}, ${item.country}`}/>
                                     <br/>
                                     <IconText type="mail" text={`Correo: ${item.email}`}/>
                                     <br/>
