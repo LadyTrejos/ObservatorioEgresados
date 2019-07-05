@@ -194,6 +194,7 @@ const { TextArea } = Input;
         if (!err) {
           let interests = [], promises = [];
           let data = ''
+          console.log(interests)
           this.state.eventInfo.interests.forEach((interest, i) => {
               if(interest.includes('>')) {
                   data = interest.split('>')
