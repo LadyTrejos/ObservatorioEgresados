@@ -270,6 +270,7 @@ const { TextArea } = Input;
               >
                 {getFieldDecorator('name', {
                   rules: [{ required: true, message: 'Ingrese el nombre del evento', whitespace: true }],
+                  initialValue: this.state.eventInfo.name
                 })(<Input
                       placeholder='Nombre del evento'
                       size='large'
@@ -290,6 +291,7 @@ const { TextArea } = Input;
               >
                 {getFieldDecorator('description', {
                   rules: [{ required: true, message: 'Ingrese descripción del evento', whitespace: true }],
+                  initialValue: this.state.eventInfo.description
                 })(<TextArea rows={4}
                       placeholder='Descripción de evento'
                       size='large'
@@ -308,6 +310,7 @@ const { TextArea } = Input;
               <Form.Item label="Fecha del evento">
                 {getFieldDecorator('date', {
                   rules: [{ required:true, message: 'Ingresar la fecha del evento' }],
+                  initialValue: moment(this.state.eventInfo.date)
                 }) (
                   <DatePicker
                     placeholder='Seleccione fecha'
@@ -327,7 +330,7 @@ const { TextArea } = Input;
               <Form.Item label="Hora del evento">
                 {getFieldDecorator('hour  ', {
                   rules: [{ required: true, message: 'Ingresar la hora del evento' }],
-                  setFieldsValue:this.state.hour,
+                  
                 })(
                     <TimePicker
                         size='large'
@@ -349,6 +352,7 @@ const { TextArea } = Input;
                   rules: [{ required:true, message: '¿Dónde se realizará?' },
                   {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
                     message: "Dirección no válida"}],
+                    initialValue: this.state.eventInfo.place
                 })(
                     <Input
                     placeholder='Lugar del evento'
@@ -373,6 +377,7 @@ const { TextArea } = Input;
                     {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
                       message: "Nombre no válido"}
                   ],
+                  initialValue: this.state.eventInfo.organizer
                 })(<Input
                       placeholder='Nombre, asociación o institución '
                       size='large'
@@ -390,6 +395,7 @@ const { TextArea } = Input;
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
                         
                         ],
+                        initialValue: this.state.eventInfo.interests
                     })(
                         <Select 
                         size='large'
