@@ -18,6 +18,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 
@@ -55,8 +56,8 @@ const { TextArea } = Input;
       previewVisible: true,
     });
   };
-
-  /* handleChange = (info) => {
+  /*
+   handleChange = (info) => {
      if (info.file.status === "uploading") {
        this.setState({ loading: true });
        return;
@@ -138,7 +139,7 @@ const { TextArea } = Input;
 
     componentDidMount(){
       
-        axios.get('http://127.0.0.1:8000/api/intereses/')
+        axios.get(`${HOSTNAME}/api/intereses/`)
         .then( res => {
             this.setState({ interests: res.data})
         })
@@ -174,7 +175,7 @@ const { TextArea } = Input;
         }, () => {
             const eventData = JSON.stringify(this.state.eventInfo)
             console.log(eventData)
-            axios.post('http://127.0.0.1:8000/api/eventos/', 
+            axios.post(`${HOSTNAME}/api/eventos/`, 
                         eventData, 
                         { headers: {"Content-type": "application/json"}})
             .then((res) => {
@@ -198,7 +199,7 @@ const { TextArea } = Input;
                   data = interest.split('>')
                   interests.push(data[0])
               } else {
-                  promises.push(axios.post('http://127.0.0.1:8000/api/intereses/',
+                  promises.push(axios.post(`${HOSTNAME}/api/intereses/`,
                               `{"name": "${interest}"}`,
                               { headers: {"Content-type": "application/json"}}
                               )

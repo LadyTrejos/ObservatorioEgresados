@@ -4,6 +4,7 @@ import { List, Avatar, Icon, Form, Button, Modal, Row, Empty, message } from "an
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
 
@@ -50,7 +51,7 @@ class Adminlist extends React.Component {
           onOk: () => {
             item.is_active = !item.is_active
             const userData = JSON.stringify(item)
-            axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`, 
+            axios.put(`${HOSTNAME}/api/users/${item.id}/`, 
                           userData, 
                           { headers: {"Content-Type": "application/json"}})
               .then(() => {
@@ -73,7 +74,7 @@ class Adminlist extends React.Component {
       console.log(item)
       item.is_active = !item.is_active
       const userData = JSON.stringify(item)
-      axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`, 
+      axios.put(`${HOSTNAME}/api/users/${item.id}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {

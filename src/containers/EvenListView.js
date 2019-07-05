@@ -1,12 +1,13 @@
-   import React from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Row, Button, Input } from 'antd';
 import ViewEvent from '../components/ViewEvent'
+import HOSTNAME from '../helpers/hostname';
 import history from '../helpers/history';
 
 const Search = Input.Search;
 
-class AdminListView extends React.Component {
+class EventListView extends React.Component {
 state={
     events: []
 }
@@ -16,7 +17,7 @@ componentDidMount(){
 }
 
 loadData = () => {
-    axios.get('http://localhost:8000/api/eventos/?ordering=-created_at')
+    axios.get(`${HOSTNAME}/api/eventos/?ordering=-created_at/`)
     .then(res =>{
         this.setState({
             events: res.data
@@ -25,7 +26,7 @@ loadData = () => {
 }
 
 handleSearch = (value) => {
-    axios.get(`http://localhost:8000/api/eventos/?search=${value}&&ordering=-created_at`)
+    axios.get(`${HOSTNAME}/api/eventos/?search=${value}&&ordering=-created_at/`)
     .then(res =>{
         this.setState({
             events: res.data
@@ -57,7 +58,6 @@ render(){
                     style={{maxWidth: 300}}
                 />
             </Row>
-
             <br/>
             <ViewEvent data={this.state.events} loadData={this.loadData}/>
         </div>
@@ -70,4 +70,4 @@ render(){
 
 
 
-export default AdminListView;
+export default EventListView;

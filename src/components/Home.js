@@ -3,22 +3,24 @@ import { Route } from 'react-router-dom';
 import axios from 'axios';
 import { Spin } from 'antd';
 
-import ModAdmin from './ModAdmin';
-import ModEgresado from './ModEgresado';
 import CreateAdmin from './CreateAdmin';
-import AdminListView from '../containers/AdminListView';
-import EgresadoListView from '../containers/EgresadoListView';
-import EgresadoListView1 from '../containers/EgresadoListView1';
-import AdminLayout from '../containers/AdminLayout';
-import EgresadoLayout from '../containers/EgresadoLayout';
-import SuperuserLayout from '../containers/SuperuserLayout';
-import EventListView from '../containers/EvenListView'
-import EventListView1 from '../containers/EvenListView1'
 import CreateEvent from './CreateEvent';
 import ModAccountAdmin from './ModAccountAdmin';
 import ModAccountGraduated from './ModAccountGraduated';
+import ModAdmin from './ModAdmin';
+import ModEgresado from './ModEgresado';
 import ModEvent from './ModEvent';
 
+import AdminListView from '../containers/AdminListView';
+import EgresadoListView from '../containers/EgresadoListView';
+import EgresadoListView1 from '../containers/EgresadoListView1';
+import EventListView from '../containers/EvenListView'
+import EventListView1 from '../containers/EvenListView1'
+
+import AdminLayout from '../containers/AdminLayout';
+import EgresadoLayout from '../containers/EgresadoLayout';
+import SuperuserLayout from '../containers/SuperuserLayout';
+import HOSTNAME from '../helpers/hostname';
 
 class Home extends React.Component {
     constructor(props) {
@@ -30,7 +32,7 @@ class Home extends React.Component {
     componentDidMount(){
         const userID = localStorage.getItem('user');
         console.log(userID)
-        axios.get(`http://127.0.0.1:8000/api/users/${userID}`)
+        axios.get(`${HOSTNAME}/api/users/${userID}/`)
         .then(res => {
             this.setState({
                 user: res.data
@@ -80,7 +82,6 @@ class Home extends React.Component {
                 :
                 (
                     this.getRoutes()
-
                 )
             }
             </div>

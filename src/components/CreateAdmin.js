@@ -15,6 +15,7 @@ import { withRouter, } from 'react-router-dom';
 import NumericInput from './NumericInput';
 import CountrySelector from './CountrySelector';
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
   
 const { Option } = Select;
 
@@ -72,11 +73,13 @@ class RegistrationForm extends React.Component {
           () => {
             const userData = JSON.stringify(this.state.userInfo)
             const adminData = JSON.stringify(this.state.adminInfo)
-            axios.post('http://localhost:8000/rest-auth/registration/', 
+            console.log(userData);
+            console.log(adminData);
+            axios.post(`${HOSTNAME}/rest-auth/registration/`, 
                         userData, 
                         { headers: {"Content-type": "application/json"}})
             .then(() => {
-                axios.post('http://localhost:8000/api/admins/', 
+                axios.post(`${HOSTNAME}/api/admins/`, 
                         adminData, 
                         { headers: {"Content-type": "application/json"}})
                 .then(() => {

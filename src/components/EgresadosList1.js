@@ -1,9 +1,10 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Form, Button, Modal, message } from "antd";
+import { List, Avatar, Icon, Form, Button, Modal, message, Row, Empty } from "antd";
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
 
@@ -50,7 +51,7 @@ class Egresadoslist extends React.Component {
           onOk: () => {
             item.is_active = !item.is_active
             const userData = JSON.stringify(item)
-            axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`,
+            axios.put(`${HOSTNAME}/api/users/${item.id}/`,
                           userData,
                           { headers: {"Content-Type": "application/json"}})
               .then(() => {
@@ -73,7 +74,7 @@ class Egresadoslist extends React.Component {
       console.log(item)
       item.is_active = !item.is_active
       const userData = JSON.stringify(item)
-      axios.put(`http://127.0.0.1:8000/api/users/${item.id}/`,
+      axios.put(`${HOSTNAME}/api/users/${item.id}/`,
                     userData,
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
@@ -92,6 +93,9 @@ class Egresadoslist extends React.Component {
 
     render(){
         return(
+          <div>
+            {
+              this.props.data.length > 0 ? 
                 <List
                     itemLayout="horizontal"
                     size="middle"
@@ -127,21 +131,19 @@ class Egresadoslist extends React.Component {
                                     </div>
                                 }
                             />
-
-
                         </List.Item>
-
-
                     )}
                 />
+                :
+              <Row type="flex" justify="center" align="middle">
+                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han registrado egresados.</h2>}/>
+              </Row>
+              }
+            </div> 
         );
     }
     }
 
-   const EgresadosList = Form.create({ name: 'EgresadosList' })(Egresadoslist);
+   const EgresadosList1 = Form.create({ name: 'EgresadosList' })(Egresadoslist);
 
-///este error marica ^
-///                  |
-
-
-    export default withRouter(EgresadosList);
+    export default withRouter(EgresadosList1);

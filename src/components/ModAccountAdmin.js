@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import * as actions from '../store/actions/auth';
 
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 import NumericInput from './NumericInput';
 import ChangePassword from './ChangePassword'
 
@@ -52,7 +53,7 @@ class ModAccountAdmin extends React.Component {
   
   componentWillMount(){
     const adminID = localStorage.getItem('user');
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+    axios.get(`${HOSTNAME}/api/users/${adminID}/`)
     .then(res => {
       this.setState({ 
         userInfo: {
@@ -69,7 +70,7 @@ class ModAccountAdmin extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
+    axios.get(`${HOSTNAME}/api/admins/${adminID}/`)
     .then(res => {
       this.setState({
         adminInfo : {
@@ -103,11 +104,11 @@ changeProfile = () =>{
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = localStorage.getItem('user');
         console.log("ID: "+adminID)
-        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
+        axios.put(`${HOSTNAME}/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
+            axios.put(`${HOSTNAME}/api/admins/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
             history.push('/perfil')

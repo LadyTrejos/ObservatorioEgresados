@@ -16,7 +16,9 @@ import axios from 'axios';
 import moment from 'moment';
 import * as actions from '../store/actions/auth';
 
+import NumericInput from './NumericInput';
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 //import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
@@ -54,7 +56,7 @@ class ModAccountGraduated extends React.Component {
   
   componentWillMount(){
     const graduatedID = localStorage.getItem('user');
-    axios.get(`http://127.0.0.1:8000/api/users/${graduatedID}`)
+    axios.get(`${HOSTNAME}/api/users/${graduatedID}/`)
     .then(res => {
       this.setState({ 
         userInfo: {
@@ -71,7 +73,7 @@ class ModAccountGraduated extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/egresados/${graduatedID}`)
+    axios.get(`${HOSTNAME}/api/egresados/${graduatedID}/`)
     .then(res => {
       this.setState({
         graduatedInfo : {
@@ -105,12 +107,11 @@ changeProfile = () =>{
         const userData = JSON.stringify(this.state.userInfo)
         const graduatedData = JSON.stringify(this.state.graduatedInfo)
         const graduatedID = localStorage.getItem('user');
-        console.log("ID: "+graduatedID)
-        axios.put(`http://127.0.0.1:8000/api/users/${graduatedID}/`, 
+        axios.put(`${HOSTNAME}/api/users/${graduatedID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/egresados/${graduatedID}/`, 
+            axios.put(`${HOSTNAME}/api/egresados/${graduatedID}/`, 
                     graduatedData, 
                     { headers: {"Content-Type": "application/json"}})
             history.push('/perfil')

@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import history from '../helpers/history';
 import NumericInput from './NumericInput';
+import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 
@@ -47,7 +48,7 @@ class ModAdmins extends React.Component {
   
   componentWillMount(){
     const adminID = this.props.match.params.id;
-    axios.get(`http://127.0.0.1:8000/api/users/${adminID}`)
+    axios.get(`${HOSTNAME}/api/users/${adminID}/`)
     .then(res => {
       this.setState({ 
         userInfo: {
@@ -64,7 +65,7 @@ class ModAdmins extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/admins/${adminID}`)
+    axios.get(`${HOSTNAME}/api/admins/${adminID}/`)
     .then(res => {
       this.setState({
         adminInfo : {
@@ -85,11 +86,11 @@ class ModAdmins extends React.Component {
         const userData = JSON.stringify(this.state.userInfo)
         const adminData = JSON.stringify(this.state.adminInfo)
         const adminID = this.props.match.params.id;
-        axios.put(`http://127.0.0.1:8000/api/users/${adminID}/`, 
+        axios.put(`${HOSTNAME}/api/users/${adminID}/`, 
                     userData, 
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/admins/${adminID}/`, 
+            axios.put(`${HOSTNAME}/api/admins/${adminID}/`, 
                     adminData, 
                     { headers: {"Content-Type": "application/json"}})
             history.push('/ver-admins')
