@@ -55,13 +55,6 @@ class RegisterForm extends React.Component {
       }
 
   handleSubmit = e => {
-    const args = {
-      message: 'Registro exitoso.',
-      description:
-        'La solicitud de registro ha sido enviada. \nPara ingresar debe esperar que un administrador valide su solicitud. \nSe le notificará por correo electrónico cuando su cuenta haya sido activada.',
-      duration: 0,
-    };
-    notification.success(args);
     const selector = this.countryRef.current;
     
     e.preventDefault();
@@ -194,6 +187,16 @@ class RegisterForm extends React.Component {
       callback('Debe aceptar la política de privacidad');
     }
   }
+
+  validateResidence = (rule, value, callback) => {
+    const selector = this.countryRef.current;
+    
+    if(selector.state.city !== ''){
+      callback();
+    } else {
+      callback('Seleccione el lugar donde reside.')
+    }
+  }
   
 
   render() {
@@ -264,7 +267,13 @@ class RegisterForm extends React.Component {
                         </Form.Item>
                         
                         <Form.Item label="Lugar de residencia">
+                          {getFieldDecorator('residence', {
+                                rules: [
+                                  {required:true},
+                                {validator: this.validateResidence}],
+                            })(
                             <CountrySelector ref={this.countryRef}/>
+                            )}
                         </Form.Item>
 
                         <Form.Item label="Tipo de documento" hasFeedback>
