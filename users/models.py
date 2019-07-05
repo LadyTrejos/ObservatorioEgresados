@@ -1,11 +1,16 @@
 from django.db import models
-from djongo import models as djongomodels
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 from django.forms import ModelForm, PasswordInput
-
+from django.db.models import signals
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from djongo import models as djongomodels
 import datetime
 
 
@@ -195,3 +200,19 @@ class UserForm(ModelForm):
             'is_graduated',
             'is_admin'
         )
+
+#signal used for is_active=False to is_active=True
+@receiver(pre_save, sender=User, dispatch_uid='active')
+def active(sender, instance, **kwargs):
+    if instance.is_active and User.objects.filter(pk=instance.id, is_active=False).exists():
+        # Enviar correo notificando que está activo
+        ctx = {
+            'name': instance.name,
+        }
+        subject = 'Cuenta activada'
+        from_email = 'Observatorio UTP <observatorioutp@utp.edu.co>'
+        to = instance.email
+        html_message = render_to_string('../templates/active_user.html', ctx)
+        plain_message = strip_tags(html_message)
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message,
+            fail_silently=False,)
