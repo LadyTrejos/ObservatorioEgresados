@@ -145,7 +145,7 @@ class ModAdmins extends React.Component {
       <Form layout="vertical" onSubmit={this.handleSubmit} >
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar administrador</h1>
         <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item 
               label='Nombre(s)'
             >
@@ -166,7 +166,7 @@ class ModAdmins extends React.Component {
         </Row>
         <Row  type="flex" justify="center" align="middle">
           
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item 
               label='Apellido(s)'
             >
@@ -186,7 +186,7 @@ class ModAdmins extends React.Component {
         </Row>
         <br/>
         <Row gutter={0} type="flex" justify="center" align="middle">
-          <Col span={3.5}>
+          <Col xs={10} sm={6} md={4} lg={4} xl={4}>
             <Form.Item label="Tipo de documento">
               {getFieldDecorator('id_type', {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
@@ -203,7 +203,7 @@ class ModAdmins extends React.Component {
 
           </Col>
 
-          <Col span={4.5}> 
+          <Col xs={10} sm={6} md={4} lg={4} xl={4}> 
             <Form.Item label="Documento de identidad">
               {getFieldDecorator('id', {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }], 
@@ -221,7 +221,7 @@ class ModAdmins extends React.Component {
         <br/>
 
         <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Correo electrónico">
               {getFieldDecorator('email', {
                 rules: [{
@@ -240,7 +240,7 @@ class ModAdmins extends React.Component {
         </Row>
 
         <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Dirección">
               {getFieldDecorator('address', {
                 initialValue: this.state.adminInfo.address
@@ -255,7 +255,7 @@ class ModAdmins extends React.Component {
         </Row>
 
         <Row type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
               message:'El número debe contener 10 dígitos'}],
@@ -272,7 +272,7 @@ class ModAdmins extends React.Component {
         </Row>
 
         <Row type="flex" justify="center" align="middle">
-          <Col span={2.5}>
+          <Col xs={16} sm={12} md={8} lg={3} xl={3}>
             <Form.Item>
               <Button onClick={this.showModal} size='large' type="primary"  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}>
                   {this.state.userInfo.is_active ? "Desactivar cuenta" : "Activar cuenta"}
@@ -297,8 +297,8 @@ class ModAdmins extends React.Component {
           </Col>
         </Row>
 
-        <Row type="flex" justify="center" align="middle" gutter={20}>
-          <Col >
+        <Row type="flex" justify="center" align="middle" gutter={10}>
+          <Col xs={15} sm={11} md={7} lg={2} xl={2}>
             <Form.Item>
               <Button size='large' type="primary" onClick={(e) => this.handleSave(e)} style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
                 Guardar
@@ -306,7 +306,7 @@ class ModAdmins extends React.Component {
             </Form.Item>
           </Col>
 
-          <Col >
+          <Col xs={15} sm={11} md={7} lg={2} xl={2}>
             <Form.Item>
               <Button 
                   size='large' 

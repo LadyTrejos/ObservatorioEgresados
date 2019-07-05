@@ -235,7 +235,7 @@ const { TextArea } = Input;
 
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={5}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
               <Form.Item label="Imagen de portada del evento">
                   {getFieldDecorator('multimedia', )(<PicturesWall ref={this.imageRef}/>
                   )}
@@ -244,7 +244,7 @@ const { TextArea } = Input;
           </Row>
 
           <Row  type="flex" justify="center" align="middle">
-            <Col span={7}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
               <Form.Item
                 label='Nombre'
               >
@@ -264,7 +264,7 @@ const { TextArea } = Input;
 
           <Row  type="flex" justify="center" align="middle">
 
-            <Col span={7}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
               <Form.Item
                 label='Descripción'
               >
@@ -323,7 +323,7 @@ const { TextArea } = Input;
             <br/>
 
           <Row  type="flex" justify="center" align="middle">
-            <Col span={7}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
               <Form.Item label="Lugar del evento">
                 {getFieldDecorator('place', {
                   rules: [{ required:true, message: '¿Dónde se realizará?' },
@@ -342,7 +342,7 @@ const { TextArea } = Input;
 
 
           <Row  type="flex" justify="center" align="middle">
-            <Col span={7}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
               <Form.Item label="Organizador">
                 {getFieldDecorator('organizer', {
                   rules: [
@@ -363,7 +363,7 @@ const { TextArea } = Input;
           </Row>
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={7}>
+            <Col xs={20} sm={16} md={12} lg={7} xl={7}>
                 <Form.Item label="Intereses" extra="Para añadir un nuevo interés escriba el nombre en este espacio y finalice con la tecla Enter">
                     {getFieldDecorator('interests', {
                         rules: [

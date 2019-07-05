@@ -155,7 +155,7 @@ class RegistrationForm extends React.Component {
           Crear administrador
         </h1>
         <Row type="flex" justify="center" >
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             
             <Form.Item label='Nombre(s)'>
               {getFieldDecorator('name', {
@@ -174,7 +174,7 @@ class RegistrationForm extends React.Component {
 
         <Row  type="flex" justify="center" align="middle">
           
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label='Apellido(s)'>
               {getFieldDecorator('lastname', {
                 rules: [{ required: true, message: 'Ingresar apellido(s)'},
@@ -192,7 +192,7 @@ class RegistrationForm extends React.Component {
         <br/>
 
         <Row gutter={0} type="flex" justify="center" align="middle">
-          <Col span={3.5}>
+          <Col xs={10} sm={6} md={4} lg={4} xl={4}>
             <Form.Item label="Tipo de documento">
               {getFieldDecorator('id_type', {
                 initialValue: 'CC', rules: [{ required:true, message: 'Ingresar el tipo de documento' }],
@@ -210,7 +210,7 @@ class RegistrationForm extends React.Component {
             </Form.Item>
           </Col>
 
-          <Col span={4.5}> 
+          <Col xs={10} sm={6} md={4} lg={4} xl={4}> 
             <Form.Item label="Documento de identidad">
               {getFieldDecorator('id', {
                 rules: [{ required:true, message: 'Ingresar el documento de identidad' }, 
@@ -232,7 +232,7 @@ class RegistrationForm extends React.Component {
         <br/>
 
         <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Correo electrónico">
               {getFieldDecorator('email', {
                 rules: [
@@ -256,7 +256,7 @@ class RegistrationForm extends React.Component {
         </Row>
 
         <Row  type="flex" justify="center" align="middle">
-          <Col span={7}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Dirección">
               {getFieldDecorator('address',  {rules: [{ required:true, message: '¿Dónde se realizará?' },
                   {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
@@ -272,7 +272,7 @@ class RegistrationForm extends React.Component {
         </Row>
 
         <Row type="flex" justify="center" align="middle">
-          <Col >
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Número de celular">
               {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
               message:'El número debe contener 10 dígitos'}]
@@ -288,7 +288,7 @@ class RegistrationForm extends React.Component {
         </Row>
 
         <Row type="flex" justify="center" align="middle">
-          <Col span={5}>
+          <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Lugar de residencia: ">
               <CountrySelector ref={this.countryRef}/>
 						</Form.Item>
