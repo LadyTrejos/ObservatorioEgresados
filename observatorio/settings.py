@@ -147,8 +147,6 @@ REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS": [("%d-%m-%Y"),],
 }
 
-
-
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
