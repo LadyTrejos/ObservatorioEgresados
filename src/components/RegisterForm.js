@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox, Tooltip, Alert } from 'antd';
+import { Form, Icon, Input, Button, Spin, Select, DatePicker, Checkbox, Tooltip, notification } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
@@ -46,17 +46,26 @@ class RegisterForm extends React.Component {
             interests: [],
             friends:[]
           },
-          captcha: false
+          captcha: false,
+          privacy: false,
+          success_message: null
         };
         
         this.countryRef = React.createRef();
       }
 
   handleSubmit = e => {
+    const args = {
+      message: 'Registro exitoso.',
+      description:
+        'La solicitud de registro ha sido enviada. \nPara ingresar debe esperar que un administrador valide su solicitud. \nSe le notificará por correo electrónico cuando su cuenta haya sido activada.',
+      duration: 0,
+    };
+    notification.success(args);
     const selector = this.countryRef.current;
     
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.setState({ userInfo: { ...this.state.userInfo, 
           country: selector.state.country,
@@ -71,29 +80,23 @@ class RegisterForm extends React.Component {
           axios.post(`${HOSTNAME}/rest-auth/registration/`, 
                           userData, 
                         { headers: {"Content-type": "application/json"}})
-            .then(() => {
-                axios.post(`${HOSTNAME}/api/egresados/`, 
-                        egresadoData, 
-                        { headers: {"Content-type": "application/json"}})
-                .then(() => 
-                    <Alert
-                        message="Success Tips"
-                        description="Detailed description and advice about successful copywriting."
-                        type="success"
-                        showIcon
-                        />
-                  
-                )
-            })
+            
             .catch(err => {
               if(err.message==='Request failed with status code 500'){
                 axios.post(`${HOSTNAME}/api/egresados/`, 
                         egresadoData, 
                         { headers: {"Content-type": "application/json"}})
+                .then(() => {
+                  const args = {
+                    message: 'Registro exitoso.',
+                    description:
+                      'La solicitud de registro ha sido enviada. \nPara ingresar debe esperar que un administrador valide su solicitud. \nSe le notificará por correo electrónico cuando su cuenta haya sido activada.',
+                    duration: 0,
+                  };
+                  notification.success(args);
+                  this.props.form.resetFields();
+                })
               }
-              history.push('/login')
-              console.log(err.message)
-
             })
           }
         )
@@ -126,8 +129,6 @@ class RegisterForm extends React.Component {
     }
     callback();
   };
-
-  
 
   handleConfirmBlur = e => {
     const { value } = e.target;
@@ -184,7 +185,15 @@ class RegisterForm extends React.Component {
               callback()
             }
     })
-}
+  }
+
+  validatePrivacyCheck = (rule, value, callback) => {
+    if(value){
+      callback();
+    } else {
+      callback('Debe aceptar la política de privacidad');
+    }
+  }
   
 
   render() {
@@ -406,7 +415,8 @@ class RegisterForm extends React.Component {
                         <Form.Item>
                             {getFieldDecorator('agreement', {
                                 valuePropName: 'checked',
-                                rules: [{required:true, message: "Debe aceptar la política de privacidad"}]
+                                rules: [
+                              {validator: this.validatePrivacyCheck}]
                             })(
                                 <Checkbox>
                                     Acepto la <a href="/privacy" target="_blank">política de privacidad</a>
@@ -432,7 +442,9 @@ class RegisterForm extends React.Component {
                         <Button type="primary" htmlType="submit" size='large' disabled={!this.state.captcha} >
                             Registrarse
                         </Button>
-
+                        <div>
+                          {this.state.success_message}
+                        </div>
                     </Form>
                 }
             </div>
