@@ -15,6 +15,17 @@ class AdminLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            city: "",
+            country: "",
+            email: "",
+            id: "",
+            id_type: "",
+            is_admin: true,
+            is_graduated: false,
+            is_superuser: false,
+            last_name: "",
+            name: "",
+            region: ""
         };
       }
 
@@ -23,12 +34,37 @@ class AdminLayout extends React.Component {
         axios.get(`${HOSTNAME}/api/users/${userID}/`)
         .then(res => {
             this.setState({
-                user: res.data
+                user: res.data,
+                city: res.data.city,
+                country: res.data.country,
+                email: res.data.email,
+                id: res.data.id,
+                id_type: res.data.id_type,
+                is_active: res.data.is_active,
+                is_admin: res.data.is_admin,
+                is_graduated: res.data.is_graduated,
+                is_superuser: res.data.is_superuser,
+                last_name: res.data.last_name,
+                name: res.data.name,
+                region: res.data.region
             })
         })
     }
 
+    checkIsActive =async()=>{
+        const userID = localStorage.getItem('user');
+        let res = await axios.get(`${HOSTNAME}/api/users/${userID}/`)
+            this.setState({
+                is_active: res.data.is_active,
+               
+            })
+    }
+
     render() {
+        this.checkIsActive()
+        if(this.state.is_active===false){
+            this.props.logout()
+        }
         // isLoading indica si aún no tiene un usuario en el estado
         let isLoading = this.state.user ? false : true;
             return(

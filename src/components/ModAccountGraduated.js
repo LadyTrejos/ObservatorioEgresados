@@ -101,6 +101,13 @@ changeProfile = () =>{
 
   
   handleSave = e => {
+
+    let date_string = this.state.graduatedInfo.date_of_birth;
+        
+    if(typeof(this.state.graduatedInfo.date_of_birth)==="object"){
+        date_string = this.state.graduatedInfo.date_of_birth.format('DD-MM-YYYY')
+    }
+
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -273,7 +280,8 @@ changeProfile = () =>{
                 format="DD-MM-YYYY"
                 onChange={(date, dateString) => this.setState({  graduatedInfo: {...this.state.graduatedInfo, date_of_birth: dateString }})}
                 disabledDate={this.disabledDate}
-                disabled
+                disabled={this.state.profile}
+              
 
               />)}
             </Form.Item>

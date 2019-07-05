@@ -298,11 +298,11 @@ changeProfile = () =>{
             </Form.Item>
           </Col>
         </Row>
-        <Row type="flex" justify="center" align="middle">
+        {/*<Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
             <ChangePassword/>
           </Col>
-        </Row>
+          </Row>*/}
         
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>

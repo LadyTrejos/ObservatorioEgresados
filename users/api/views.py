@@ -42,6 +42,7 @@ class EgresadoListView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(is_graduated = True)
     serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
-    filter_fields = ('id',)
+    filter_fields = ('is_active',)
     ordering_fields = ('id', 'email')
     search_fields = ('id','email')
+
