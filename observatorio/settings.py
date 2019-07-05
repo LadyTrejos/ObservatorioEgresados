@@ -182,3 +182,5 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer'
 }
+
+OLD_PASSWORD_FIELD_ENABLED = True
