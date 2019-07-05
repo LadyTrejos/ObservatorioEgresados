@@ -188,30 +188,14 @@ class RegisterForm extends React.Component {
     }
   }
 
-  validatePrivacyCheck = (rule, value, callback) => {
-    if(value){
-      callback();
-    } else {
-      callback('Debe aceptar la política de privacidad');
-    }
-  }
-
+  
   validateResidence = (rule, value, callback) => {
     const selector = this.countryRef.current;
-    if(selector.state.country != ''){
+    
+    if(selector.state.city !== ''){
       callback();
-      if(selector.state.region != ''){
-        callback();
-        if(selector.state.city != ''){
-          callback();
-        } else {
-          callback('Seleccione la ciudad donde reside.')
-        }
-      } else {
-        callback('Seleccione la región donde reside.')
-      }
     } else {
-      callback('Seleccione el país donde reside.')
+      callback('Seleccione el lugar donde reside.')
     }
   }
   

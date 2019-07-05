@@ -5,8 +5,14 @@ import App from './App';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-
+import { LocaleProvider } from 'antd';
+import es_ES from 'antd/lib/locale-provider/es_ES';
+import moment from 'moment';
+import 'moment/locale/es';
 import reducer from './store/reducers/auth';
+
+moment.locale('es');
+
 
 const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -16,7 +22,7 @@ const store = createStore(reducer, composeEnhances(
 
 const app = (
     <Provider store={store}>
-        <App />
+        <LocaleProvider locale={es_ES}><App /></LocaleProvider>
     </Provider>
 )
 
