@@ -1,7 +1,8 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List } from 'antd';
+import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
+import HOSTNAME from '../helpers/hostname';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -26,7 +27,7 @@ class ViewEvent extends React.Component {
     }
 
     componentDidMount(){
-      axios.get('http://127.0.0.1:8000/api/intereses/')
+      axios.get(`${HOSTNAME}/api/intereses/`)
       .then(res => {
         let interests = {}
         res.data.map( item =>
@@ -64,7 +65,7 @@ class ViewEvent extends React.Component {
           content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
           onOk: () => {
             console.log(this.state)
-            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
+            axios.delete(`${HOSTNAME}/api/eventos/${item.id}/`)
             .then(() =>
               this.props.loadData()
             )
@@ -76,6 +77,9 @@ class ViewEvent extends React.Component {
 
     render(){
         return(
+          <div>
+            {
+              this.props.data.length > 0 ? 
             <List
               itemLayout="horizontal"
               size="middle"
@@ -138,6 +142,12 @@ class ViewEvent extends React.Component {
               </div>
             )}
           />
+          :
+              <Row type="flex" justify="center" align="middle">
+                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</h2>}/>
+              </Row>
+              }
+            </div>
         )
     }
 }

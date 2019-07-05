@@ -13,16 +13,14 @@ import {
     Modal,
     message
   } from 'antd';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import axios from 'axios';
 
 import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
-
-
 const { TextArea } = Input;
   
   
@@ -56,8 +54,8 @@ const { TextArea } = Input;
       previewVisible: true,
     });
   };
-  /*
-   handleChange = (info) => {
+
+  /* handleChange = (info) => {
      if (info.file.status === "uploading") {
        this.setState({ loading: true });
        return;
@@ -136,6 +134,27 @@ const { TextArea } = Input;
     };
     this.imageRef = React.createRef();
   }
+
+    componentWillMount(){
+        const eventID = this.props.match.params.id;
+        axios.get(`${HOSTNAME}/api/eventos/${eventID}/`)
+        .then(res => {
+        this.setState({ 
+            eventInfo: {
+            name: res.data.name,
+            description: res.data.description,
+            place: res.data.place,
+            date: res.data.date,
+            hour: res.data.hour,
+            organizer: res.data.organizer,
+            admin: res.data.admin,
+            interests: res.data.interests,
+            url: res.data.url,
+            }
+        })
+        })
+       
+    }
 
     componentDidMount(){
       
@@ -218,7 +237,7 @@ const { TextArea } = Input;
 
     render() {
       
-
+      console.log(this.state)
       const { getFieldDecorator } = this.props.form;
 
       const interestItems = [] 
@@ -231,7 +250,7 @@ const { TextArea } = Input;
       return (
         
         <Form layout="vertical" >
-          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
+          <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Editar evento</h1>
 
 
           <Row type="flex" justify="center" align="middle">
@@ -394,7 +413,7 @@ const { TextArea } = Input;
                     type="primary"
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
-                  Crear
+                  Guardar
                 </Button>
               </Form.Item>
             </Col>

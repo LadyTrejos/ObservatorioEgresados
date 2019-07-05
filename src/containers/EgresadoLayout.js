@@ -6,6 +6,7 @@ import axios from 'axios';
 import './Layout.css'
 import * as actions from '../store/actions/auth';
 import logo from '../static/img/logo.png'
+import HOSTNAME from '../helpers/hostname';
 
 
 const { Header, Content, Sider } = Layout;
@@ -19,7 +20,7 @@ class AdminLayout extends React.Component {
 
     componentDidMount() {
         const userID = localStorage.getItem('user');
-        axios.get(`http://127.0.0.1:8000/api/users/${userID}`)
+        axios.get(`${HOSTNAME}/api/users/${userID}/`)
         .then(res => {
             this.setState({
                 user: res.data
@@ -63,7 +64,7 @@ class AdminLayout extends React.Component {
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
-                                <Link to='/perfilEgresado'></Link>
+                                <Link to='/perfil'></Link>
                             </Menu.Item>
                             <Menu.Divider />
                             <Menu.Item key="2">

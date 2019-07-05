@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import EgresadosList from '../components/EgresadosList'
+import HOSTNAME from '../helpers/hostname';
 
   class EgresadoListView extends React.Component {
    state={
@@ -13,7 +14,7 @@ import EgresadosList from '../components/EgresadosList'
    }
 
    loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/egresado-list')
+    axios.get(`${HOSTNAME}/api/egresado-list/`)
     .then(res =>{
         this.setState({
             egresados: res.data

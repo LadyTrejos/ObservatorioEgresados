@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Button, Input } from 'antd';
 import EgresadosList from '../components/EgresadosList1'
+import HOSTNAME from '../helpers/hostname';
 const Search = Input.Search;
 
 
@@ -15,7 +16,7 @@ const Search = Input.Search;
    }
 
    loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/egresado-list/?ordering=-is_graduated')
+    axios.get(`${HOSTNAME}/api/egresado-list/?ordering=-is_graduated/`)
     .then(res =>{
         this.setState({
             egresados: res.data
@@ -23,7 +24,7 @@ const Search = Input.Search;
     })
    }
    handleSearch = (value) => {
-       axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-id`)
+       axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id/`)
        .then(res =>{
            this.setState({
                egresados : res.data
@@ -38,7 +39,7 @@ const Search = Input.Search;
        return(
          <div>
              <Row type="flex" justify="center" align="middle">
-                 <h2 style={{fontSize:30, color:'#001870'}}>egresados</h2>
+                 <h2 style={{fontSize:30, color:'#001870'}}>Egresados</h2>
              </Row>
              <Row >
                  <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-end'}}>

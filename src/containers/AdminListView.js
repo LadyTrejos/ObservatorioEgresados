@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import AdminList from '../components/AdminList'
+import HOSTNAME from '../helpers/hostname';
 
   class AdminListView extends React.Component {
    state={
@@ -13,7 +14,7 @@ import AdminList from '../components/AdminList'
    }
 
    loadData = () => {
-    axios.get('http://127.0.0.1:8000/api/admin-list')
+    axios.get(`${HOSTNAME}/api/admin-list/`)
     .then(res =>{
         this.setState({
             admins: res.data

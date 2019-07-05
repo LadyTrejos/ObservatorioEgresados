@@ -1,7 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
+import history from '../helpers/history';
 import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty } from 'antd';
+import HOSTNAME from '../helpers/hostname';
 
 const { Meta } = Card;
 const confirm = Modal.confirm;
@@ -20,16 +22,15 @@ class ViewEvent extends React.Component {
         super(props);
         this.state = {
             interests: {}
-
         }
         this.showConfirm = this.showConfirm.bind(this)
     }
 
     componentDidMount(){
-      axios.get('http://127.0.0.1:8000/api/intereses/')
+      axios.get(`${HOSTNAME}/api/intereses/`)
       .then(res => {
         let interests = {}
-        res.data.map( item =>
+        res.data.map( item => 
           interests[item.id] = item.name
         )
         this.setState({ interests: interests })
@@ -64,15 +65,14 @@ class ViewEvent extends React.Component {
           content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
           onOk: () => {
             console.log(this.state)
-            axios.delete(`http://127.0.0.1:8000/api/eventos/${item.id}/`)
-            .then(() =>
+            axios.delete(`${HOSTNAME}/api/eventos/${item.id}/`)
+            .then(() => 
               this.props.loadData()
             )
           },
           onCancel() {},
         });
       }
-
 
     render(){
         return(
@@ -89,7 +89,6 @@ class ViewEvent extends React.Component {
                 pageSize: 2
               }}
               dataSource={this.props.data}
-
               renderItem={item => (
                 <div style={{display:"flex", justifyContent:"center", alignItems:"center" }}>
                   <Card
@@ -116,7 +115,6 @@ class ViewEvent extends React.Component {
                     />
                     <br/>
                     <br/>
-
                     { item.interests.map( item => (
                       <Tag key={item}>{this.state.interests[item]}</Tag>
                       ))
@@ -131,7 +129,10 @@ class ViewEvent extends React.Component {
                     <br/>
                     <Row type='flex' justify='center' align='middle' gutter={50}>
                         <Col>
-                            <Button size='large' style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}>
+                            <Button 
+                            size='large'
+                            style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}
+                            onClick={() => history.push(`/editar-evento/${item.id}`)}>
                               Editar
                             </Button>
                         </Col>

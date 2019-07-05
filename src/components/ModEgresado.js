@@ -15,6 +15,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import history from '../helpers/history';
+import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 ///modificar todo esto
@@ -50,7 +51,7 @@ class ModificarEgresado extends React.Component {
 
   componentWillMount(){
     const egreID = this.props.match.params.id;
-    axios.get(`http://127.0.0.1:8000/api/users/${egreID}`)
+    axios.get(`${HOSTNAME}/api/users/${egreID}/`)
     .then(res => {
       this.setState({
         userInfo: {
@@ -67,7 +68,7 @@ class ModificarEgresado extends React.Component {
         }
       })
     })
-    axios.get(`http://127.0.0.1:8000/api/egresados/${egreID}`)
+    axios.get(`${HOSTNAME}/api/egresados/${egreID}/`)
     .then(res => {
       this.setState({
         egresadoInfo : {
@@ -89,11 +90,11 @@ class ModificarEgresado extends React.Component {
         const userData = JSON.stringify(this.state.userInfo)
         const egresadoData = JSON.stringify(this.state.egresadoInfo)
         const egreID = this.props.match.params.id;
-        axios.put(`http://127.0.0.1:8000/api/users/${egreID}/`,
+        axios.put(`${HOSTNAME}/api/users/${egreID}/`,
                     userData,
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
-            axios.put(`http://127.0.0.1:8000/api/egresados/${egreID}/`,
+            axios.put(`${HOSTNAME}/api/egresados/${egreID}/`,
                     egresadoData,
                     { headers: {"Content-Type": "application/json"}})
             history.push('/ver-egresados')
@@ -330,7 +331,7 @@ class ModificarEgresado extends React.Component {
                   size='large'
                   type="primary"
                   htmlType="submit"
-                  style={{backgroundColor:'#8F9AE0', boderColor:'#8F9AE0'}}
+                  style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}
                   onClick={() => history.push('/ver-egresados')}
               >
               Cancelar

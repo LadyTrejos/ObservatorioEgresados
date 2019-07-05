@@ -13,6 +13,7 @@ import './RegisterForm.css'
 import logo from '../static/img/logo.png'
 import history from '../helpers/history';
 import CountrySelector from '../components/CountrySelector';
+import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
 
@@ -65,15 +66,13 @@ class RegisterForm extends React.Component {
           adminInfo: { ...this.state.adminInfo, user: this.state.userInfo.id}
         },
         () => {
-          console.log(JSON.stringify(this.state.userInfo))
-          console.log(JSON.stringify(this.state.egresadoInfo))
           const userData = JSON.stringify(this.state.userInfo)
           const egresadoData = JSON.stringify(this.state.egresadoInfo)
-          axios.post('http://localhost:8000/rest-auth/registration/', 
+          axios.post(`${HOSTNAME}/rest-auth/registration/`, 
                           userData, 
                         { headers: {"Content-type": "application/json"}})
             .then(() => {
-                axios.post('http://localhost:8000/api/egresados/', 
+                axios.post(`${HOSTNAME}/api/egresados/`, 
                         egresadoData, 
                         { headers: {"Content-type": "application/json"}})
                 .then(() => 
@@ -88,7 +87,7 @@ class RegisterForm extends React.Component {
             })
             .catch(err => {
               if(err.message==='Request failed with status code 500'){
-                axios.post('http://localhost:8000/api/egresados/', 
+                axios.post(`${HOSTNAME}/api/egresados/`, 
                         egresadoData, 
                         { headers: {"Content-type": "application/json"}})
               }
@@ -153,7 +152,7 @@ class RegisterForm extends React.Component {
       callback('El documento ingresado no es válido')
     }else {
       
-      axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-id`)
+      axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id/`)
       .then(res =>{
           if(res.data.length>0){
             console.log(res.data[0].id)
@@ -172,7 +171,7 @@ class RegisterForm extends React.Component {
   };
 
   handleSearch = (rule,value,callback) => {
-    axios.get(`http://localhost:8000/api/egresado-list/?search=${value}&&ordering=-email`)
+    axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-email/`)
     .then(res =>{
       if(res.data.length>0){
           if(res.data[0].email===value && value!=="")
