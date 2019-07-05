@@ -25,6 +25,7 @@ export const authFail = error => {
 }
 
 export const logout = () => {
+    axios.post(`${HOSTNAME}/rest-auth/logout/`, {})
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('user')
