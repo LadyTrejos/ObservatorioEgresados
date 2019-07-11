@@ -31,14 +31,14 @@ class LoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const stylesObj = {
-        background: '#2F3E9E'
+      backgroundColor: '#2F3E9E'
       };
     
     
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'300%'}}>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'100vw'}}>
                 <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
                 <strong>Observatorio de egresados</strong>
             </div>
@@ -73,7 +73,7 @@ class LoginForm extends React.Component {
                             {getFieldDecorator('email', {
                                 rules: [{ required: true, message: 'Ingrese su correo electrónico' }],
                             })(
-                                <Input className='Input2'
+                                <Input 
                                 prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
                                 size="large"
                                 placeholder="Correo electrónico"
