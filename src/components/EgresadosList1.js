@@ -93,7 +93,7 @@ class Egresadoslist extends React.Component {
 
     addFriend = (friend) => {
       const user = localStorage.getItem('user');
-      const newData = JSON.stringify({'user': `${user}`, 'friends'})
+      const newData = JSON.stringify({'user': `${user}`, 'friends':null})
       axios.patch(`${HOSTNAME}/api/egresados/${user}/`,
                     newData,
                     { headers: {"Content-Type": "application/json"}})
