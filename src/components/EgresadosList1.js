@@ -90,7 +90,7 @@ class Egresadoslist extends React.Component {
         })
 
     }
-
+    /*
     addFriend = (friend) => {
       const user = localStorage.getItem('user');
       const newData = JSON.stringify({'user': `${user}`, 'friends':null})
@@ -108,7 +108,7 @@ class Egresadoslist extends React.Component {
         .catch(err => {
           console.log(err.message)
         })
-    }
+    }*/
 
     render(){
         return(
@@ -130,7 +130,7 @@ class Egresadoslist extends React.Component {
                     renderItem={item => (
                         <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
-                              <Button onClick={() => this.addFriend(item)}>Agregar a mis amigos</Button>
+                              <Button >Agregar a mis amigos</Button>
                             ]}>
 
 
