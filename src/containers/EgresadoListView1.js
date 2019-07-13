@@ -16,7 +16,7 @@ const Search = Input.Search;
    }
 
    loadData = () => {
-    axios.get(`${HOSTNAME}/api/egresado-list/?is_active=True&&ordering=-is_graduated/`)
+    axios.get(`${HOSTNAME}/api/egresado-list/?is_active=True&&ordering=-is_graduated`)
     .then(res =>{
         this.setState({
             egresados: res.data
@@ -24,7 +24,7 @@ const Search = Input.Search;
     })
    }
    handleSearch = (value) => {
-       axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id/`)
+       axios.get(`${HOSTNAME}/api/egresado-list/?search=${value}&&ordering=-id`)
        .then(res =>{
            this.setState({
                egresados : res.data

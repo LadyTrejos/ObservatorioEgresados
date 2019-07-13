@@ -269,7 +269,6 @@ class RegisterForm extends React.Component {
                         <Form.Item label="Lugar de residencia">
                           {getFieldDecorator('residence', {
                                 rules: [
-                                  {required:true},
                                 {validator: this.validateResidence}],
                             })(
                             <CountrySelector ref={this.countryRef}/>
@@ -389,7 +388,7 @@ class RegisterForm extends React.Component {
                                 {
                                 validator: this.validateToNextPassword,
                                 },
-                              {pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/, message:'Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos'} ],
+                              {pattern: /^(?=.*[0-9])(?=.*[!@_#$%^&*])[a-zA-Z0-9!@_#$%^&*]{8,15}$/, message:'Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos'} ],
                             })(
                                 <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

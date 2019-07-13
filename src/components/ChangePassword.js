@@ -27,11 +27,15 @@ class PasswordChangeForm extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const userData = JSON.stringify(values);
+        const token = localStorage.getItem('token');
         axios.post(`${HOSTNAME}/rest-auth/password/change/`, 
           userData, 
-          { headers: {"Content-type": "application/json"}})
+          { headers: {"Content-type": "application/json", "Authorization": `Token ${token}`}})
         .then(res => {
-          message.success('La contraseña ha sido cambiada.')
+          message.success('La contraseña se ha cambiado correctamente.')
+          this.setState({
+            visiblePassword: false,
+          });
         })
         .catch(err => 
             console.log(err)

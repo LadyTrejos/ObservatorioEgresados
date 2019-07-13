@@ -19,6 +19,7 @@ import * as actions from '../store/actions/auth';
 import NumericInput from './NumericInput';
 import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
+import ChangePassword from './ChangePassword';
 //import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
@@ -310,11 +311,11 @@ changeProfile = () =>{
           </Col>
         </Row>
 
-        {/*<Row type="flex" justify="center" align="middle">
+        <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
           <ChangePassword/>
           </Col>
-              </Row>*/}
+              </Row>
         
         <Row type="flex" justify="center" align="middle">
           <Col span={2.5}>
