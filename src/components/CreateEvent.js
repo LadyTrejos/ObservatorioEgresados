@@ -77,11 +77,8 @@ const { TextArea } = Input;
       if (!isJPG) {
         message.error('Solo se pueden subir imágenes');
       }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error('La imagen debe ser menor a 2MB');
-      }
-      return isJPG && isLt2M;
+      
+      return isJPG;
     }
 
    render() {
@@ -130,7 +127,7 @@ const { TextArea } = Input;
             organizer:'',
             admin: localStorage.getItem('user'),
             interests: [],
-            url:''
+            url: null
         },
         interests: []
     };
@@ -169,15 +166,24 @@ const { TextArea } = Input;
     }
 
     postEvent = (interests) => {
-        const urlImage = this.imageRef.current.state.previewImage
+        const image = this.imageRef.current.state.fileList[0]
         this.setState({
-            eventInfo: { ...this.state.eventInfo, interests: interests, url:urlImage}
+            eventInfo: { ...this.state.eventInfo, interests: interests, url:image.originFileObj}
         }, () => {
-            const eventData = JSON.stringify(this.state.eventInfo)
+            let eventData = new FormData();
+            eventData.append('name', this.state.eventInfo.name);
+            eventData.append('description', this.state.eventInfo.description);
+            eventData.append('place', this.state.eventInfo.place);
+            eventData.append('date', this.state.eventInfo.date);
+            eventData.append('hour', this.state.eventInfo.hour);
+            eventData.append('organizer', this.state.eventInfo.organizer);
+            eventData.append('admin', this.state.eventInfo.admin);
+            eventData.append('interests', this.state.eventInfo.interests);
+            eventData.append('url', this.state.eventInfo.url);
             console.log(eventData)
             axios.post(`${HOSTNAME}/api/eventos/`, 
                         eventData, 
-                        { headers: {"Content-type": "application/json"}})
+                        { headers: {"Content-type": 'multipart/form-data'}})
             .then((res) => {
               message.success('El evento ha sido creado con éxito.', 10)
               history.push('/eventos')

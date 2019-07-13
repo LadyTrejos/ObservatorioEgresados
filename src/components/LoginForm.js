@@ -31,7 +31,7 @@ class LoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const stylesObj = {
-        background: '#2F3E9E'
+      backgroundColor: '#2F3E9E'
       };
     
     
@@ -73,7 +73,7 @@ class LoginForm extends React.Component {
                             {getFieldDecorator('email', {
                                 rules: [{ required: true, message: 'Ingrese su correo electrónico' }],
                             })(
-                                <Input className='Input2'
+                                <Input 
                                 prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
                                 size="large"
                                 placeholder="Correo electrónico"

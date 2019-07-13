@@ -44,4 +44,5 @@ class EgresadoListView(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
     filter_fields = ('is_active',)
     ordering_fields = ('id', 'email')
-    search_fields = ('id','email', 'name', 'last_name')
+    search_fields = ('id','email','name', 'last_name')
+
