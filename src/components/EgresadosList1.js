@@ -22,12 +22,18 @@ class Egresadoslist extends React.Component {
     this.state = {
       visible: false,
       requests: [],
-      myRequests: []
+      myRequests: [],
+      myFriends: []
     }
   }
 
   componentWillMount = () => {
     const user = localStorage.getItem('user');
+    // Traer mi lista de amigos
+    axios.get(`${HOSTNAME}/api/egresados/${user}/`)
+    .then(res => this.setState({myFriends: res.data.friends}))
+
+    // Cargar las solicitudes de amistad para mí 
     axios.get(`${HOSTNAME}/api/friend-requests/?to_user=&from_user=${user}`)
     .then( (res) => {
       let myRequests = res.data.map( item => item.to_user)
@@ -91,11 +97,44 @@ class Egresadoslist extends React.Component {
       })
     }
 
+    removeFriend = (friend) => {
+      const currentUser = localStorage.getItem('user')
+      let myFriends = [...this.state.myFriends]
+      const index = myFriends.indexOf(friend.id)
+      myFriends.splice(index, 1)
+
+      const userData = JSON.stringify({'friends': myFriends})
+      axios.patch(`${HOSTNAME}/api/egresados/${currentUser}/`, 
+        userData,
+        { headers: {"Content-Type": "application/json"}}
+      )
+      .then(() => {
+        this.props.loadData()
+        message.info(`Has eliminado a ${friend.name} de tus amigos.`)
+        this.setState({
+          myFriends
+        })
+      })
+    }
+
     handleFriendRequest = (friend) => {
-      this.state.myRequests.includes(friend.id) ? 
+      if(this.state.myRequests.includes(friend.id)){
         this.cancelFriendRequest(friend)
-        :
+      } else if (this.state.myFriends.includes(friend.id)){
+        this.removeFriend(friend)
+      } else {
         this.addFriend(friend)
+      }
+    }
+
+    buttonText = (item) => {
+      if(this.state.myRequests.includes(item.id)){
+        return 'Cancelar solicitud de amistad'
+      } else if (this.state.myFriends.includes(item.id)){
+        return 'Eliminar de mis amigos'
+      } else {
+        return 'Agregar a mis amigos'
+      }
     }
 
     render(){
@@ -121,7 +160,7 @@ class Egresadoslist extends React.Component {
                         <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
                               <Button onClick={() => this.handleFriendRequest(item)}>
-                                { this.state.myRequests.includes(item.id) ? 'Cancelar solicitud de amistad': 'Agregar a mis amigos'}
+                                { this.buttonText(item)}
                               </Button>
                             ]}>
 
@@ -149,7 +188,7 @@ class Egresadoslist extends React.Component {
                 />
                 :
               <Row type="flex" justify="center" align="middle">
-                <Empty description={<span style={{fontSize:20, color:'#001870'}}>No se han registrado egresados.</span>}/>
+                <Empty description={<span style={{fontSize:20, color:'#001870'}}>No se han registrado más egresados.</span>}/>
               </Row>
               }
             </div> 
