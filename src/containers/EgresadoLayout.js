@@ -15,7 +15,11 @@ class AdminLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            events: [],
+            eventEgresado:[],
+            prueba:0
         };
+        
       }
 
     componentDidMount() {
@@ -33,7 +37,6 @@ class AdminLayout extends React.Component {
         let res = await axios.get(`${HOSTNAME}/api/users/${userID}/`)
             this.setState({
                 is_active: res.data.is_active,
-               
             })
     }
 
@@ -81,7 +84,6 @@ class AdminLayout extends React.Component {
                             </Menu.Item>
 
                             <Menu.Divider />
-
                             <Menu.Item key="3">
                                 <Icon type="calendar" />
                                 <span className="nav-text">
