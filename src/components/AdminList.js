@@ -172,7 +172,7 @@ class Adminlist extends React.Component {
                 />
               :
               <Row type="flex" justify="center" align="middle">
-                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado administradores.</h2>}/>
+                <Empty description={<span style={{fontSize:20, color:'#001870'}}>No se han creado administradores.</span>}/>
               </Row>
               }
             </div>  

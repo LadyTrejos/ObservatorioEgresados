@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Button, Input } from 'antd';
+import { Row, Input } from 'antd';
 import ViewEvent from '../components/ViewEvent1'
 import HOSTNAME from '../helpers/hostname';
 

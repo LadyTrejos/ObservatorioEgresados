@@ -334,7 +334,7 @@ const { TextArea } = Input;
               <Form.Item label="Lugar del evento">
                 {getFieldDecorator('place', {
                   rules: [{ required:true, message: '¿Dónde se realizará?' },
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-#]+)*$/gi, 
                     message: "Dirección no válida"}],
                 })(
                     <Input

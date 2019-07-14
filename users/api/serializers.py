@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
-from users.models import User, Egresado, Admin, Evento, Interes
+from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
 from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
 from smtplib import SMTPException
@@ -155,9 +155,22 @@ class EventoSerializer(serializers.ModelSerializer):
         model = Evento
         fields = "__all__"
 
+class FriendRequestListSerializer(serializers.ModelSerializer):
+    from_user = UserSerializer(read_only=True)
+    to_user = UserSerializer(read_only=True)
+    class Meta:
+        model = FriendRequest
+        fields = ('id', 'from_user', 'to_user', 'timestamp')
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendRequest
+        fields = '__all__'
+
 
 class TokenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Token
         fields = ('key', 'user')
+
