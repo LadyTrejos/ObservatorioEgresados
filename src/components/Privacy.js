@@ -1,12 +1,9 @@
 import React from 'react';
 import {
     Form,
-    Layout,
     Card
   } from 'antd';
-  import logo from '../static/img/logo.png'
-
-  const { Content} = Layout;
+import logo from '../static/img/logo.png'
 
 class PrivacyClass extends React.Component {
 state={

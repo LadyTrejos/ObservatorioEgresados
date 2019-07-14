@@ -259,7 +259,7 @@ class RegistrationForm extends React.Component {
           <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Dirección">
               {getFieldDecorator('address',  {rules: [{ required:true, message: '¿Dónde se realizará?' },
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-\#]+)*$/gi, 
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-#]+)*$/gi, 
                     message: "Dirección no válida"}],}
               )(<Input 
                     placeholder='Cr 27 Cll 4 # 45-56'

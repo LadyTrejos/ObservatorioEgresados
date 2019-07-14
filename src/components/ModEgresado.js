@@ -18,7 +18,7 @@ import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
 
 const { Option } = Select;
-///modificar todo esto
+
 class ModificarEgresado extends React.Component {
   constructor(props) {
     super(props);
@@ -144,15 +144,6 @@ class ModificarEgresado extends React.Component {
     
     const { getFieldDecorator } = this.props.form;
 
-    const date_of_birth = this.state.egresadoInfo ? moment(this.state.egresadoInfo.date_of_birth, "YYYY-MM-DD") : null; 
-    /*(
-      <Select
-        size='large'
-        onChange={(value) => this.setState({ egresadoInfo: { ...this.state.egresadoInfo, date_of_birth: value } })}
-      >
-        {this.state.phonecodeItems}
-      </Select>,
-    );*/
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Modificar egresado</h1>

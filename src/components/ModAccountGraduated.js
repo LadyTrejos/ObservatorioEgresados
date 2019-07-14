@@ -16,11 +16,9 @@ import axios from 'axios';
 import moment from 'moment';
 import * as actions from '../store/actions/auth';
 
-import NumericInput from './NumericInput';
 import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
 import ChangePassword from './ChangePassword';
-//import ChangePassword from './ChangePassword'
 
 const { Option } = Select;
 
@@ -102,13 +100,6 @@ changeProfile = () =>{
 
   
   handleSave = e => {
-
-    let date_string = this.state.graduatedInfo.date_of_birth;
-        
-    if(typeof(this.state.graduatedInfo.date_of_birth)==="object"){
-        date_string = this.state.graduatedInfo.date_of_birth.format('DD-MM-YYYY')
-    }
-
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -167,14 +158,6 @@ changeProfile = () =>{
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const prefixSelector = getFieldDecorator('prefix')(
-      <Select 
-        size='large' 
-        onChange={(value) => this.setState({ graduatedInfo: { ...this.state.graduatedInfo, id_phone: value } })}
-      >
-        {this.state.phonecodeItems}
-      </Select>,
-    );
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit} >
         <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>{this.state.profile ? "Perfil" : "Modificar perfil"}</h1>

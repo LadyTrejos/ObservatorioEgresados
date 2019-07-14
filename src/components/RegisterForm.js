@@ -325,9 +325,9 @@ class RegisterForm extends React.Component {
                                           
 
                         <Form.Item label="Fecha de nacimiento: " hasFeedback>
-                            {getFieldDecorator('date_of_birth',{initialValue:moment().add(-20, "year")})
-                            
-                             (
+                          {getFieldDecorator('date_of_birth',
+                            {initialValue:moment().add(-20, "year")
+                          })(
                             <DatePicker
                                 placeholder='Seleccione fecha'
                                 size='large'
