@@ -1,7 +1,10 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Icon, Form, Button, Row, Empty } from "antd";
+import { List, Avatar, Icon, Form, Button, Row, Empty, message } from "antd";
 import { withRouter } from 'react-router-dom';
+import axios from "axios";
+
+import HOSTNAME from '../helpers/hostname';
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae','#f56a50', '#72f5e6', '#f9bf00', '#0092ae','#f53a00', '#726566'];
 
@@ -19,8 +22,36 @@ class Friend_Request extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      
+      egresadoInfo: {
+        friends: []
+      }
     }
+  }
+
+  componentWillMount = () => {
+    // Load my friendlist
+    const currentUser = localStorage.getItem('user');
+    axios.get(`${HOSTNAME}/api/egresados/${currentUser}/`)
+    .then(res => {
+      this.setState({ egresadoInfo: {friends: res.data.friends}})
+    })
+  }
+ 
+  acceptFriendRequest = (item) => {
+    const currentUser = localStorage.getItem('user');
+
+    let myFriendlist = [...this.state.egresadoInfo.friends]
+    myFriendlist.push(item.from_user.id)
+    const userData = JSON.stringify({'friends': myFriendlist})
+    axios.patch(`${HOSTNAME}/api/egresados/${currentUser}/`, 
+      userData,
+      { headers: {"Content-Type": "application/json"}}
+    )
+    axios.delete(`${HOSTNAME}/api/friend-requests/${item.id}`)
+    .then(() => {
+      message.success('La solicitud de amistad ha sido aceptada.')
+      this.setState({egresadoInfo:{friends: myFriendlist}}, () => this.props.loadData())
+    })
   }
 
 
@@ -47,14 +78,14 @@ class Friend_Request extends React.Component {
                               <Button 
                                 size='large'
                                 style={{backgroundColor:'#28a745', borderColor:'#28a745', color:'white'}}
-                                onClick={() => this.addFriend(item)}
+                                onClick={() => this.acceptFriendRequest(item)}
                                 >
                                     Aceptar
                                 </Button>,
                               <Button 
                                 size='large'
                                 style={{backgroundColor:'#dc3545', borderColor:'#dc3545', color:'white'}} 
-                                onClick={() => this.addFriend(item)}
+                                onClick={() => this.declineFriendRequest(item)}
                                 >
                                     Rechazar
                                 </Button>
