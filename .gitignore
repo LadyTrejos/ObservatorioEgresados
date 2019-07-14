@@ -29,3 +29,7 @@ node_modules/
 build
 
 uploaded_media/
+users/migrations/
+users/__pycache__/
+users/api/__pycache__/
+observatorio/__pycache__/

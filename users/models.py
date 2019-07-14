@@ -179,6 +179,10 @@ class Egresado(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 # FORMS
 

@@ -76,22 +76,14 @@ class AdminLayout extends React.Component {
 
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} style={{backgroundColor: '#2F3E9E', textAlign:'left'}}>
                             <Menu.Item key="1">
-                                <Icon type="user-add" />
+                                <Icon type="user" />
                                 <span className="nav-text">
                                     Mi perfil
                                 </span>
                                 <Link to='/perfil'></Link>
                             </Menu.Item>
+
                             <Menu.Divider />
-                            
-                            <Menu.Item key="2">
-                                <Icon type="bell" />
-                                <span className="nav-text">
-                                    Notificaciones
-                                </span>                              
-                                <Link to='/eventos1'></Link>
-                            </Menu.Item>
-                            
                             <Menu.Item key="3">
                                 <Icon type="calendar" />
                                 <span className="nav-text">
@@ -106,6 +98,14 @@ class AdminLayout extends React.Component {
                                     Egresados
                                 </span>
                                 <Link to='/ver-egresados1'></Link>
+                            </Menu.Item>
+
+                            <Menu.Item key="5">
+                                <Icon type="usergroup-add" />
+                                <span className="nav-text" style={{fontSize:'13px'}}>
+                                Solicitudes de amistad
+                                </span>
+                                <Link to='/solicitudes'></Link>
                             </Menu.Item>
                         </Menu>
 

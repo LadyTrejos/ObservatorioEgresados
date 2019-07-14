@@ -170,7 +170,7 @@ class ViewEvent extends React.Component {
           />
           :
               <Row type="flex" justify="center" align="middle">
-                <Empty description={<h2 style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</h2>}/>
+                <Empty description={<span style={{fontSize:20, color:'#001870'}}>No se han creado eventos.</span>}/>
               </Row>
               }
             </div>
