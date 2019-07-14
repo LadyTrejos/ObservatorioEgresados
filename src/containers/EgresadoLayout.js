@@ -15,7 +15,11 @@ class AdminLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            events: [],
+            eventEgresado:[],
+            prueba:0
         };
+        
       }
 
     componentDidMount() {
@@ -33,7 +37,6 @@ class AdminLayout extends React.Component {
         let res = await axios.get(`${HOSTNAME}/api/users/${userID}/`)
             this.setState({
                 is_active: res.data.is_active,
-               
             })
     }
 
@@ -80,7 +83,16 @@ class AdminLayout extends React.Component {
                                 <Link to='/perfil'></Link>
                             </Menu.Item>
                             <Menu.Divider />
+                            
                             <Menu.Item key="2">
+                                <Icon type="bell" />
+                                <span className="nav-text">
+                                    Notificaciones
+                                </span>                              
+                                <Link to='/eventos1'></Link>
+                            </Menu.Item>
+                            
+                            <Menu.Item key="3">
                                 <Icon type="calendar" />
                                 <span className="nav-text">
                                     Eventos
@@ -88,7 +100,7 @@ class AdminLayout extends React.Component {
                                 <Link to='/eventos1'></Link>
                             </Menu.Item>
 
-                            <Menu.Item key="3">
+                            <Menu.Item key="4">
                                 <Icon type="team" />
                                 <span className="nav-text">
                                     Egresados

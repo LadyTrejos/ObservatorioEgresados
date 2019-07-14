@@ -91,6 +91,25 @@ class Egresadoslist extends React.Component {
 
     }
 
+    addFriend = (friend) => {
+      /*const user = localStorage.getItem('user');
+      const newData = JSON.stringify({'user': `${user}`, 'friends'})
+      axios.patch(`${HOSTNAME}/api/egresados/${user}/`,
+                    newData,
+                    { headers: {"Content-Type": "application/json"}})
+        .then(() => {
+          let action = item.is_active ? "activado" : "desactivado"
+          message.success(`El egresado ha sido ${action}.`)
+          this.setState({
+            visible: false,
+          })
+          this.props.loadData()
+        })
+        .catch(err => {
+          console.log(err.message)
+        })*/
+    }
+
     render(){
         return(
           <div>
@@ -111,7 +130,7 @@ class Egresadoslist extends React.Component {
                     renderItem={item => (
                         <List.Item style={{backgroundColor:'#fff', paddingLeft: 20}}
                             actions={[
-
+                              <Button onClick={() => this.addFriend(item)}>Agregar a mis amigos</Button>
                             ]}>
 
 

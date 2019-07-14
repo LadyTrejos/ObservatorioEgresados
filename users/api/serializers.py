@@ -142,7 +142,6 @@ class AdminSerializer(serializers.ModelSerializer):
             )
 
 class EventoSerializer(serializers.ModelSerializer):
-    url = serializers.CharField()
     class Meta:
         model = Evento
         fields = "__all__"
