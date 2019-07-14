@@ -22,10 +22,22 @@ class ViewEvent extends React.Component {
         this.state = {
             interests: {},
             suscrito:false,
+            events:[]
 
         }
-        this.showConfirm = this.showConfirm.bind(this)
+        this.ToSuscribe = this.ToSuscribe.bind(this)
     }
+
+    componentWillMount(){
+      const graduatedID = localStorage.getItem('user');
+      axios.get(`${HOSTNAME}/api/egresados/${graduatedID}/`)
+      .then(res => {
+        this.setState({
+          events:res.data.events
+        })
+      })
+          
+  } 
 
     componentDidMount(){
       axios.get(`${HOSTNAME}/api/intereses/`)
@@ -58,34 +70,34 @@ class ViewEvent extends React.Component {
         });
       };
 
+      ToSuscribe(id) {
+            
 
-      showConfirm(item) {
-
-        confirm({
-          title: '¿Está seguro(a) que desea eliminar este evento?',
-          content: 'Si elimina el evento ni usted ni los egresados suscritos a este podrán verlo de nuevo.',
-          onOk: () => {
-            console.log(this.state)
-            axios.delete(`${HOSTNAME}/api/eventos/${item.id}/`)
-            .then(() =>
-              this.props.loadData()
-            )
-          },
-          onCancel() {},
-        });
-      }
-      IsSuscrito=()=>{
-        
-          this.setState({suscrito: !this.state.suscrito}, () => {
-            this.state.suscrito ?
+            if(!this.state.events.includes(id)){
+              this.state.events.push(id)
+              this.setState({suscrito: !this.state.suscrito})
               message.success('Acabas de suscribirte al evento.')
-              :
-              message.info('Haz eliminado la suscripción al evento.')
-          })
+            }else{
+              for( var i = 0; i < this.state.events.length; i++){ 
+                if ( this.state.events[i] === id) {
+                  this.state.events.splice(i, 1); 
+                }
+             }
+             this.setState({suscrito: !this.state.suscrito})
+             message.info('Haz eliminado la suscripción al evento.')
+            }
+            const graduatedID = localStorage.getItem('user')
+            const EventData = JSON.stringify({events:this.state.events});
+            axios.patch(`${HOSTNAME}/api/egresados/${graduatedID}/`,
+            EventData,
+            { headers: {"Content-type": "application/json"}})
+            .catch(err => 
+              console.log(err)
+            )
+            
           
-        
       }
-      
+
 
     render(){
         return(
@@ -146,8 +158,8 @@ class ViewEvent extends React.Component {
                         <Col>
                             <Button size='large' 
                             style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}
-                            onClick={this.IsSuscrito}>
-                            {this.state.suscrito ? "Eliminar suscripción" : "Suscribirse"}
+                            onClick={()=>{this.ToSuscribe(item.id)}}>
+                            {this.state.events.includes(item.id) ? "Eliminar suscripción" : "Suscribirse"}
                             </Button>
                         </Col>
 

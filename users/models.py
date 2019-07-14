@@ -142,19 +142,6 @@ GENDER_CHOICES = (
     ('P', 'Prefiere no responder'),
 )
 
-
-
-class Egresado(models.Model):
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    date_of_birth = models.DateField(default="2000-01-01")
-    genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
-    interests = models.ManyToManyField(Interes, blank=True)
-    friends = models.ManyToManyField("self", blank=True)
-
-    def __str__(self):
-        return self.user.get_full_name()
-
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     address = models.CharField(max_length=100, blank=True, null=True)
@@ -163,6 +150,7 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
 
 class Evento(models.Model):
     name = models.CharField(max_length=120)
@@ -178,6 +166,19 @@ class Evento(models.Model):
 
     def __str__(self):
         return self.name
+
+class Egresado(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    date_of_birth = models.DateField(default="2000-01-01")
+    genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
+    interests = models.ManyToManyField(Interes, blank=True)
+    friends = models.ManyToManyField("self", blank=True)
+    events = models.ManyToManyField(Evento, related_name="events",blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
+
 
 # FORMS
 

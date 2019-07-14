@@ -269,7 +269,6 @@ class RegisterForm extends React.Component {
                         <Form.Item label="Lugar de residencia">
                           {getFieldDecorator('residence', {
                                 rules: [
-                                  {required:true},
                                 {validator: this.validateResidence}],
                             })(
                             <CountrySelector ref={this.countryRef}/>

@@ -117,15 +117,16 @@ class EgresadoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Egresado
-    #    fields = "__all__"
-        fields= (
+        fields = "__all__"
+        """fields= (
         'user',
         'date_of_birth',
         'genre',
         'interests',
-        'friends'
+        'friends',
+        'events'
 
-        )
+        )"""
 
 class AdminSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False, allow_blank=True)
