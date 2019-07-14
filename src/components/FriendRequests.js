@@ -47,7 +47,7 @@ class Friend_Request extends React.Component {
       userData,
       { headers: {"Content-Type": "application/json"}}
     )
-    axios.delete(`${HOSTNAME}/api/friend-requests/${item.id}`)
+    axios.delete(`${HOSTNAME}/api/friend-requests/${item.id}/`)
     .then(() => {
       message.success('La solicitud de amistad ha sido aceptada.')
       this.setState({egresadoInfo:{friends: myFriendlist}}, () => this.props.loadData())
