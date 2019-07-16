@@ -1,11 +1,11 @@
-from rest_framework import serializers
-from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
-from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
-from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
-from smtplib import SMTPException
+from rest_auth.registration.serializers import RegisterSerializer
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import APIException
+from smtplib import SMTPException
+from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
 
 class ServiceUnavailable(APIException):
     status_code = 500
@@ -167,10 +167,14 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         model = FriendRequest
         fields = '__all__'
 
+class FriendCircleSerializer(serializers.ModelSerializer):
+    friends = UserSerializer(read_only=True)
+    class Meta:
+        model = UserSerializer
+        fields = '__all__'
 
 class TokenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Token
         fields = ('key', 'user')
-
