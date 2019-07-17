@@ -29,11 +29,6 @@ import HOSTNAME from '../helpers/hostname';
            </div>
        )
    }
-
   }
-
-
-
-
 
   export default EgresadoListView;

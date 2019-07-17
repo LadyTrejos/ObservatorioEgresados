@@ -22,6 +22,7 @@ import AdminLayout from '../containers/AdminLayout';
 import EgresadoLayout from '../containers/EgresadoLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import HOSTNAME from '../helpers/hostname';
+import FriendCircleListView from '../containers/FriendCircleListView';
 
 class Home extends React.Component {
     constructor(props) {
@@ -66,6 +67,7 @@ class Home extends React.Component {
                 <Route exact path="/ver-egresados1" component={EgresadoListView1} />
                 <Route exact path="/eventos1" component={EventListView1} />
                 <Route exact path="/solicitudes" component={FriendRequestView} />
+                <Route exact path="/amigos" component={FriendCircleListView}/>
               </EgresadoLayout>)
               }
               }

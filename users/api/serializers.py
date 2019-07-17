@@ -130,15 +130,12 @@ class EgresadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Egresado
         fields = "__all__"
-        """fields= (
-        'user',
-        'date_of_birth',
-        'genre',
-        'interests',
-        'friends',
-        'events'
 
-        )"""
+class EgresadoUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Egresado
+        fields = ('user',)
 
 class AdminSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False, allow_blank=True)
@@ -181,10 +178,10 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FriendCircleSerializer(serializers.ModelSerializer):
-    friends = UserSerializer(read_only=True)
+    friends = EgresadoUserSerializer(read_only=True, many=True)
     class Meta:
-        model = UserSerializer
-        fields = '__all__'
+        model = Egresado
+        fields = ('user', 'friends')
 
 class TokenSerializer(serializers.ModelSerializer):
 
