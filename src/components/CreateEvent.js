@@ -82,7 +82,6 @@ const { TextArea } = Input;
     }
 
    render() {
-     console.log(this.state)
      const { previewVisible, previewImage, fileList } = this.state;
      const uploadButton = (
        <div>
@@ -178,9 +177,9 @@ const { TextArea } = Input;
             eventData.append('hour', this.state.eventInfo.hour);
             eventData.append('organizer', this.state.eventInfo.organizer);
             eventData.append('admin', this.state.eventInfo.admin);
-            eventData.append('interests', this.state.eventInfo.interests);
+            eventData.append('interests', JSON.stringify(this.state.eventInfo.interests));
             eventData.append('url', this.state.eventInfo.url);
-            console.log(eventData)
+            console.log(eventData.get('interests'))
             axios.post(`${HOSTNAME}/api/eventos/`, 
                         eventData, 
                         { headers: {"Content-type": 'multipart/form-data'}})
@@ -200,7 +199,6 @@ const { TextArea } = Input;
         if (!err) {
           let interests = [], promises = [];
           let data = ''
-          console.log(interests)
           this.state.eventInfo.interests.forEach((interest, i) => {
               if(interest.includes('>')) {
                   data = interest.split('>')

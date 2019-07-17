@@ -1,12 +1,19 @@
-from rest_framework import serializers
-from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
-from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
-from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from rest_auth.registration.serializers import RegisterSerializer
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import APIException
 from smtplib import SMTPException
+from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
+
+class ServiceUnavailable(APIException):
+    status_code = 500
+    default_detail = 'No se pudo enviar el correo.'
+    default_code = 'email_server_not_found'
+
 
 class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
@@ -173,10 +180,14 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         model = FriendRequest
         fields = '__all__'
 
+class FriendCircleSerializer(serializers.ModelSerializer):
+    friends = UserSerializer(read_only=True)
+    class Meta:
+        model = UserSerializer
+        fields = '__all__'
 
 class TokenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Token
         fields = ('key', 'user')
-

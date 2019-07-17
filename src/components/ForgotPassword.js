@@ -1,29 +1,37 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Spin, Avatar } from 'antd';
+import { Form, Icon, Input, Button, notification} from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
 
 import '../App.css';
-import './LoginForm.css';
+import './ForgotPassword.css';
 import logo from '../static/img/logo.png'
 import history from '../helpers/history';
+import axios from 'axios';
+import HOSTNAME from '../helpers/hostname';
 
 
-const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
-
-class LoginForm extends React.Component {
-  state ={
-    user:'',
-    password:'',
-  };
+class ForgotPasswordForm extends React.Component {
 
   handleSubmit = e => {
     
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onAuth(values.email, values.password)
+        console.log(values)
+        axios.post(`${HOSTNAME}/rest-auth/password/reset/`, JSON.stringify(values), 
+            {headers: {"Content-type": "application/json"}})
+        .then( res => {
+            this.props.form.resetFields();
+            notification.info({
+                message: 'Las instrucciones se han enviado',
+                description: 'Revise su correo electrónico y siga las instrucciones para restablecer su contraseña. Si no recibe el correo, asegúrese de que el correo ingresado es correcto y se encuentra registrado en nuestra página.',
+                duration: 0
+            })
+            history.push('/login')
+        })
+        .catch(err => console.log(err.message))
       }
     });
   };
@@ -38,7 +46,7 @@ class LoginForm extends React.Component {
     return (
         
         <div>
-            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'100%'}}>
+            <div style={{color:'#fff', backgroundColor:'#8796F0', textAlign: 'left', fontSize:'200%', height:'20%', width:'100vw'}}>
                 <img src={logo} alt="Logo de la página" style={{width: 40, height: 40}}/>
                 <strong>Observatorio de egresados</strong>
             </div>
@@ -57,52 +65,32 @@ class LoginForm extends React.Component {
             </div>
             
             <div className='Div3' >
-                <h1 className='h1IS'>Iniciar sesión</h1>
-                <Avatar type="user" size={80} icon='user' style={{color:'black', backgroundColor:'#8F9AE0'}} />
-                
-                  
-                {
-                    this.props.loading ? 
-                    
-                    <Spin indicator={antIcon} />
-                    
-                    :
-                    
-                    <Form onSubmit={this.handleSubmit} className='Input1'>                    
-                        <Form.Item >
+                <h1 className='h1RC'>Recuperar contraseña</h1>
+                <p >Ingresa el correo electrónico que tienes registrado en nuestra página y te enviaremos las instrucciones para recuperar el acceso a tu cuenta.</p>
+                <br/>
+                <div>
+                    <Form onSubmit={this.handleSubmit} >                    
+                        <Form.Item label="Correo electrónico: ">
                             {getFieldDecorator('email', {
                                 rules: [{ required: true, message: 'Ingrese su correo electrónico' }],
                             })(
                                 <Input 
                                 prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}  />}
                                 size="large"
+                                style={{width:'80%'}}
                                 placeholder="Correo electrónico"
                                 />,
                             )}
                         </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Ingrese su contraseña' }],
-                            })(
-                                <Input.Password
-                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                type="password"
-                                size="large"
-                                placeholder="Contraseña"
-                                onChange={e => this.setState({password: e.target.value})}
-                                />,
-                            )}
-                        </Form.Item>
-                        <a href='/password-reset/'>¿Ha olvidado su contraseña?</a>
-                        <br/>
-                        <br/>
+                        
+                        
                         <Form.Item>
                           <Button type="primary" htmlType="submit" size='large'>
-                              Iniciar
+                              Enviar
                           </Button>
                         </Form.Item>
                     </Form>
-                }
+                </div>
             </div>
         </div>
         
@@ -110,7 +98,7 @@ class LoginForm extends React.Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(LoginForm);
+const ForgotPassword = Form.create({ name: 'forgot_password_form' })(ForgotPasswordForm);
 
 const mapStateToProps = state => {
     return {
@@ -125,4 +113,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ForgotPassword));
