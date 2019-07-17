@@ -173,7 +173,7 @@ class Egresado(models.Model):
     date_of_birth = models.DateField(default="2000-01-01")
     genre = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     interests = models.ManyToManyField(Interes, blank=True)
-    friends = models.ManyToManyField("self", blank=True)
+    friends = models.ManyToManyField("self", blank=True, related_name='friends')
     events = models.ManyToManyField(Evento, related_name="events",blank=True)
 
     def __str__(self):

@@ -1,6 +1,7 @@
 from users.api.views import (
     UserViewSet, EgresadoViewSet, AdminViewSet, EventoViewSet, 
-    InteresViewSet, AdminListView,EgresadoListView, FriendRequestView, FriendRequestListView)
+    InteresViewSet, AdminListView,EgresadoListView, FriendRequestView, FriendRequestListView,
+    FriendCircleView)
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -13,4 +14,5 @@ router.register(r'admin-list', AdminListView, basename='admin-list')
 router.register(r'egresado-list', EgresadoListView, basename='egresado-list')
 router.register(r'friend-requests', FriendRequestView, basename='friend-requests')
 router.register(r'friend-requests-list', FriendRequestListView, basename='friend-requests-list')
+router.register(r'friend-circle', FriendCircleView, basename='friend-circle')
 urlpatterns = router.urls

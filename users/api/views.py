@@ -1,7 +1,8 @@
 from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
 from .serializers import (
     UserSerializer, EgresadoSerializer, AdminSerializer, 
-    EventoSerializer, InteresSerializer, FriendRequestSerializer, FriendRequestListSerializer
+    EventoSerializer, InteresSerializer, FriendRequestSerializer, FriendRequestListSerializer,
+    FriendCircleSerializer
     )
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
@@ -65,3 +66,11 @@ class FriendRequestListView(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('to_user', 'from_user')
     ordering_fields = ('timestamp',)
     search_fields = ('to_user','from_user')
+
+class FriendCircleView(viewsets.ReadOnlyModelViewSet):
+    queryset = Egresado.objects.all()
+    serializer_class = FriendCircleSerializer
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
+    filter_fields = ('user',)
+    ordering_fields = ('user',)
+    search_fields = ('user',)

@@ -107,6 +107,14 @@ class AdminLayout extends React.Component {
                                 </span>
                                 <Link to='/solicitudes'></Link>
                             </Menu.Item>
+
+                            <Menu.Item key="6">
+                                <Icon type="team" />
+                                <span className="nav-text">
+                                    Amigos
+                                </span>
+                                <Link to='/amigos'></Link>
+                            </Menu.Item>
                         </Menu>
 
                         <Button
