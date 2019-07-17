@@ -129,7 +129,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static')
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')	
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
@@ -157,21 +157,21 @@ CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'observatorioutp'
 EMAIL_HOST_PASSWORD = 'laboratorio2019'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 SEND_GRID_API_KEY = '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'
-DEFAULT_FROM_EMAIL = 'Observatorio UTP <observatorioutp2019@gmail.com'
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_EMAIL_FIELD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False 
-EMAIL_REQUIRED = True 
 USERNAME_REQUIRED = False 
+EMAIL_REQUIRED = True 
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',

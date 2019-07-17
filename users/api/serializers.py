@@ -110,7 +110,7 @@ class CustomRegisterSerializer(RegisterSerializer):
                 'password': self.cleaned_data.get('password1'),
             }
             subject = 'Bienvenido(a) a Observatorio UTP'
-            from_email = 'Observatorio UTP <observatorioutp@utp.edu.co>'
+            from_email = 'Observatorio UTP <observatorioutp2019@gmail.com>'
             to = self.cleaned_data.get('email')
             html_message = render_to_string('../templates/welcome_admin.html', ctx)
             plain_message = strip_tags(html_message)
