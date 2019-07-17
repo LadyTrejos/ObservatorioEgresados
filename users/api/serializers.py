@@ -223,7 +223,7 @@ class PasswordResetSerializer(serializers.Serializer):
         opts = {
             'use_https': request.is_secure(),
             'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
-            'email_template_name': '../templates/password_reset_email.html',
+            'email_template_name': strip_tags('../templates/password_reset_email.html'),
             'html_email_template_name': '../templates/password_reset_email.html',
             'request': request,
         }
