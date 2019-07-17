@@ -163,7 +163,7 @@ EMAIL_HOST_PASSWORD = 'laboratorio2019'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 SEND_GRID_API_KEY = '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'
-DEFAULT_FROM_EMAIL = 'Observatorio UTP <observatorioutp2019@gmail.com'
+DEFAULT_FROM_EMAIL = 'Observatorio UTP <observatorioutp2019@gmail.com>'
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
