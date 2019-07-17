@@ -130,10 +130,18 @@ changeProfile = () =>{
     this.setState({ userInfo: {
       ...this.state.userInfo, is_active: !this.state.userInfo.is_active
     }}, () => {
-      this.handleSave(e)
-      let action = this.state.userInfo.is_active ? "activado" : "desactivado"
-      message.success(`El administrador ha sido ${action}.`)
-      this.props.logout()
+      const userData = JSON.stringify({'is_active': this.state.userInfo.is_active})
+      axios.patch(`${HOSTNAME}/api/users/${this.state.userInfo.id}/`,
+                  userData,
+                  { headers: {"Content-Type": "application/json"}})
+      .then(() => {
+        let action = this.state.userInfo.is_active ? "activado" : "desactivado"
+        message.success(`El administrador ha sido ${action}.`)
+        this.props.logout()
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
     })
     
   };

@@ -48,24 +48,7 @@ class Egresadoslist extends React.Component {
           content: `${ item.is_active ?
             "Al desactivar la cuenta, el egresado no podrá ingresar al sistema. "
           : "Al activar la cuenta, el egresado podrá ingresar al sistema. " }`,
-          onOk: () => {
-            item.is_active = !item.is_active
-            const userData = JSON.stringify(item)
-            axios.put(`${HOSTNAME}/api/users/${item.id}/`,
-                          userData,
-                          { headers: {"Content-Type": "application/json"}})
-              .then(() => {
-                let action = item.is_active ? "activado" : "desactivado"
-                message.success(`El egresado ha sido ${action}.`)
-                this.setState({
-                  visible: false,
-                })
-                this.props.loadData()
-              })
-              .catch(err => {
-                console.log(err.message)
-              })
-          },
+          onOk: () => this.handleDeactivate(item),
           onCancel() {},
         });
       }
@@ -73,8 +56,8 @@ class Egresadoslist extends React.Component {
     handleDeactivate = (item) => {
       console.log(item)
       item.is_active = !item.is_active
-      const userData = JSON.stringify(item)
-      axios.put(`${HOSTNAME}/api/users/${item.id}/`,
+      const userData = JSON.stringify({'is_active': item.is_active})
+      axios.patch(`${HOSTNAME}/api/users/${item.id}/`,
                     userData,
                     { headers: {"Content-Type": "application/json"}})
         .then(() => {
