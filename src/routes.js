@@ -16,7 +16,7 @@ const BaseRouter = () => (
         <Route exact path="/registro" component={RegisterForm}/>
         <Route exact path="/privacy" component={Privacy}/>
         <Route exact path="/password-reset" component={ForgotPassword}/> 
-        <Route exact path="/password-reset/confirm/:uid([0-9A-Za-z_\-]+)/:token([0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/" component={ResetPassword}/>
+        <Route exact path="/password-reset/:uid([0-9A-Za-z_\-]+)/:token([0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/" component={ResetPassword}/>
         <PrivateRoute path="/" component={Home}/>
       </Switch>
   </div>

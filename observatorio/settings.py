@@ -167,10 +167,13 @@ EMAIL_REQUIRED = True
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
+    'PASSWORD_RESET_SERIALIZER': 
+        'users.api.serializers.PasswordResetSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer'
+    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
+    
 }
 
 OLD_PASSWORD_FIELD_ENABLED = True
