@@ -1,5 +1,7 @@
 from allauth.account.adapter import get_adapter
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -105,13 +107,23 @@ class CustomRegisterSerializer(RegisterSerializer):
         password = self.cleaned_data.get('password1')
         user.set_password(password)
 
-        message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \nEsta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
+
+        # message = 'Haz sido seleccionado como administrador para la aplicacion Observatorio de Egresados. \nEsta es tu contrasena temporal: %s \nPor favor ingresa con este correo y la contraseña temporal. Luego ve a la seccion "Mi perfil" y cambia la contrasena' % password
         if ( self.cleaned_data.get('is_admin')):
+            # Enviar correo con contraseña temporal al administrador
+            ctx = {
+                'name': self.cleaned_data.get('name'),
+                'email': self.cleaned_data.get('email'),
+                'password': self.cleaned_data.get('password1'),
+            }
+            subject = 'Bienvenido(a) a Observatorio UTP'
+            from_email = 'Observatorio UTP <observatorioutp2019@gmail.com>'
+            to = self.cleaned_data.get('email')
+            html_message = render_to_string('../templates/welcome_admin.html', ctx)
+            plain_message = strip_tags(html_message)
             try:
-                send_mail('Prueba',
-                message,
-                'observatorioutp@utp.edu.co', 
-                    [self.cleaned_data.get('email')],  fail_silently=False,)
+                send_mail(subject, plain_message, from_email, [to], html_message=html_message,
+                fail_silently=False,)
             except SMTPException:
                 print('No se ha podido conectar al servidor de correo.')
         user.save()
@@ -211,7 +223,8 @@ class PasswordResetSerializer(serializers.Serializer):
         opts = {
             'use_https': request.is_secure(),
             'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
-            'email_template_name': 'password_reset_email.html',
+            'email_template_name': '../templates/password_reset_email.html',
+            'html_email_template_name': '../templates/password_reset_email.html',
             'request': request,
         }
         self.reset_form.save(**opts)
