@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^b2^5j-5g$lp!*_p)myjev3!(1vth@v_9f+!5p8!q9nf8nhf2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['observatorioutp.herokuapp.com', 'localhost']
 
@@ -166,13 +166,14 @@ EMAIL_USE_TLS = True
 SEND_GRID_API_KEY = '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'
 DEFAULT_FROM_EMAIL = 'Observatorio UTP <observatorioutp2019@gmail.com'
 
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_USER_EMAIL_FIELD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USER_EMAIL_FIELD = 'email'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False 
-USERNAME_REQUIRED = False 
 EMAIL_REQUIRED = True 
+USERNAME_REQUIRED = False 
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',
