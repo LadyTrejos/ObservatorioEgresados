@@ -59,11 +59,7 @@ ROOT_URLCONF = 'observatorio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
         'DIRS': [os.path.join(BASE_DIR, 'build')],
-=======
-        'DIRS': [os.path.join(BASE_DIR, 'users/templates'),],
->>>>>>> d9e9feec86823c278ea908f2e781deda558cffbb
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
