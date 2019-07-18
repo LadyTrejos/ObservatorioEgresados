@@ -163,7 +163,7 @@ class Evento(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='admin')
     interests = models.ManyToManyField(Interes, related_name='insterests',blank=True)
-    url = models.ImageField()
+    url = models.ImageField(upload_to="event_img")
 
     def __str__(self):
         return self.name
