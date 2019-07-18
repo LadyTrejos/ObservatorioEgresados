@@ -24,8 +24,8 @@ const { Option } = Select;
 
 
 const { TextArea } = Input;
-  
-  
+
+
  /* imagenes*/
  function getBase64(file) {
    return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ const { TextArea } = Input;
    });
  }
 
- 
+
  class PicturesWall extends React.Component {
    state = {
      previewVisible: false,
@@ -70,14 +70,14 @@ const { TextArea } = Input;
  };*/
 
     handleChange = ({ fileList }) => this.setState({ fileList });
-    
+
 
     beforeUpload = (file) => {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJPG) {
         message.error('Solo se pueden subir imágenes');
       }
-      
+
       return isJPG;
     }
 
@@ -134,7 +134,7 @@ const { TextArea } = Input;
   }
 
     componentDidMount(){
-      
+
         axios.get(`${HOSTNAME}/api/intereses/`)
         .then( res => {
             this.setState({ interests: res.data})
@@ -161,7 +161,7 @@ const { TextArea } = Input;
         this.setState({
             eventInfo: { ...this.state.eventInfo, interests: value}
         })
-        
+
     }
 
     postEvent = (interests) => {
@@ -180,8 +180,8 @@ const { TextArea } = Input;
             eventData.append('interests', JSON.stringify(this.state.eventInfo.interests));
             eventData.append('url', this.state.eventInfo.url);
             console.log(eventData.get('interests'))
-            axios.post(`${HOSTNAME}/api/eventos/`, 
-                        eventData, 
+            axios.post(`${HOSTNAME}/api/eventos/`,
+                        eventData,
                         { headers: {"Content-type": 'multipart/form-data'}})
             .then((res) => {
               message.success('El evento ha sido creado con éxito.', 10)
@@ -222,19 +222,19 @@ const { TextArea } = Input;
     }
 
     render() {
-      
+
 
       const { getFieldDecorator } = this.props.form;
 
-      const interestItems = [] 
-      
-      this.state.interests.map( (item) => 
+      const interestItems = []
+
+      this.state.interests.map( (item) =>
           interestItems.push(<Option key={item.id} value={`${item.id}>${item.name}`}>{item.name}</Option>)
       );
 
 
       return (
-        
+
         <Form layout="vertical" >
           <h1 style={{textAlign:'center', fontSize:30, color:'#001870'}}>Crear evento</h1>
 
@@ -317,8 +317,8 @@ const { TextArea } = Input;
                     <TimePicker
                         size='large'
                         placeholder="Hora del evento"
-                        onChange={(_, timeString) => 
-                            this.setState({ eventInfo: {...this.state.eventInfo, hour: timeString} })} 
+                        onChange={(_, timeString) =>
+                            this.setState({ eventInfo: {...this.state.eventInfo, hour: timeString} })}
                     />
                   )}
               </Form.Item>
@@ -332,7 +332,7 @@ const { TextArea } = Input;
               <Form.Item label="Lugar del evento">
                 {getFieldDecorator('place', {
                   rules: [{ required:true, message: '¿Dónde se realizará?' },
-                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-#]+)*$/gi, 
+                  {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[0-9a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da\-#]+)*$/gi,
                     message: "Dirección no válida"}],
                 })(
                     <Input
@@ -355,7 +355,7 @@ const { TextArea } = Input;
                       required: true,
                       message: '¿Quién organiza el evento?',
                     },
-                    {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi, 
+                    {pattern: /^[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+([ ]?[a-z\u00f1\u00d1\u00c1\u00c9\u00cd\u00d3\u00da]+)*$/gi,
                       message: "Nombre no válido"}
                   ],
                 })(<Input
@@ -373,10 +373,10 @@ const { TextArea } = Input;
                     {getFieldDecorator('interests', {
                         rules: [
                         { required: true, message: 'Seleccione al menos un interés', type: 'array' },
-                        
+
                         ],
                     })(
-                        <Select 
+                        <Select
                         size='large'
                         mode="tags"
                         placeholder="Seleccione intereses relacionados con el evento"
@@ -394,8 +394,8 @@ const { TextArea } = Input;
           <Row type="flex" justify="center" align="middle" gutter={20}>
             <Col>
               <Form.Item>
-                <Button 
-                    size='large' 
+                <Button
+                    size='large'
                     type="primary"
                     onClick={this.handleCreate}
                     style={{backgroundColor:'#FF5126', borderColor:'#FF5126'}}>
@@ -406,9 +406,9 @@ const { TextArea } = Input;
 
             <Col >
               <Form.Item>
-                <Button 
-                    size='large' 
-                    type="primary" 
+                <Button
+                    size='large'
+                    type="primary"
                     onClick={() => history.push(`/eventos/`)}
                     style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} >
 

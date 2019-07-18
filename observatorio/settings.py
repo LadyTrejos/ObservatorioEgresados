@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     "storages",
 
     'django.contrib.sites',
     'allauth',
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'observatorio.urls'
@@ -85,6 +86,15 @@ DATABASES = {
     }
 }
 
+AWS_S3_SECURE_URLS = False       # use http instead of https
+AWS_QUERYSTRING_AUTH = False                # don't add complex authentication-related query parameters for requests
+AWS_S3_ACCESS_KEY_ID = "JfT5r1fp5DQgfql28BxtcZkxV5tbcsKp5l7TbMth"                # Your S3 Access Key
+AWS_S3_SECRET_ACCESS_KEY = "JfT5r1fp5DQgfql28BxtcZkxV5tbcsKp5l7TbMth"            # Your S3 Secret
+AWS_STORAGE_BUCKET_NAME = "repositoriodemultimedia"
+AWS_S3_HOST = "s3-eu-west-1.amazonaws.com"  # Change to the media center you chose when creating the bucket
+
+STATICFILES_STORAGE = "myproject.s3utils.StaticS3BotoStorage"
+DEFAULT_FILE_STORAGE = "myproject.s3utils.MediaS3BotoStorage"
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -160,20 +170,20 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_EMAIL_FIELD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False 
-USERNAME_REQUIRED = False 
-EMAIL_REQUIRED = True 
+ACCOUNT_USERNAME_REQUIRED = False
+USERNAME_REQUIRED = False
+EMAIL_REQUIRED = True
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
-    'PASSWORD_RESET_SERIALIZER': 
+    'PASSWORD_RESET_SERIALIZER':
         'users.api.serializers.PasswordResetSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
-    
+
 }
 
 OLD_PASSWORD_FIELD_ENABLED = True
