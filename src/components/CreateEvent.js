@@ -177,7 +177,7 @@ const { TextArea } = Input;
             eventData.append('hour', this.state.eventInfo.hour);
             eventData.append('organizer', this.state.eventInfo.organizer);
             eventData.append('admin', this.state.eventInfo.admin);
-            eventData.append('interests', JSON.stringify(this.state.eventInfo.interests));
+            this.state.eventInfo.interests.map(interest => eventData.append('interests', interest));
             eventData.append('url', this.state.eventInfo.url);
             console.log(eventData.get('interests'))
             axios.post(`${HOSTNAME}/api/eventos/`, 

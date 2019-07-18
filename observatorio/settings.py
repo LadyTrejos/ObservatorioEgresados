@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'storages',
     'users'
 ]
 
@@ -177,3 +178,13 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 OLD_PASSWORD_FIELD_ENABLED = True
+
+# AWS storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIASNWJXNEZNS6QZMOR'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'observatorioutp-files'
+
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
