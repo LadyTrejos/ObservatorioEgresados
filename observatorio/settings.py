@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     "storages",
 
     'django.contrib.sites',
     'allauth',
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'observatorio.urls'
@@ -161,20 +162,20 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_EMAIL_FIELD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False 
-USERNAME_REQUIRED = False 
-EMAIL_REQUIRED = True 
+ACCOUNT_USERNAME_REQUIRED = False
+USERNAME_REQUIRED = False
+EMAIL_REQUIRED = True
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
-    'PASSWORD_RESET_SERIALIZER': 
+    'PASSWORD_RESET_SERIALIZER':
         'users.api.serializers.PasswordResetSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
-    
+
 }
 
 OLD_PASSWORD_FIELD_ENABLED = True
