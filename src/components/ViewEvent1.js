@@ -1,12 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import { Card, Icon, Tag, Divider, Row, Col, Button, Modal, List, Empty, message } from 'antd';
+import { Card, Icon, Tag, Divider, Row, Col, Button, List, Empty, message } from 'antd';
 import HOSTNAME from '../helpers/hostname';
 
 const { Meta } = Card;
-const confirm = Modal.confirm;
-
 
 const IconText = ({ type, text }) => (
     <span>

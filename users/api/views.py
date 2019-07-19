@@ -1,8 +1,8 @@
-from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
+from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest, Post
 from .serializers import (
     UserSerializer, EgresadoSerializer, AdminSerializer, 
     EventoSerializer, InteresSerializer, FriendRequestSerializer, FriendRequestListSerializer,
-    FriendCircleSerializer
+    FriendCircleSerializer, PostSerializer
     )
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
@@ -74,3 +74,11 @@ class FriendCircleView(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('user',)
     ordering_fields = ('user',)
     search_fields = ('user',)
+
+class PostsViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
+    filter_fields = ('event', 'admin')
+    ordering_fields = ('created_at',)
+    search_fields = ('event','admin')

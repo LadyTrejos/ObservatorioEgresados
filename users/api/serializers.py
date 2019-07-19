@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import APIException
 from smtplib import SMTPException
-from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest
+from users.models import User, Egresado, Admin, Evento, Interes, FriendRequest, Post
 
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.translation import ugettext_lazy as _
@@ -189,6 +189,11 @@ class FriendCircleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Egresado
         fields = ('user', 'friends')
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
 
 class TokenSerializer(serializers.ModelSerializer):
 

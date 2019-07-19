@@ -106,7 +106,7 @@ class ViewEvent extends React.Component {
                   >
                     <Meta
                       style={{textAlign:'center'}}
-                      title= {item.name}
+                      title= {<a href={`/evento/${item.id}/`}>{item.name}</a>}
                     />
                     <br/>
                     <Meta

@@ -8,9 +8,6 @@ import {
     DatePicker,
     Button,
     TimePicker,
-    Icon,
-    Upload,
-    Modal,
     message
   } from 'antd';
 import { withRouter } from 'react-router-dom';
@@ -19,115 +16,10 @@ import axios from 'axios';
 
 import history from '../helpers/history';
 import HOSTNAME from '../helpers/hostname';
+import ChangeEventImage from './ChangeEventImage';
 
 const { Option } = Select;
 const { TextArea } = Input;
-  
-  
- /* imagenes*/
- function getBase64(file) {
-   return new Promise((resolve, reject) => {
-     const reader = new FileReader();
-     reader.readAsDataURL(file);
-     reader.onload = () => resolve(reader.result);
-     reader.onerror = error => reject(error);
-   });
- }
-
- 
- class PicturesWall extends React.Component {
-    constructor(props) {
-        super(props);
-            this.state = {
-                previewVisible: false,
-                previewImage: '',
-                fileList: [  ],
-            };
-            
-            console.log("aca-->"+this.previewImage)
-        }
-    
-   
-     handleCancel = () => {this.setState({ previewVisible: false });}
-   
-     handlePreview = async file => {
-        if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-        }
-
-        this.setState({
-        previewImage: file.url || file.preview,
-        previewVisible: true,
-        });
-  };
-
-  /* handleChange = (info) => {
-     if (info.file.status === "uploading") {
-       this.setState({ loading: true });
-       return;
-      }
-      if (info.file.status === "done") {
-        // Get this url from response in real world.
-        console.log(info.fileList)
-        this.setState({ fileList: info.fileList })
-    }
- };*/
-
-    handleChange = async info => {
-        if (!info.file.url && !info.file.preview) {
-            info.file.preview = await getBase64(info.file.originFileObj)
-        }
-    
-        this.setState({
-        previewImage: info.file.url || info.file.preview,
-        fileList: info.fileList 
-        });
-    };
-    
-
-    beforeUpload = (file) => {
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-      if (!isJPG) {
-        message.error('Solo se pueden subir imágenes');
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error('La imagen debe ser menor a 2MB');
-      }
-      return isJPG && isLt2M;
-    }
-
-   render() {
-       console.log(this.state)
-     const { previewVisible, previewImage, fileList } = this.state;
-     const uploadButton = (
-       <div>
-         <Icon type="plus" />
-         <div className="ant-upload-text">Subir</div>
-       </div>
-     );
-     return (
-       <div className="clearfix">
-         <Upload
-           name="avatar"
-           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-           className="avatar-uploader"
-           listType="picture-card"
-           fileList={fileList}
-           onPreview={this.handlePreview}
-           onChange={this.handleChange}
-           beforeUpload={this.beforeUpload}
-         >
-           {fileList.length >= 1   ? null : uploadButton}
-         </Upload>
-         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-           <img alt="Portada del evento" style={{ width: '100%' }} src={previewImage} />
-         </Modal>
-       </div>
-     );
-   }
- }
-/* fin de imagenes */
 
 
   class createEvento extends React.Component {
@@ -151,44 +43,37 @@ const { TextArea } = Input;
     this.imageRef = React.createRef();
   }
 
-    componentWillMount(){
-        const eventID = this.props.match.params.id;
-        axios.get(`${HOSTNAME}/api/eventos/${eventID}/`)
-        .then(res => {
-          fetch(res.data.url)
-          .then(res => res.blob())
-          .then(blob => 
-            this.setState({ 
-                eventInfo: {
-                name: res.data.name,
-                description: res.data.description,
-                place: res.data.place,
-                date: moment(res.data.date,"YYYY-MM-DD"),
-                hour: res.data.hour,
-                organizer: res.data.organizer,
-                admin: res.data.admin,       
-                interests: res.data.interests,
-                url: blob,
-                }
-            })
-          )
+  componentWillMount(){
+    const eventID = this.props.match.params.id;
+    axios.get(`${HOSTNAME}/api/eventos/${eventID}/`)
+    .then(res => { 
+        
+        this.setState({ 
+            eventInfo: {
+            name: res.data.name,
+            description: res.data.description,
+            place: res.data.place,
+            date: moment(res.data.date,"YYYY-MM-DD"),
+            hour: res.data.hour,
+            organizer: res.data.organizer,
+            admin: res.data.admin,       
+            interests: res.data.interests,
+            url: res.data.url,
+            }
+        }, () => {
+          axios.get(`${HOSTNAME}/api/intereses/`)
+          .then( res => {
+              let interests = {}
+              res.data.map( item => 
+                  interests[item.id] = item.name
+                  )
+              let data = this.state.eventInfo.interests.map( item => `${item}>${interests[item]}`)
+              console.log(data)
+              this.setState({ interests: res.data, eventInfo: { ...this.state.eventInfo, interests: data}},()=>console.log(this.state.eventInfo))
+          })
+          .catch( err => console.log(err.message))
         })
-            
-    }
-
-    componentDidMount(){
-      
-        axios.get(`${HOSTNAME}/api/intereses/`)
-        .then( res => {
-            let interests = {}
-            res.data.map( item => 
-                interests[item.id] = item.name
-                )
-            let data = this.state.eventInfo.interests.map( item => `${item}>${interests[item]}`)
-            console.log(data)
-            this.setState({ interests: res.data, eventInfo: { ...this.state.eventInfo, interests: data}},()=>console.log(this.state.eventInfo))
-        })
-        .catch( err => console.log(err.message))
+      })
     }
 
     onChange = e => {
@@ -229,11 +114,20 @@ const { TextArea } = Input;
             eventInfo: { ...this.state.eventInfo, interests: interests, url:urlImage, date: date_string}
         }, () => {
             
-            const eventData = JSON.stringify(this.state.eventInfo)
+            let eventData = new FormData();
+            eventData.append('name', this.state.eventInfo.name);
+            eventData.append('description', this.state.eventInfo.description);
+            eventData.append('place', this.state.eventInfo.place);
+            eventData.append('date', this.state.eventInfo.date);
+            eventData.append('hour', this.state.eventInfo.hour);
+            eventData.append('organizer', this.state.eventInfo.organizer);
+            eventData.append('admin', this.state.eventInfo.admin);
+            this.state.eventInfo.interests.map(interest => eventData.append('interests', interest));
+            eventData.append('url', this.state.eventInfo.url);
             
             axios.put(`${HOSTNAME}/api/eventos/${id}/`, 
                         eventData, 
-                        { headers: {"Content-type": "application/json"}})
+                        { headers: {"Content-type": 'multipart/form-data'}})
             .then((res) => {
               message.success('El evento ha sido editado con éxito.', 10)
               history.push('/eventos')
@@ -279,7 +173,7 @@ const { TextArea } = Input;
     }
 
     render() {
-        console.log(this.state.eventInfo)
+      const eventID = this.props.match.params.id
         
       const { getFieldDecorator } = this.props.form;
       const interestItems = [] 
@@ -297,8 +191,8 @@ const { TextArea } = Input;
 
           <Row type="flex" justify="center" align="middle">
             <Col span={5}>
-              <Form.Item label="Imagen de portada del evento">
-                  {getFieldDecorator('url', )(<PicturesWall ref={this.imageRef}/>
+              <Form.Item>
+                  {getFieldDecorator('url', )(<ChangeEventImage eventID={eventID}/>
                   )}
                 </Form.Item>
             </Col>
