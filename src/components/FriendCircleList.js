@@ -105,7 +105,7 @@ class FriendCircle extends React.Component {
                 />
                 :
               <Row type="flex" justify="center" align="middle">
-                <Empty description={<span style={{fontSize:20, color:'#001870'}}>No se han registrado más egresados.</span>}/>
+                <Empty description={<span style={{fontSize:20, color:'#001870'}}>Aún no has agregado egresados a tu círculo de amigos.</span>}/>
               </Row>
               }
             </div> 
