@@ -274,8 +274,8 @@ class RegistrationForm extends React.Component {
         <Row type="flex" justify="center" align="middle">
           <Col xs={20} sm={16} md={12} lg={7} xl={7}>
             <Form.Item label="Número de celular">
-              {getFieldDecorator('phone', {rules:[{pattern:/^[0-9]{10}$/gi,
-              message:'El número debe contener 10 dígitos'}]
+              {getFieldDecorator('phone', {
+                rules:[ {pattern:/^[0-9]{10}$/gi, message:'El número debe contener 10 dígitos'}]
               })(
                 <NumericInput 
                   size='large'
