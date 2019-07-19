@@ -155,21 +155,25 @@ const { TextArea } = Input;
         const eventID = this.props.match.params.id;
         axios.get(`${HOSTNAME}/api/eventos/${eventID}/`)
         .then(res => {
-        this.setState({ 
-            eventInfo: {
-            name: res.data.name,
-            description: res.data.description,
-            place: res.data.place,
-            date: moment(res.data.date,"YYYY-MM-DD"),
-            hour: res.data.hour,
-            organizer: res.data.organizer,
-            admin: res.data.admin,       
-            interests: res.data.interests,
-            url: res.data.url,
-            }
+          fetch(res.data.url)
+          .then(res => res.blob())
+          .then(blob => 
+            this.setState({ 
+                eventInfo: {
+                name: res.data.name,
+                description: res.data.description,
+                place: res.data.place,
+                date: moment(res.data.date,"YYYY-MM-DD"),
+                hour: res.data.hour,
+                organizer: res.data.organizer,
+                admin: res.data.admin,       
+                interests: res.data.interests,
+                url: blob,
+                }
+            })
+          )
         })
-        })
-       
+            
     }
 
     componentDidMount(){
