@@ -101,7 +101,7 @@ class PostList extends React.Component {
   handleDeletePost = (id) => {
     axios.delete(`${HOSTNAME}/api/posts/${id}/`)
     .then(() => {
-        this.loadComments()
+        window.location.reload();
         message.success('La publicación ha sido eliminada.')
         
     })
@@ -119,30 +119,36 @@ class PostList extends React.Component {
     return (
       <div>
             <div>
-                <Form.Item>
-                    <TextArea rows={3} onChange={this.handleCommentChange} value={value} />
-                </Form.Item>
-                <Form.Item>
-                    <div className="clearfix">
-                        <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={this.handlePreview}
-                        onChange={this.handleChange}
-                        >
-                        {fileList.length >= 1 ? null : uploadButton}
-                        </Upload>
-                        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                        </Modal>
-                    </div>
-                </Form.Item>
-                <Form.Item>
-                <Button htmlType="submit" loading={submitting} onClick={this.handleSubmit} type="primary">
-                    Publicar
-                </Button>
-                </Form.Item>
+                { this.props.admin ? 
+                <React.Fragment>
+                    <Form.Item>
+                        <TextArea rows={3} onChange={this.handleCommentChange} value={value} />
+                    </Form.Item>
+                    <Form.Item>
+                        <div className="clearfix">
+                            <Upload
+                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            listType="picture-card"
+                            fileList={fileList}
+                            onPreview={this.handlePreview}
+                            onChange={this.handleChange}
+                            >
+                            {fileList.length >= 1 ? null : uploadButton}
+                            </Upload>
+                            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                            </Modal>
+                        </div>
+                    </Form.Item>
+                    <Form.Item>
+                    <Button htmlType="submit" loading={submitting} onClick={this.handleSubmit} type="primary">
+                        Publicar
+                    </Button>
+                    </Form.Item>
+                </React.Fragment>
+                :
+                <div></div>
+                }
             </div>
             {comments.length > 0 ? 
                 <List

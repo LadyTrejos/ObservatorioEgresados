@@ -7,7 +7,8 @@ import {
     Row,
     Button,
     Col,
-    Modal
+    Modal,
+    message
   } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -20,7 +21,7 @@ import PostList from './PostList';
 
 const confirm = Modal.confirm;
 
-class EventDetailView extends React.Component {
+class EventDetailGraduatedView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +40,13 @@ class EventDetailView extends React.Component {
   }
   
   componentWillMount(){
+    const graduatedID = localStorage.getItem('user');
+    axios.get(`${HOSTNAME}/api/egresados/${graduatedID}/`)
+    .then(res => {
+        this.setState({
+        events:res.data.events
+        })
+    })
     const eventID = this.props.match.params.id;
     axios.get(`${HOSTNAME}/api/eventos/${eventID}/`)
     .then(res => {
@@ -52,7 +60,8 @@ class EventDetailView extends React.Component {
             organizer:res.data.organizer,
             admin: res.data.admin,
             interests: res.data.interests,
-            url: res.data.url
+            url: res.data.url,
+            id: res.data.id
         },
 
       })
@@ -96,6 +105,35 @@ class EventDetailView extends React.Component {
     });
   }
 
+  ToSuscribe = () => {
+      const id = this.state.eventInfo.id;
+    if(!this.state.events.includes(id)){
+      this.state.events.push(id)
+      this.setState({suscrito: !this.state.suscrito})
+      message.success('Acabas de suscribirte al evento.')
+    }else{
+      for( var i = 0; i < this.state.events.length; i++){ 
+        if ( this.state.events[i] === id) {
+          this.state.events.splice(i, 1); 
+        }
+     }
+     this.setState({suscrito: !this.state.suscrito})
+     message.info('Haz eliminado la suscripción al evento.')
+    }
+    const graduatedID = localStorage.getItem('user')
+    const EventData = JSON.stringify({events:this.state.events});
+    console.log(EventData)
+    axios.patch(`${HOSTNAME}/api/egresados/${graduatedID}/`,
+        EventData,
+        { headers: {"Content-type": "application/json"}}
+    )
+    .catch(err => 
+      console.log(err)
+    )
+    
+  
+    }
+
   render() {
     return (
         <div style={{backgroundColor:'white', padding:15}}>
@@ -129,27 +167,17 @@ class EventDetailView extends React.Component {
                     </Descriptions>
                     <Row type="flex" justify="center" align="middle" gutter={20}>
                         <Col>
-                            <Button
-                                size='large'
+                            <Button size='large' 
                                 style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#FF5126', borderColor:'FF5126'}}
-                                onClick={() => history.push(`/editar-evento/${this.props.match.params.id}`)}
+                                onClick={()=>this.ToSuscribe()}
                             >
-                                Editar
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button 
-                                size='large' 
-                                onClick={() => {this.showConfirm(this.props.match.params.id)}} 
-                                style={{width:'100%', borderRadius:'10%', color:'#fff', backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}}
-                            >
-                                Eliminar
+                                 {this.state.events.includes(this.state.eventInfo.id) ? "Eliminar suscripción" : "Suscribirse"}
                             </Button>
                         </Col>
                     </Row>
                     <br/>
-                    <span style={{fontSize:20, color:'#001870'}}>Añadir publicación</span>
-                    <PostList {...this.props} admin={true}/>
+                    <span style={{fontSize:20, color:'#001870'}}>Publicaciones</span>
+                    <PostList {...this.props} admin={false}/>
                     </div>
                 :
                 <Skeleton/>
@@ -166,7 +194,7 @@ const mapStateToProps = state => {
   }
 }
 
-const EventDetail = Form.create({ name: 'EventDetail' })(EventDetailView);
+const EventDetailGraduated = Form.create({ name: 'EventDetailGraduated' })(EventDetailGraduatedView);
 const mapDispatchToProps = dispatch => {
     return {
       logout: () => dispatch(actions.logout())
@@ -174,4 +202,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EventDetail));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EventDetailGraduated));

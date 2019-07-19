@@ -24,6 +24,7 @@ import SuperuserLayout from '../containers/SuperuserLayout';
 import HOSTNAME from '../helpers/hostname';
 import FriendCircleListView from '../containers/FriendCircleListView';
 import EventDetail from './EventDetail';
+import EventDetailGraduated from './EventDetailGraduated';
 
 class Home extends React.Component {
     constructor(props) {
@@ -70,6 +71,7 @@ class Home extends React.Component {
                 <Route exact path="/eventos1" component={EventListView1} />
                 <Route exact path="/solicitudes" component={FriendRequestView} />
                 <Route exact path="/amigos" component={FriendCircleListView}/>
+                <Route exact path="/evento/:id" component={EventDetailGraduated}/>
               </EgresadoLayout>)
               }
               }
