@@ -87,7 +87,7 @@ class RegisterForm extends React.Component {
                     duration: 0,
                   };
                   notification.success(args);
-                  this.props.form.resetFields();
+                  history.push('/login')
                 })
               }
             })

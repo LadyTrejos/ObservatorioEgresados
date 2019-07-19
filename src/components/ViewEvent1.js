@@ -34,8 +34,7 @@ class ViewEvent extends React.Component {
           events:res.data.events
         })
       })
-          
-  } 
+    } 
 
     componentDidMount(){
       axios.get(`${HOSTNAME}/api/intereses/`)
@@ -92,8 +91,6 @@ class ViewEvent extends React.Component {
             .catch(err => 
               console.log(err)
             )
-            
-          
       }
 
 
@@ -130,7 +127,7 @@ class ViewEvent extends React.Component {
                   >
                     <Meta
                       style={{textAlign:'center'}}
-                      title= {item.name}
+                      title= {<a href={`/evento/${item.id}/`}>{item.name}</a>}
                     />
                     <br/>
                     <Meta
