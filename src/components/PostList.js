@@ -159,7 +159,7 @@ class PostList extends React.Component {
                     <React.Fragment>
                         <Divider/> 
                         <Comment 
-                            actions={[<Button type="danger" onClick={() => this.handleDeletePost(item.id)}>Eliminar</Button>]}
+                            actions={this.props.admin? [<Button type="danger" onClick={() => this.handleDeletePost(item.id)}>Eliminar</Button>] : null}
                             author="Administrador"
                             avatar={<Avatar  style={{backgroundColor: '#f56a00', verticalAlign: 'middle' }} size='large'>
                             A
