@@ -199,6 +199,17 @@ class RegisterForm extends React.Component {
     }
   }
   
+  validatePasswordFormat = (rule, value, callback) => {
+    const regex = /^(?=.*[0-9])(?=.*[!-@_#$%^&*?"])[a-zA-Z0-9!-@_#$%^&*?"]{8,15}$/gi
+    if(value.length > 15){
+      callback("La contraseña es demasiado larga, use menos de 15 caracteres.")
+    } else if (value.length > 0 && value.length < 8) {
+      callback("La contraseña es muy corta, use al menos 8 caracteres.")
+    } else if (value && !regex.test(value)) {
+      callback("Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos")
+    }
+    callback();
+  };
 
   render() {
     
@@ -389,7 +400,7 @@ class RegisterForm extends React.Component {
                                 {
                                 validator: this.validateToNextPassword,
                                 },
-                              {pattern: /^(?=.*[0-9])(?=.*[!@_#$%^&*])[a-zA-Z0-9!@_#$%^&*]{8,15}$/, message:'Elija una contraseña más segura. Pruebe con una combinación de letras números y símbolos'} ],
+                                {validator: this.validatePasswordFormat} ],
                             })(
                                 <Input.Password
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
