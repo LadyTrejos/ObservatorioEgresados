@@ -367,7 +367,7 @@ changeProfile = () =>{
             htmlType="submit" 
             style={{backgroundColor:'#8F9AE0', borderColor:'#8F9AE0'}} 
             onClick={this.changeProfile}>
-            Editar datos
+            Editar datos 
           </Button>
         </Row>
                 }
