@@ -23,6 +23,7 @@ import EgresadoLayout from '../containers/EgresadoLayout';
 import SuperuserLayout from '../containers/SuperuserLayout';
 import HOSTNAME from '../helpers/hostname';
 import FriendCircleListView from '../containers/FriendCircleListView';
+import EventDetail from './EventDetail';
 
 class Home extends React.Component {
     constructor(props) {
@@ -58,6 +59,7 @@ class Home extends React.Component {
                 <Route exact path='/editar-evento/:id/' component={ModEvent}/>
                 <Route exact path="/ver-egresados" component={EgresadoListView} />
                 <Route exact path="/editar-egresado/:id/" component={ModEgresado}/>
+                <Route exact path="/evento/:id/" component={EventDetail}/>
               </AdminLayout>)
             }  else if (this.state.user.is_graduated ){
               return (

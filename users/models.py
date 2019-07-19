@@ -167,6 +167,14 @@ class Evento(models.Model):
     def __str__(self):
         return self.name
 
+class Post(models.Model):
+    description = models.TextField(blank=True)
+    file_url = models.FileField(upload_to="local_comments", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    event = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name='event_post')
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='post_admin')
+    file_type = models.CharField(max_length=50, default="image/jpeg", blank=True)
+
 class Egresado(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
