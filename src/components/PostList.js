@@ -103,7 +103,6 @@ class PostList extends React.Component {
     .then(() => {
         window.location.reload();
         message.success('La publicación ha sido eliminada.')
-        
     })
   }
 
