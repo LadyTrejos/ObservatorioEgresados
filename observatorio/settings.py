@@ -159,11 +159,11 @@ AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'observatorioutp'
-EMAIL_HOST_PASSWORD = 'laboratorio2019'
+EMAIL_HOST_USER = 'ladytrejosh@gmail.com'
+EMAIL_HOST_PASSWORD = 'enviarcorreos123*'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-SEND_GRID_API_KEY = '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'
+SEND_GRID_API_KEY = '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'
 DEFAULT_FROM_EMAIL = 'Observatorio UTP <observatorioutp2019@gmail.com>'
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
